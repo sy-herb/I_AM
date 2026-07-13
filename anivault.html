@@ -120,6 +120,24 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
+
+        /* Hero gradient text with a visible fallback */
+        .hero-gradient-text {
+            color: #7C3AED;
+            display: inline-block;
+            font-weight: inherit;
+        }
+
+        @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+            .hero-gradient-text {
+                background: linear-gradient(90deg, #7C3AED 0%, #A855F7 52%, #60A5FA 100%);
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+                color: transparent;
+            }
+        }
+
         /* Slot Roulette Spinning Transition */
         .slot-container {
             perspective: 1000px;
@@ -247,7 +265,7 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
             <!-- Catchphrase -->
             <h1 class="font-heading font-extrabold text-4xl sm:text-6xl text-white tracking-tight leading-tight sm:leading-none mb-6">
                 나의 인생작으로 채워나가는<br>
-                <span class="bg-gradient-to-r from-primary via-hoverViolet to-blue-400 bg-clip-text text-transparent">
+                <span class="hero-gradient-text">
                     단 하나의 애니메이션 도감
                 </span>
             </h1>
