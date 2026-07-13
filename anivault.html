@@ -398,6 +398,99 @@ html[data-theme="dark"] .poster-picker-preview { background:#0F172A !important; 
 })();
 </script>
 
+<style id="brand-refinement">
+
+/* Refined AniVault brand lockup */
+.brand-lockup {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.72rem;
+    padding: 0.35rem 0.45rem 0.35rem 0.2rem;
+    border-radius: 0.9rem;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    text-align: left;
+    transition: transform 180ms ease, opacity 180ms ease;
+}
+.brand-lockup:hover { transform: translateY(-1px); }
+.brand-lockup:focus-visible { outline: 3px solid rgba(124,58,237,.24); outline-offset: 4px; }
+.brand-mark {
+    position: relative;
+    width: 2.35rem;
+    height: 2.35rem;
+    flex: 0 0 2.35rem;
+    display: grid;
+    place-items: center;
+    border-radius: 0.82rem;
+    background: linear-gradient(145deg, #6d28d9 0%, #8b5cf6 54%, #60a5fa 100%);
+    box-shadow: 0 9px 22px rgba(124,58,237,.25), inset 0 1px 0 rgba(255,255,255,.42);
+    overflow: hidden;
+}
+.brand-mark::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    border-radius: calc(.82rem - 1px);
+    border: 1px solid rgba(255,255,255,.22);
+}
+.brand-mark-letter {
+    position: relative;
+    z-index: 1;
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 1.12rem;
+    line-height: 1;
+    letter-spacing: -.06em;
+    transform: translateX(-.02em);
+}
+.brand-mark-spark {
+    position: absolute;
+    top: .42rem;
+    right: .42rem;
+    width: .31rem;
+    height: .31rem;
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: 0 0 9px rgba(255,255,255,.95);
+}
+.brand-copy { display: flex; flex-direction: column; min-width: 0; line-height: 1; }
+.brand-wordmark {
+    display: inline-flex;
+    align-items: baseline;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 1.22rem;
+    letter-spacing: -.045em;
+    white-space: nowrap;
+}
+.brand-ani { color: var(--brand-ink, #172033) !important; }
+.brand-vault {
+    margin-left: .08em;
+    color: #7c3aed !important;
+}
+.brand-tagline {
+    margin-top: .26rem;
+    color: var(--brand-muted, #7c879b) !important;
+    font-family: 'Outfit', sans-serif;
+    font-size: .49rem;
+    font-weight: 700;
+    letter-spacing: .17em;
+    white-space: nowrap;
+}
+html.dark .brand-ani { color: #f8fafc !important; }
+html.dark .brand-vault { color: #c4b5fd !important; }
+html.dark .brand-tagline { color: #94a3b8 !important; }
+html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1px 0 rgba(255,255,255,.32); }
+@media (max-width: 520px) {
+    .brand-lockup { gap: .58rem; padding-right: .2rem; }
+    .brand-mark { width: 2.15rem; height: 2.15rem; flex-basis: 2.15rem; border-radius: .72rem; }
+    .brand-wordmark { font-size: 1.08rem; }
+    .brand-tagline { display: none; }
+}
+</style>
 </head>
 <body class="bg-midnight text-slate-100 font-body min-h-screen relative overflow-x-hidden">
 
@@ -408,15 +501,17 @@ html[data-theme="dark"] .poster-picker-preview { background:#0F172A !important; 
     <nav class="fixed top-0 left-0 w-full z-40 glass-nav">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <!-- Logo -->
-                <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-primary to-hoverViolet flex items-center justify-center shadow-lg shadow-primary/30">
-                        <i class="fa-solid fa-vault text-white text-base"></i>
-                    </div>
-                    <span class="font-heading font-extrabold text-xl tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
-                        Ani<span class="text-hoverViolet">Vault</span>
+                <!-- Refined AniVault Wordmark -->
+                <button type="button" class="brand-lockup" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="AniVault 홈으로 이동">
+                    <span class="brand-mark" aria-hidden="true">
+                        <span class="brand-mark-letter">A</span>
+                        <span class="brand-mark-spark"></span>
                     </span>
-                </div>
+                    <span class="brand-copy">
+                        <span class="brand-wordmark"><span class="brand-ani">Ani</span><span class="brand-vault">Vault</span></span>
+                        <span class="brand-tagline">PERSONAL ANIME ARCHIVE</span>
+                    </span>
+                </button>
                 <!-- Menu -->
                 <div class="hidden md:flex items-center gap-8">
                     <a href="#hero" class="text-slate-300 hover:text-white font-medium text-sm transition-colors duration-200">Home</a>
@@ -559,7 +654,7 @@ html[data-theme="dark"] .poster-picker-preview { background:#0F172A !important; 
 
         <!-- Today's Pick Dynamic Card -->
         <div id="todays-pick-card" class="bg-gradient-to-r from-cardBg to-slate-900 border border-slate-700/60 rounded-3xl overflow-hidden p-6 sm:p-8 hover:border-primary/40 transition-all duration-300 flex flex-col md:flex-row gap-8 items-stretch relative">
-            <div class="absolute top-4 right-4 bg-primary/20 text-hoverViolet text-[10px] uppercase font-bold tracking-widest px-3 py-1 rounded-full border border-primary/20">
+            <div class="self-end md:absolute md:top-4 md:right-4 mb-1 md:mb-0 bg-primary/20 text-hoverViolet text-[10px] uppercase font-bold tracking-widest px-3 py-1 rounded-full border border-primary/20 whitespace-nowrap shrink-0">
                 SYSTEM SELECTION
             </div>
             
