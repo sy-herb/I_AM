@@ -350,8 +350,8 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
                 <div class="bg-cardBg/60 backdrop-blur-sm border border-slate-700/40 p-6 rounded-2xl flex flex-col justify-between hover:border-primary/30 transition-all duration-300 col-span-2 lg:col-span-1">
                     <span class="text-xs text-slate-400 font-semibold tracking-wider uppercase mb-2 block">🏆 All-Time Favorite</span>
                     <div>
-                        <span class="font-heading font-bold text-lg sm:text-xl text-white block truncate">장송의 프리렌</span>
-                        <span class="text-slate-400 text-xs font-semibold">Frieren: Beyond Journey's</span>
+                        <span class="font-heading font-bold text-lg sm:text-2xl text-white block truncate">아오하라이드</span>
+                        <span class="text-slate-400 text-xs font-semibold">Ao Haru Ride</span>
                     </div>
                     <div class="h-1 bg-slate-700/50 rounded-full mt-4 overflow-hidden">
                         <div class="w-full h-full bg-successGreen rounded-full"></div>
@@ -412,7 +412,7 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
                 <!-- Interaction CTA inside Today's Pick -->
                 <div class="pt-4 flex justify-center md:justify-start">
                     <button id="today-detail-btn" class="text-xs font-semibold bg-slate-800 hover:bg-slate-700 hover:text-white text-slate-300 py-3 px-6 rounded-xl border border-slate-700/60 transition-all duration-300 flex items-center gap-2">
-                        <span>상세 소감 및 명대사 열기</span>
+                        <span>상세 내용 열기</span>
                         <i class="fa-solid fa-arrow-right text-[10px]"></i>
                     </button>
                 </div>
@@ -660,7 +660,7 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
     <div id="roulette-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
         <div class="bg-cardBg border border-slate-700/60 rounded-3xl max-w-md w-full overflow-hidden p-6 sm:p-8 flex flex-col shadow-2xl relative transform scale-95 transition-transform duration-300">
             
-            <button onclick="closeRouletteModal()" id="roulette-close-btn" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-900/60 hover:bg-slate-950 text-slate-400 hover:text-white flex items-center justify-center border border-slate-800 transition-colors">
+            <button onclick="closeRouletteModal()" id="roulette-close-btn" aria-label="룰렛 닫기" class="absolute top-4 right-4 z-30 w-10 h-10 rounded-full bg-slate-900/60 hover:bg-slate-950 text-slate-400 hover:text-white flex items-center justify-center border border-slate-800 transition-colors">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
@@ -1854,6 +1854,49 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
         let activeTab = 'overview';
         let activeMoodFilter = null;
         let isSpinning = false;
+
+        // Roulette lifecycle state: allow closing safely during an active spin.
+        let rouletteSessionId = 0;
+        let rouletteSoundTimer = null;
+        let rouletteFinishTimer = null;
+        let rouletteResultTimer = null;
+        let rouletteDetailTimer = null;
+
+        function clearRouletteTimers() {
+            clearTimeout(rouletteSoundTimer);
+            clearTimeout(rouletteFinishTimer);
+            clearTimeout(rouletteResultTimer);
+            clearTimeout(rouletteDetailTimer);
+
+            rouletteSoundTimer = null;
+            rouletteFinishTimer = null;
+            rouletteResultTimer = null;
+            rouletteDetailTimer = null;
+        }
+
+        function cancelRouletteSpin() {
+            rouletteSessionId += 1;
+            clearRouletteTimers();
+            isSpinning = false;
+
+            const strip = document.getElementById('slot-strip');
+            if (strip) {
+                const currentTransform = getComputedStyle(strip).transform;
+                strip.style.transition = 'none';
+                if (currentTransform && currentTransform !== 'none') {
+                    strip.style.transform = currentTransform;
+                }
+            }
+
+            const spinBtn = document.getElementById('roulette-spin-btn');
+            const closeBtn = document.getElementById('roulette-close-btn');
+
+            if (spinBtn) spinBtn.disabled = false;
+            if (closeBtn) {
+                closeBtn.disabled = false;
+                closeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        }
         
         // Reliable poster loader: Jikan (primary) + Kitsu (fallback)
         // API requests are queued to respect public API rate limits.
@@ -2552,17 +2595,18 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
 
         // Close Roulette Modal smoothly
         function closeRouletteModal() {
-            if (isSpinning) return; // Prevent closing while spin is occurring
+            // Closing is always allowed, even while the roulette is spinning.
+            cancelRouletteSpin();
 
             const modal = document.getElementById('roulette-modal');
             modal.classList.add('opacity-0');
             modal.querySelector('.transform').classList.remove('scale-100');
             modal.querySelector('.transform').classList.add('scale-95');
-            
+
             setTimeout(() => {
                 modal.classList.add('hidden');
             }, 300);
-            
+
             playTickSound(350, 0.1);
         }
 
@@ -2608,7 +2652,10 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
         // Spin Slot mechanism using high performance transitions
         function spinRoulette() {
             if (isSpinning) return;
+
+            clearRouletteTimers();
             isSpinning = true;
+            const sessionId = ++rouletteSessionId;
 
             const spinBtn = document.getElementById('roulette-spin-btn');
             const closeBtn = document.getElementById('roulette-close-btn');
@@ -2616,67 +2663,74 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
             const strip = document.getElementById('slot-strip');
 
             spinBtn.disabled = true;
-            closeBtn.classList.add('opacity-50', 'cursor-not-allowed');
-            statusText.innerText = "수호자 결정 중... 🔮";
 
-            const rowHeight = 64; 
+            // Keep the close button fully active and visually clickable while spinning.
+            closeBtn.disabled = false;
+            closeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+
+            statusText.innerText = "추천작 결정 중... 🔮";
+
+            const rowHeight = 64;
             const winnerIndex = Math.floor(Math.random() * animeDatabase.length);
-            // Ensure at least 2 full rotations of our 55-item database for cinematic rolling
             const targetOffset = (animeDatabase.length * 2) + winnerIndex;
-            const stopPosition = -(targetOffset * rowHeight) + 64; 
+            const stopPosition = -(targetOffset * rowHeight) + 64;
 
-            // Hard reset to origin zero before transition
             strip.style.transition = 'none';
             strip.style.transform = 'translateY(0px)';
-            
-            // Force Browser Reflow to commit the reset immediately
             strip.offsetHeight;
 
-            // Apply high-fidelity cubic-bezier transition to smoothly decelerate over exactly 3 seconds
             strip.style.transition = 'transform 3s cubic-bezier(0.12, 0.88, 0.22, 1)';
             strip.style.transform = `translateY(${stopPosition}px)`;
 
-            // High precision audio tick scheduling simulating mechanical slot wheels slowing down
             let tickCount = 0;
-            let currentDelay = 50; // starting millisecond interval for tick sound
-            let soundTimer = null;
+            let currentDelay = 50;
 
             function playTickSequence() {
-                if (!isSpinning) return;
-                playTickSound(520 + (tickCount % 8 * 15), 0.05, 'triangle');
-                tickCount++;
-                
-                // Exponential deceleration growth mimicking CSS cubic-bezier behavior (50ms -> 350ms max cap)
-                currentDelay = Math.min(380, currentDelay * 1.092);
-                soundTimer = setTimeout(playTickSequence, currentDelay);
-            }
-            
-            // Initiate audio sequence
-            soundTimer = setTimeout(playTickSequence, currentDelay);
+                if (!isSpinning || sessionId !== rouletteSessionId) return;
 
-            // Complete the cycle exactly at the 3-second mark
-            setTimeout(() => {
-                clearTimeout(soundTimer);
-                finalizeSpin(winnerIndex);
+                playTickSound(520 + (tickCount % 8 * 15), 0.05, 'triangle');
+                tickCount += 1;
+                currentDelay = Math.min(380, currentDelay * 1.092);
+                rouletteSoundTimer = setTimeout(playTickSequence, currentDelay);
+            }
+
+            rouletteSoundTimer = setTimeout(playTickSequence, currentDelay);
+
+            rouletteFinishTimer = setTimeout(() => {
+                clearTimeout(rouletteSoundTimer);
+                rouletteSoundTimer = null;
+
+                if (!isSpinning || sessionId !== rouletteSessionId) return;
+                finalizeSpin(winnerIndex, sessionId);
             }, 3000);
         }
 
         // Finalize Roulette spin results
-        function finalizeSpin(winnerIndex) {
+        function finalizeSpin(winnerIndex, sessionId = rouletteSessionId) {
+            if (!isSpinning || sessionId !== rouletteSessionId) return;
+
             const winner = animeDatabase[winnerIndex];
             const statusText = document.getElementById('roulette-status');
-            
-            // Victory synthesis chord progression
+
             playTickSound(440, 0.15, 'sine');
-            setTimeout(() => playTickSound(659, 0.15, 'sine'), 130);
-            setTimeout(() => playTickSound(880, 0.35, 'sine'), 260);
+            setTimeout(() => {
+                if (sessionId === rouletteSessionId) playTickSound(659, 0.15, 'sine');
+            }, 130);
+            setTimeout(() => {
+                if (sessionId === rouletteSessionId) playTickSound(880, 0.35, 'sine');
+            }, 260);
 
             statusText.innerText = `오늘의 저격수 낙찰: ${winner.title}!`;
 
-            setTimeout(() => {
+            rouletteResultTimer = setTimeout(() => {
+                if (sessionId !== rouletteSessionId) return;
+
                 isSpinning = false;
                 closeRouletteModal();
-                setTimeout(() => {
+
+                rouletteDetailTimer = setTimeout(() => {
+                    // closeRouletteModal invalidates the old session, so only continue
+                    // when the roulette was not manually cancelled before this point.
                     openDetailModal(winner.id);
                     showToast(`🎲 룰렛 매칭이 '${winner.title}' 작품을 획득하였습니다!`);
                 }, 350);
@@ -2685,6 +2739,30 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
 
         // Window event load routing
         document.addEventListener('DOMContentLoaded', function() {
+            const rouletteModal = document.getElementById('roulette-modal');
+
+            // Click outside the roulette panel to cancel and close at any time.
+            rouletteModal.addEventListener('click', function(event) {
+                if (event.target === rouletteModal) {
+                    closeRouletteModal();
+                }
+            });
+
+            // Escape closes either open modal. Roulette cancellation is immediate.
+            document.addEventListener('keydown', function(event) {
+                if (event.key !== 'Escape') return;
+
+                if (!rouletteModal.classList.contains('hidden')) {
+                    closeRouletteModal();
+                    return;
+                }
+
+                const detailModal = document.getElementById('detail-modal');
+                if (!detailModal.classList.contains('hidden')) {
+                    closeDetailModal();
+                }
+            });
+
             // Start Visual stars background particles
             initStars();
 
