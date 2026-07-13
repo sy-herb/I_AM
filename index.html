@@ -169,6 +169,20 @@
         .anime-card.is-watched:hover {
             opacity: 1;
         }
+
+
+        /* Watching progress */
+        .watch-progress-panel { border: 1px solid rgba(124,58,237,.18); background: rgba(124,58,237,.05); }
+        .watch-progress-bar { height: 7px; border-radius: 999px; overflow: hidden; background: rgba(148,163,184,.25); }
+        .watch-progress-fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg,#7C3AED,#A855F7); transition: width .25s ease; }
+        .watch-status-badge { display:inline-flex; align-items:center; gap:.3rem; border-radius:999px; padding:.22rem .55rem; font-size:10px; font-weight:800; }
+        .watch-status-unwatched { background:#f1f5f9; color:#64748b; }
+        .watch-status-watching { background:#ede9fe; color:#7c3aed; }
+        .watch-status-complete { background:#dcfce7; color:#15803d; }
+        html[data-theme="dark"] .watch-progress-panel { background:rgba(124,58,237,.10); border-color:rgba(167,139,250,.25); }
+        html[data-theme="dark"] .watch-status-unwatched { background:#334155; color:#cbd5e1; }
+        html[data-theme="dark"] .watch-status-watching { background:rgba(124,58,237,.2); color:#c4b5fd; }
+        html[data-theme="dark"] .watch-status-complete { background:rgba(34,197,94,.16); color:#86efac; }
     </style>
 
 <style id="light-theme-override">
@@ -646,8 +660,8 @@ nav .archive-shortcut-fix { white-space: nowrap; flex-shrink: 0; }
                 <div class="bg-cardBg/60 backdrop-blur-sm border border-slate-700/40 p-6 rounded-2xl flex flex-col justify-between hover:border-primary/30 transition-all duration-300">
                     <span class="text-xs text-slate-400 font-semibold tracking-wider uppercase mb-2 block">🏆 All-Time Favorite</span>
                     <div>
-                        <span class="font-heading font-bold text-lg sm:text-2xl text-white block truncate">아오하라이드</span>
-                        <span class="text-slate-400 text-xs font-semibold">Ao Haru Ride</span>
+                        <span id="stat-favorite-title" class="font-heading font-bold text-lg sm:text-2xl text-white block truncate">아오하라이드</span>
+                        <span id="stat-favorite-subtitle" class="text-slate-400 text-xs font-semibold">Ao Haru Ride</span>
                     </div>
                     <div class="h-1 bg-slate-700/50 rounded-full mt-4 overflow-hidden">
                         <div class="w-full h-full bg-successGreen rounded-full"></div>
@@ -1017,6 +1031,15 @@ nav .archive-shortcut-fix { white-space: nowrap; flex-shrink: 0; }
                             <input id="edit-tags" maxlength="200" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="힐링, 설렘, 성장">
                         </label>
                     </div>
+                    <section class="rounded-2xl border border-amber-200 bg-amber-50/70 p-4">
+                        <label class="flex cursor-pointer items-start gap-3">
+                            <input id="edit-all-time-favorite" type="checkbox" class="mt-1 h-5 w-5 rounded border-amber-300 text-amber-500 focus:ring-amber-400">
+                            <span>
+                                <strong class="block text-sm font-extrabold text-slate-800">🏆 All-Time Favorite로 지정</strong>
+                                <span class="mt-1 block text-xs leading-relaxed text-slate-500">저장하면 이 작품이 나의 덕력 지표에 표시됩니다. 가장 최근에 지정한 한 작품만 최애작으로 유지됩니다.</span>
+                            </span>
+                        </label>
+                    </section>
                     <label class="block text-sm font-semibold text-slate-700">한 줄 소개
                         <textarea id="edit-plot" maxlength="500" rows="3" class="mt-2 w-full resize-y rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"></textarea>
                     </label>
@@ -1102,6 +1125,33 @@ nav .archive-shortcut-fix { white-space: nowrap; flex-shrink: 0; }
                                     <i class="fa-solid fa-trash"></i>
                                     <span>추가한 작품 삭제</span>
                                 </button>
+                            </div>
+
+                            <div id="modal-watch-progress" class="watch-progress-panel mt-4 rounded-2xl p-4 space-y-3">
+                                <div class="flex flex-wrap items-center justify-between gap-3">
+                                    <div>
+                                        <p class="text-xs font-bold text-slate-700">시청 진행도</p>
+                                        <p id="modal-progress-summary" class="mt-1 text-xs text-slate-500">아직 시작하지 않았어요.</p>
+                                    </div>
+                                    <select id="modal-watch-status" class="rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-bold text-slate-700 outline-none focus:border-primary">
+                                        <option value="unwatched">안 봄</option>
+                                        <option value="watching">보는 중</option>
+                                        <option value="complete">완료</option>
+                                    </select>
+                                </div>
+                                <div class="grid grid-cols-[auto_1fr_auto] items-center gap-2">
+                                    <button id="progress-minus-btn" type="button" class="h-9 w-9 rounded-xl border border-slate-300 bg-white text-slate-600 transition hover:border-primary hover:text-primary" aria-label="한 화 줄이기">−</button>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <label class="text-[10px] font-bold text-slate-500">현재 화
+                                            <input id="modal-current-episode" type="number" min="0" step="1" class="mt-1 w-full rounded-lg border border-slate-300 bg-white px-2 py-2 text-center text-xs font-bold outline-none focus:border-primary">
+                                        </label>
+                                        <label class="text-[10px] font-bold text-slate-500">전체 화
+                                            <input id="modal-total-episodes" type="number" min="1" step="1" class="mt-1 w-full rounded-lg border border-slate-300 bg-white px-2 py-2 text-center text-xs font-bold outline-none focus:border-primary">
+                                        </label>
+                                    </div>
+                                    <button id="progress-plus-btn" type="button" class="h-9 w-9 rounded-xl border border-slate-300 bg-white text-slate-600 transition hover:border-primary hover:text-primary" aria-label="한 화 늘리기">＋</button>
+                                </div>
+                                <div class="watch-progress-bar"><div id="modal-progress-fill" class="watch-progress-fill" style="width:0%"></div></div>
                             </div>
                         </div>
 
@@ -2402,14 +2452,18 @@ nav .archive-shortcut-fix { white-space: nowrap; flex-shrink: 0; }
         let isSpinning = false;
 
         const WATCHED_STORAGE_KEY = 'anivault_watched_anime_ids_v1';
+        const WATCH_PROGRESS_STORAGE_KEY = 'anivault_watch_progress_v1';
         const CUSTOM_ANIME_STORAGE_KEY = 'anivault_custom_anime_v1';
         const CONTENT_OVERRIDES_STORAGE_KEY = 'anivault_content_overrides_v1';
+        const ALL_TIME_FAVORITE_STORAGE_KEY = 'anivault_all_time_favorite_v1';
+        let allTimeFavoriteId = 5;
         let contentOverrides = {};
         let originalBuiltInAnime = [];
         const POSTER_DB_NAME = 'AniVaultPosterDB';
         const POSTER_DB_VERSION = 1;
         const POSTER_STORE_NAME = 'posters';
         let watchedAnimeIds = new Set();
+        let watchProgress = {};
         let pendingPosterFile = null;
         let pendingAutoPosterUrl = '';
         let pendingPosterObjectUrl = '';
@@ -2751,6 +2805,34 @@ nav .archive-shortcut-fix { white-space: nowrap; flex-shrink: 0; }
             return emojiMap[clean] || clean;
         }
 
+        function loadAllTimeFavorite() {
+            const savedId = Number(localStorage.getItem(ALL_TIME_FAVORITE_STORAGE_KEY));
+            allTimeFavoriteId = Number.isFinite(savedId) && savedId > 0 ? savedId : 5;
+        }
+
+        function saveAllTimeFavorite(id) {
+            const nextId = Number(id);
+            if (!Number.isFinite(nextId) || nextId <= 0) return;
+            allTimeFavoriteId = nextId;
+            localStorage.setItem(ALL_TIME_FAVORITE_STORAGE_KEY, String(nextId));
+            updateAllTimeFavoriteStat();
+        }
+
+        function updateAllTimeFavoriteStat() {
+            let anime = animeDatabase.find(item => Number(item.id) === Number(allTimeFavoriteId));
+            if (!anime) {
+                anime = animeDatabase.find(item => Number(item.id) === 5) || animeDatabase[0];
+                if (anime) {
+                    allTimeFavoriteId = Number(anime.id);
+                    localStorage.setItem(ALL_TIME_FAVORITE_STORAGE_KEY, String(allTimeFavoriteId));
+                }
+            }
+            const title = document.getElementById('stat-favorite-title');
+            const subtitle = document.getElementById('stat-favorite-subtitle');
+            if (title) title.textContent = anime?.title || '선택되지 않음';
+            if (subtitle) subtitle.textContent = anime?.englishTitle || 'Choose your favorite';
+        }
+
         function loadCustomAnime() {
             try {
                 const saved = JSON.parse(localStorage.getItem(CUSTOM_ANIME_STORAGE_KEY) || '[]');
@@ -2825,6 +2907,8 @@ nav .archive-shortcut-fix { white-space: nowrap; flex-shrink: 0; }
             document.getElementById('edit-recommend').value = (anime.recommendTo || []).join(', ');
             document.getElementById('edit-platforms').value = (anime.platforms || []).join(', ');
             document.getElementById('edit-series').value = seriesToEditableText(anime.series);
+            const favoriteCheckbox = document.getElementById('edit-all-time-favorite');
+            if (favoriteCheckbox) favoriteCheckbox.checked = Number(anime.id) === Number(allTimeFavoriteId);
             loadCurrentEditPoster(anime);
             const resetButton = document.getElementById('reset-original-content-btn');
             if (resetButton) {
@@ -2886,6 +2970,9 @@ nav .archive-shortcut-fix { white-space: nowrap; flex-shrink: 0; }
                 return;
             }
             Object.assign(anime, updated);
+
+            const shouldSetFavorite = Boolean(document.getElementById('edit-all-time-favorite')?.checked);
+            if (shouldSetFavorite) saveAllTimeFavorite(id);
 
             try {
                 if (editPosterRemoveRequested) {
@@ -2959,6 +3046,7 @@ nav .archive-shortcut-fix { white-space: nowrap; flex-shrink: 0; }
             if (countEl) countEl.textContent = count.toLocaleString();
             const completedEl = document.getElementById('stat-completed');
             if (completedEl) completedEl.textContent = count.toLocaleString();
+            updateAllTimeFavoriteStat();
         }
 
         function openAddAnimeModal() {
@@ -3099,61 +3187,125 @@ nav .archive-shortcut-fix { white-space: nowrap; flex-shrink: 0; }
             return shuffled;
         }
 
+        function inferTotalEpisodes(anime) {
+            if (!anime || !Array.isArray(anime.series)) return 12;
+            let total = 0;
+            anime.series.forEach(part => {
+                const text = String(part.episodes || '');
+                const matches = text.match(/\d+/g);
+                if (!matches) return;
+                const value = Number(matches[0]);
+                if (/극장판|영화|분/.test(text)) return;
+                if (/이상|돌파/.test(text) && value > 100) return;
+                total += value;
+            });
+            return total > 0 ? total : 12;
+        }
+
+        function normalizeProgress(id) {
+            const numericId = Number(id);
+            const anime = animeDatabase.find(item => Number(item.id) === numericId);
+            const saved = watchProgress[numericId] || {};
+            const status = ['unwatched','watching','complete'].includes(saved.status) ? saved.status : 'unwatched';
+            const total = Math.max(1, Number(saved.total) || inferTotalEpisodes(anime));
+            let current = Math.max(0, Number(saved.current) || 0);
+            if (status === 'complete') current = total;
+            current = Math.min(current, total);
+            return { status, current, total };
+        }
+
         function loadWatchedAnimeIds() {
             try {
-                const saved = JSON.parse(localStorage.getItem(WATCHED_STORAGE_KEY) || '[]');
-                watchedAnimeIds = new Set(Array.isArray(saved) ? saved.map(Number) : []);
-            } catch (error) {
-                watchedAnimeIds = new Set();
-            }
+                const oldSaved = JSON.parse(localStorage.getItem(WATCHED_STORAGE_KEY) || '[]');
+                watchedAnimeIds = new Set(Array.isArray(oldSaved) ? oldSaved.map(Number) : []);
+            } catch (error) { watchedAnimeIds = new Set(); }
+            try {
+                const saved = JSON.parse(localStorage.getItem(WATCH_PROGRESS_STORAGE_KEY) || '{}');
+                watchProgress = saved && typeof saved === 'object' ? saved : {};
+            } catch (error) { watchProgress = {}; }
+            watchedAnimeIds.forEach(id => {
+                if (!watchProgress[id]) {
+                    const anime = animeDatabase.find(item => Number(item.id) === Number(id));
+                    const total = inferTotalEpisodes(anime);
+                    watchProgress[id] = { status:'complete', current:total, total };
+                }
+            });
+            saveWatchedAnimeIds();
         }
 
         function saveWatchedAnimeIds() {
+            watchedAnimeIds = new Set(Object.entries(watchProgress).filter(([,v]) => v?.status === 'complete').map(([id]) => Number(id)));
             localStorage.setItem(WATCHED_STORAGE_KEY, JSON.stringify([...watchedAnimeIds]));
+            localStorage.setItem(WATCH_PROGRESS_STORAGE_KEY, JSON.stringify(watchProgress));
         }
 
-        function isAnimeWatched(id) {
-            return watchedAnimeIds.has(Number(id));
+        function getWatchProgress(id) {
+            const progress = normalizeProgress(id);
+            watchProgress[Number(id)] = progress;
+            return progress;
+        }
+
+        function isAnimeWatched(id) { return getWatchProgress(id).status === 'complete'; }
+        function isAnimeStarted(id) { return getWatchProgress(id).status !== 'unwatched'; }
+
+        function setWatchProgress(id, next, { silent = false } = {}) {
+            const numericId = Number(id);
+            const anime = animeDatabase.find(item => Number(item.id) === numericId);
+            if (!anime) return;
+            const prev = getWatchProgress(numericId);
+            let status = ['unwatched','watching','complete'].includes(next.status) ? next.status : prev.status;
+            const total = Math.max(1, Number(next.total ?? prev.total) || inferTotalEpisodes(anime));
+            let current = Math.max(0, Number(next.current ?? prev.current) || 0);
+            if (status === 'complete') current = total;
+            if (status === 'unwatched') current = 0;
+            if (status === 'watching' && current >= total) status = 'complete';
+            current = Math.min(current, total);
+            watchProgress[numericId] = { status, current, total };
+            saveWatchedAnimeIds();
+            filterArchive();
+            updateModalWatchedButton();
+            updateModalProgressControls();
+            if (!silent) {
+                const label = status === 'complete' ? '완료' : status === 'watching' ? `보는 중 (${current}/${total}화)` : '안 봄';
+                showToast(`'${anime.title}' 시청 상태: ${label}`);
+            }
         }
 
         function updateModalWatchedButton() {
             const button = document.getElementById('modal-watched-toggle');
             if (!button || !selectedAnime) return;
-
-            const watched = isAnimeWatched(selectedAnime.id);
-            button.setAttribute('aria-pressed', String(watched));
-            button.classList.toggle('bg-primary', watched);
-            button.classList.toggle('text-white', watched);
-            button.classList.toggle('border-primary', watched);
-            button.classList.toggle('shadow-primary/20', watched);
-            button.classList.toggle('bg-white', !watched);
-            button.classList.toggle('text-slate-700', !watched);
-            button.classList.toggle('border-slate-300', !watched);
-            button.innerHTML = watched
-                ? '<i class="fa-solid fa-check"></i><span>이미 본 작품</span>'
-                : '<i class="fa-solid fa-eye"></i><span>봤어요로 표시</span>';
+            const completed = getWatchProgress(selectedAnime.id).status === 'complete';
+            button.setAttribute('aria-pressed', String(completed));
+            button.classList.toggle('bg-primary', completed);
+            button.classList.toggle('text-white', completed);
+            button.classList.toggle('border-primary', completed);
+            button.classList.toggle('bg-white', !completed);
+            button.classList.toggle('text-slate-700', !completed);
+            button.classList.toggle('border-slate-300', !completed);
+            button.innerHTML = completed ? '<i class="fa-solid fa-check"></i><span>완료한 작품</span>' : '<i class="fa-solid fa-check-double"></i><span>완료로 표시</span>';
         }
 
-        function getRouletteCandidates() {
-            return animeDatabase.filter(item => !isAnimeWatched(item.id));
+        function updateModalProgressControls() {
+            if (!selectedAnime) return;
+            const p = getWatchProgress(selectedAnime.id);
+            const status = document.getElementById('modal-watch-status');
+            const current = document.getElementById('modal-current-episode');
+            const total = document.getElementById('modal-total-episodes');
+            const fill = document.getElementById('modal-progress-fill');
+            const summary = document.getElementById('modal-progress-summary');
+            if (!status || !current || !total || !fill || !summary) return;
+            status.value = p.status; current.value = p.current; total.value = p.total;
+            current.disabled = p.status === 'unwatched' || p.status === 'complete';
+            const percent = Math.round((p.current / p.total) * 100);
+            fill.style.width = `${percent}%`;
+            summary.textContent = p.status === 'complete' ? `완료 · ${p.total}화 모두 감상했어요.` : p.status === 'watching' ? `보는 중 · ${p.current} / ${p.total}화 (${percent}%)` : '아직 시작하지 않았어요.';
         }
+
+        function getRouletteCandidates() { return animeDatabase.filter(item => !isAnimeStarted(item.id)); }
 
         function toggleWatchedAnime(id) {
-            const numericId = Number(id);
-            const anime = animeDatabase.find(item => item.id === numericId);
-            if (!anime) return;
-
-            if (watchedAnimeIds.has(numericId)) {
-                watchedAnimeIds.delete(numericId);
-                showToast(`'${anime.title}'을(를) 안 본 작품으로 변경했습니다.`);
-            } else {
-                watchedAnimeIds.add(numericId);
-                showToast(`✅ '${anime.title}'을(를) 이미 본 작품으로 표시했습니다.`);
-            }
-
-            saveWatchedAnimeIds();
-            filterArchive();
-            updateModalWatchedButton();
+            const p = getWatchProgress(id);
+            setWatchProgress(id, p.status === 'complete' ? { status:'unwatched', current:0 } : { status:'complete', current:p.total });
         }
 
         // Roulette lifecycle state: allow closing safely during an active spin.
@@ -3647,6 +3799,8 @@ nav .archive-shortcut-fix { white-space: nowrap; flex-shrink: 0; }
             data.forEach(item => {
                 const card = document.createElement('div');
                 const watched = isAnimeWatched(item.id);
+                const progress = getWatchProgress(item.id);
+                const progressPercent = Math.round((progress.current / progress.total) * 100);
                 card.className = `anime-card bg-cardBg border border-slate-700/60 rounded-2xl overflow-hidden shadow-lg transition-all duration-300 transform hover:-translate-y-2 hover:border-primary/50 hover:shadow-primary/10 cursor-pointer group ${watched ? 'is-watched' : ''}`;
                 card.onclick = () => openDetailModal(item.id);
 
@@ -3677,8 +3831,8 @@ nav .archive-shortcut-fix { white-space: nowrap; flex-shrink: 0; }
                             aria-label="${item.title} ${watched ? '본 작품 표시 해제' : '이미 본 작품으로 표시'}"
                             onclick="event.stopPropagation(); toggleWatchedAnime(${item.id})"
                         >
-                            <i class="fa-solid ${watched ? 'fa-check' : 'fa-eye'}"></i>
-                            <span>${watched ? '봤어요' : '봤나요?'}</span>
+                            <i class="fa-solid ${watched ? 'fa-check' : progress.status === 'watching' ? 'fa-play' : 'fa-eye'}"></i>
+                            <span>${watched ? '완료' : progress.status === 'watching' ? '보는 중' : '안 봄'}</span>
                         </button>
 
                         <!-- Top Floating Badges -->
@@ -3705,6 +3859,13 @@ nav .archive-shortcut-fix { white-space: nowrap; flex-shrink: 0; }
                             <span class="text-[11px] font-semibold text-slate-300 bg-slate-800 px-2 py-0.5 rounded-full border border-slate-700/50">
                                 💜 애정도 ${item.rating.toFixed(1)}
                             </span>
+                        </div>
+                        <div class="pt-1 space-y-1.5">
+                            <div class="flex items-center justify-between gap-2">
+                                <span class="watch-status-badge watch-status-${progress.status}">${progress.status === 'complete' ? '✓ 완료' : progress.status === 'watching' ? '▶ 보는 중' : '○ 안 봄'}</span>
+                                <span class="text-[10px] font-bold text-slate-500">${progress.status === 'unwatched' ? 0 : progress.current}/${progress.total}화</span>
+                            </div>
+                            <div class="watch-progress-bar"><div class="watch-progress-fill" style="width:${progressPercent}%"></div></div>
                         </div>
                     </div>
                 `;
@@ -3790,6 +3951,7 @@ nav .archive-shortcut-fix { white-space: nowrap; flex-shrink: 0; }
 
             selectedAnime = anime;
             updateModalWatchedButton();
+            updateModalProgressControls();
             const deleteCustomButton = document.getElementById('modal-delete-custom');
             if (deleteCustomButton) deleteCustomButton.classList.toggle('hidden', !anime.isCustom);
             
@@ -3962,7 +4124,7 @@ nav .archive-shortcut-fix { white-space: nowrap; flex-shrink: 0; }
             currentRouletteWinner = null;
 
             if (currentRoulettePool.length === 0) {
-                showToast('모든 작품을 이미 본 것으로 표시했어요. 일부 작품의 표시를 해제해 주세요.');
+                showToast('추천 가능한 새 작품이 없어요. 보는 중 또는 완료 상태를 일부 해제해 주세요.');
                 return;
             }
 
@@ -3971,7 +4133,7 @@ nav .archive-shortcut-fix { white-space: nowrap; flex-shrink: 0; }
 
             const candidateInfo = document.getElementById('roulette-candidate-info');
             if (candidateInfo) {
-                candidateInfo.innerText = `이미 본 ${watchedAnimeIds.size}개를 제외한 ${currentRoulettePool.length}개 작품 중에서 추천합니다.`;
+                candidateInfo.innerText = `보는 중·완료 작품을 제외한 ${currentRoulettePool.length}개 작품 중에서 추천합니다.`;
             }
             
             // Build the strip dynamically for spin simulation
@@ -4020,7 +4182,7 @@ nav .archive-shortcut-fix { white-space: nowrap; flex-shrink: 0; }
             currentRouletteWinner = null;
 
             if (currentRoulettePool.length === 0) {
-                showToast('추천 가능한 미시청 작품이 없습니다.');
+                showToast('추천 가능한 새 작품이 없습니다.');
                 return;
             }
 
@@ -4203,6 +4365,7 @@ nav .archive-shortcut-fix { white-space: nowrap; flex-shrink: 0; }
 
             // Restore the user's watched-anime selections before rendering cards.
             loadWatchedAnimeIds();
+            loadAllTimeFavorite();
             captureOriginalBuiltInAnime();
             loadCustomAnime();
             loadContentOverrides();
@@ -4247,6 +4410,39 @@ nav .archive-shortcut-fix { white-space: nowrap; flex-shrink: 0; }
                     if (selectedAnime) toggleWatchedAnime(selectedAnime.id);
                 });
             }
+
+            const watchStatusSelect = document.getElementById('modal-watch-status');
+            const currentEpisodeInput = document.getElementById('modal-current-episode');
+            const totalEpisodesInput = document.getElementById('modal-total-episodes');
+            watchStatusSelect?.addEventListener('change', () => {
+                if (!selectedAnime) return;
+                const prev = getWatchProgress(selectedAnime.id);
+                const nextStatus = watchStatusSelect.value;
+                setWatchProgress(selectedAnime.id, { status: nextStatus, current: nextStatus === 'watching' ? Math.max(1, prev.current) : prev.current, total: Number(totalEpisodesInput.value) || prev.total });
+            });
+            currentEpisodeInput?.addEventListener('change', () => {
+                if (!selectedAnime) return;
+                const prev = getWatchProgress(selectedAnime.id);
+                const current = Math.max(0, Number(currentEpisodeInput.value) || 0);
+                setWatchProgress(selectedAnime.id, { status: current > 0 ? 'watching' : 'unwatched', current, total: Number(totalEpisodesInput.value) || prev.total });
+            });
+            totalEpisodesInput?.addEventListener('change', () => {
+                if (!selectedAnime) return;
+                const prev = getWatchProgress(selectedAnime.id);
+                setWatchProgress(selectedAnime.id, { status: prev.status, current: prev.current, total: Math.max(1, Number(totalEpisodesInput.value) || prev.total) });
+            });
+            document.getElementById('progress-minus-btn')?.addEventListener('click', () => {
+                if (!selectedAnime) return;
+                const prev = getWatchProgress(selectedAnime.id);
+                const current = Math.max(0, prev.current - 1);
+                setWatchProgress(selectedAnime.id, { status: current > 0 ? 'watching' : 'unwatched', current, total: prev.total });
+            });
+            document.getElementById('progress-plus-btn')?.addEventListener('click', () => {
+                if (!selectedAnime) return;
+                const prev = getWatchProgress(selectedAnime.id);
+                const current = Math.min(prev.total, prev.current + 1);
+                setWatchProgress(selectedAnime.id, { status: current >= prev.total ? 'complete' : 'watching', current, total: prev.total });
+            });
 
             // Start Visual stars background particles
             initStars();
