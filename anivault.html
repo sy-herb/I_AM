@@ -151,6 +151,24 @@
         .tab-indicator {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
+
+        /* Watched anime selection */
+        .watched-toggle {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        .watched-toggle.is-watched {
+            background: rgba(34, 197, 94, 0.94) !important;
+            color: #ffffff !important;
+            border-color: rgba(34, 197, 94, 0.95) !important;
+        }
+        .anime-card.is-watched {
+            opacity: 0.72;
+        }
+        .anime-card.is-watched:hover {
+            opacity: 1;
+        }
     </style>
 
 <style id="light-theme-override">
@@ -347,7 +365,7 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
                 </div>
 
                 <!-- Stat 4 -->
-                <div class="bg-cardBg/60 backdrop-blur-sm border border-slate-700/40 p-6 rounded-2xl flex flex-col justify-between hover:border-primary/30 transition-all duration-300 col-span-2 lg:col-span-1">
+                <div class="bg-cardBg/60 backdrop-blur-sm border border-slate-700/40 p-6 rounded-2xl flex flex-col justify-between hover:border-primary/30 transition-all duration-300">
                     <span class="text-xs text-slate-400 font-semibold tracking-wider uppercase mb-2 block">🏆 All-Time Favorite</span>
                     <div>
                         <span class="font-heading font-bold text-lg sm:text-2xl text-white block truncate">아오하라이드</span>
@@ -567,6 +585,10 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
                         <div>
                             <h2 id="modal-title" class="font-heading font-extrabold text-2xl sm:text-3xl text-white tracking-tight"></h2>
                             <p id="modal-genre" class="text-xs text-hoverViolet font-semibold mt-1 uppercase tracking-wider"></p>
+                            <button id="modal-watched-toggle" type="button" class="mt-3 inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-xs font-bold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary" aria-pressed="false">
+                                <i class="fa-solid fa-eye"></i>
+                                <span>봤어요로 표시</span>
+                            </button>
                         </div>
 
                         <!-- 3-Tab Header Layout -->
@@ -668,7 +690,7 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
             <div class="text-center mb-6">
                 <span class="text-xs font-semibold text-hoverViolet uppercase tracking-widest bg-primary/10 border border-primary/20 px-3 py-1 rounded-full"><i class="fa-solid fa-dice"></i> MATCHING ALGORITHM</span>
                 <h3 class="font-heading font-extrabold text-xl text-white mt-3">나의 취향 저격수 고르기</h3>
-                <p class="text-slate-400 text-xs mt-1">55개의 보물창고 보관품 중 최적의 애니메이션이 결정됩니다.</p>
+                <p id="roulette-candidate-info" class="text-slate-400 text-xs mt-1">이미 본 작품을 제외한 애니메이션 중에서 추천합니다.</p>
             </div>
 
             <!-- Slot Machine Physical Container -->
@@ -1855,6 +1877,67 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
         let activeMoodFilter = null;
         let isSpinning = false;
 
+        const WATCHED_STORAGE_KEY = 'anivault_watched_anime_ids_v1';
+        let watchedAnimeIds = new Set();
+        let currentRoulettePool = [];
+
+        function loadWatchedAnimeIds() {
+            try {
+                const saved = JSON.parse(localStorage.getItem(WATCHED_STORAGE_KEY) || '[]');
+                watchedAnimeIds = new Set(Array.isArray(saved) ? saved.map(Number) : []);
+            } catch (error) {
+                watchedAnimeIds = new Set();
+            }
+        }
+
+        function saveWatchedAnimeIds() {
+            localStorage.setItem(WATCHED_STORAGE_KEY, JSON.stringify([...watchedAnimeIds]));
+        }
+
+        function isAnimeWatched(id) {
+            return watchedAnimeIds.has(Number(id));
+        }
+
+        function updateModalWatchedButton() {
+            const button = document.getElementById('modal-watched-toggle');
+            if (!button || !selectedAnime) return;
+
+            const watched = isAnimeWatched(selectedAnime.id);
+            button.setAttribute('aria-pressed', String(watched));
+            button.classList.toggle('bg-primary', watched);
+            button.classList.toggle('text-white', watched);
+            button.classList.toggle('border-primary', watched);
+            button.classList.toggle('shadow-primary/20', watched);
+            button.classList.toggle('bg-white', !watched);
+            button.classList.toggle('text-slate-700', !watched);
+            button.classList.toggle('border-slate-300', !watched);
+            button.innerHTML = watched
+                ? '<i class="fa-solid fa-check"></i><span>이미 본 작품</span>'
+                : '<i class="fa-solid fa-eye"></i><span>봤어요로 표시</span>';
+        }
+
+        function getRouletteCandidates() {
+            return animeDatabase.filter(item => !isAnimeWatched(item.id));
+        }
+
+        function toggleWatchedAnime(id) {
+            const numericId = Number(id);
+            const anime = animeDatabase.find(item => item.id === numericId);
+            if (!anime) return;
+
+            if (watchedAnimeIds.has(numericId)) {
+                watchedAnimeIds.delete(numericId);
+                showToast(`'${anime.title}'을(를) 안 본 작품으로 변경했습니다.`);
+            } else {
+                watchedAnimeIds.add(numericId);
+                showToast(`✅ '${anime.title}'을(를) 이미 본 작품으로 표시했습니다.`);
+            }
+
+            saveWatchedAnimeIds();
+            filterArchive();
+            updateModalWatchedButton();
+        }
+
         // Roulette lifecycle state: allow closing safely during an active spin.
         let rouletteSessionId = 0;
         let rouletteSoundTimer = null;
@@ -2316,7 +2399,8 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
 
             data.forEach(item => {
                 const card = document.createElement('div');
-                card.className = "bg-cardBg border border-slate-700/60 rounded-2xl overflow-hidden shadow-lg transition-all duration-300 transform hover:-translate-y-2 hover:border-primary/50 hover:shadow-primary/10 cursor-pointer group";
+                const watched = isAnimeWatched(item.id);
+                card.className = `anime-card bg-cardBg border border-slate-700/60 rounded-2xl overflow-hidden shadow-lg transition-all duration-300 transform hover:-translate-y-2 hover:border-primary/50 hover:shadow-primary/10 cursor-pointer group ${watched ? 'is-watched' : ''}`;
                 card.onclick = () => openDetailModal(item.id);
 
                 // Build star template
@@ -2337,6 +2421,18 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
                             </div>
                             <span class="text-xs font-semibold text-white tracking-wider uppercase">상세 도감 열기</span>
                         </div>
+
+                        <!-- Watched selection button -->
+                        <button
+                            type="button"
+                            class="watched-toggle ${watched ? 'is-watched' : ''} absolute top-2 right-2 z-30 inline-flex items-center gap-1 rounded-full border border-white/60 bg-white/90 px-2.5 py-1 text-[10px] font-bold text-slate-700 shadow-md transition hover:scale-105"
+                            aria-pressed="${watched}"
+                            aria-label="${item.title} ${watched ? '본 작품 표시 해제' : '이미 본 작품으로 표시'}"
+                            onclick="event.stopPropagation(); toggleWatchedAnime(${item.id})"
+                        >
+                            <i class="fa-solid ${watched ? 'fa-check' : 'fa-eye'}"></i>
+                            <span>${watched ? '봤어요' : '봤나요?'}</span>
+                        </button>
 
                         <!-- Top Floating Badges -->
                         <div class="absolute top-2 left-2 flex flex-col gap-1.5 z-10">
@@ -2446,6 +2542,7 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
             if (!anime) return;
 
             selectedAnime = anime;
+            updateModalWatchedButton();
             
             // Build text elements
             document.getElementById('modal-title').innerText = anime.title;
@@ -2612,21 +2709,33 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
 
         // Trigger slot-rolling modal "Pick For Me"
         function triggerPickForMe() {
+            currentRoulettePool = getRouletteCandidates();
+
+            if (currentRoulettePool.length === 0) {
+                showToast('모든 작품을 이미 본 것으로 표시했어요. 일부 작품의 표시를 해제해 주세요.');
+                return;
+            }
+
             const modal = document.getElementById('roulette-modal');
             modal.classList.remove('hidden');
+
+            const candidateInfo = document.getElementById('roulette-candidate-info');
+            if (candidateInfo) {
+                candidateInfo.innerText = `이미 본 ${watchedAnimeIds.size}개를 제외한 ${currentRoulettePool.length}개 작품 중에서 추천합니다.`;
+            }
             
             // Build the strip dynamically for spin simulation
             const strip = document.getElementById('slot-strip');
             strip.innerHTML = '';
             
-            // Multiply items to simulate rolling infinity loop strip
-            const itemsToPopulate = [...animeDatabase, ...animeDatabase, ...animeDatabase, ...animeDatabase];
+            // Multiply eligible items to simulate an infinite slot strip
+            const itemsToPopulate = [...currentRoulettePool, ...currentRoulettePool, ...currentRoulettePool, ...currentRoulettePool];
             itemsToPopulate.forEach((item, index) => {
                 const row = document.createElement('div');
                 row.className = "h-16 flex items-center justify-center gap-3 w-full border-b border-slate-900 px-4 flex-shrink-0 bg-slate-950";
                 row.innerHTML = `
                     <div class="w-8 h-8 rounded bg-gradient-to-tr from-primary to-hoverViolet flex items-center justify-center text-xs text-white font-bold flex-shrink-0">
-                        ${(index % animeDatabase.length) + 1}
+                        ${(index % currentRoulettePool.length) + 1}
                     </div>
                     <span class="font-heading font-extrabold text-sm text-slate-100 truncate max-w-[180px]">${item.title}</span>
                     <span class="text-[10px] text-starYellow ml-auto"><i class="fa-solid fa-star"></i> ${item.rating.toFixed(1)}</span>
@@ -2670,9 +2779,15 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
 
             statusText.innerText = "추천작 결정 중... 🔮";
 
+            if (currentRoulettePool.length === 0) {
+                isSpinning = false;
+                showToast('추천 가능한 미시청 작품이 없습니다.');
+                return;
+            }
+
             const rowHeight = 64;
-            const winnerIndex = Math.floor(Math.random() * animeDatabase.length);
-            const targetOffset = (animeDatabase.length * 2) + winnerIndex;
+            const winnerIndex = Math.floor(Math.random() * currentRoulettePool.length);
+            const targetOffset = (currentRoulettePool.length * 2) + winnerIndex;
             const stopPosition = -(targetOffset * rowHeight) + 64;
 
             strip.style.transition = 'none';
@@ -2709,7 +2824,7 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
         function finalizeSpin(winnerIndex, sessionId = rouletteSessionId) {
             if (!isSpinning || sessionId !== rouletteSessionId) return;
 
-            const winner = animeDatabase[winnerIndex];
+            const winner = currentRoulettePool[winnerIndex];
             const statusText = document.getElementById('roulette-status');
 
             playTickSound(440, 0.15, 'sine');
@@ -2720,7 +2835,7 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
                 if (sessionId === rouletteSessionId) playTickSound(880, 0.35, 'sine');
             }, 260);
 
-            statusText.innerText = `오늘의 저격수 낙찰: ${winner.title}!`;
+            statusText.innerText = `오늘의 추천작 : ${winner.title}!`;
 
             rouletteResultTimer = setTimeout(() => {
                 if (sessionId !== rouletteSessionId) return;
@@ -2762,6 +2877,16 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
                     closeDetailModal();
                 }
             });
+
+            // Restore the user's watched-anime selections before rendering cards.
+            loadWatchedAnimeIds();
+
+            const modalWatchedToggle = document.getElementById('modal-watched-toggle');
+            if (modalWatchedToggle) {
+                modalWatchedToggle.addEventListener('click', () => {
+                    if (selectedAnime) toggleWatchedAnime(selectedAnime.id);
+                });
+            }
 
             // Start Visual stars background particles
             initStars();
