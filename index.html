@@ -491,6 +491,19 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
     .brand-tagline { display: none; }
 }
 </style>
+
+<style id="nav-responsive-fix">
+nav .nav-shell-fix { min-width: 0; }
+nav .nav-logo-fix { flex: 1 1 auto; min-width: 0; }
+nav .nav-actions-fix { flex: 0 0 auto; }
+nav .archive-shortcut-fix { white-space: nowrap; flex-shrink: 0; }
+@media (max-width: 640px) {
+  nav .archive-shortcut-fix { width: 2.5rem; height: 2.5rem; padding: 0; border-radius: .75rem; display: inline-flex; align-items: center; justify-content: center; }
+  nav .archive-shortcut-text { display: none; }
+  nav .archive-shortcut-icon { display: inline-block; }
+}
+@media (min-width: 641px) { nav .archive-shortcut-icon { display: none; } }
+</style>
 </head>
 <body class="bg-midnight text-slate-100 font-body min-h-screen relative overflow-x-hidden">
 
@@ -500,7 +513,7 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
     <!-- Navigation GNB -->
     <nav class="fixed top-0 left-0 w-full z-40 glass-nav">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
+            <div class="flex items-center justify-between h-16 gap-3 nav-shell-fix">
                 <!-- Refined AniVault Wordmark -->
                 <button type="button" class="brand-lockup" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="AniVault 홈으로 이동">
                     <span class="brand-mark" aria-hidden="true">
@@ -525,8 +538,9 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
                         <span class="theme-icon moon-icon"><i class="fa-solid fa-moon"></i></span>
                         <span class="theme-icon sun-icon"><i class="fa-solid fa-sun"></i></span>
                     </button>
-                    <a href="#archive" class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-semibold py-2 px-3 sm:px-4 rounded-lg text-xs transition-all duration-300 border border-slate-700/50">
-                        도감 탐색
+                    <a href="#archive" class="archive-shortcut-fix bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-semibold py-2 px-3 sm:px-4 rounded-lg text-xs transition-all duration-300 border border-slate-700/50" aria-label="도감 탐색" title="도감 탐색">
+                        <span class="archive-shortcut-text">도감 탐색</span>
+                        <i class="archive-shortcut-icon fa-solid fa-box-archive" aria-hidden="true"></i>
                     </a>
                 </div>
             </div>
@@ -618,7 +632,7 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
 
                 <!-- Stat 3 -->
                 <div class="bg-cardBg/60 backdrop-blur-sm border border-slate-700/40 p-6 rounded-2xl flex flex-col justify-between hover:border-primary/30 transition-all duration-300">
-                    <span class="text-xs text-slate-400 font-semibold tracking-wider uppercase mb-2 block">⭐ Average Rating</span>
+                    <span class="text-xs text-slate-400 font-semibold tracking-wider uppercase mb-2 block">💜 Average Affection</span>
                     <div>
                         <span id="stat-rating" class="font-heading font-extrabold text-3xl sm:text-4xl text-white">0.0</span>
                         <span class="text-slate-400 text-sm font-semibold ml-1">/ 5.0</span>
@@ -672,9 +686,9 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
                     <p id="today-sub" class="text-sm text-slate-400 mt-1"></p>
                 </div>
 
-                <!-- Star Rating Representation -->
+                <!-- Personal affection representation -->
                 <div class="flex items-center justify-center md:justify-start gap-1">
-                    <div id="today-stars" class="flex gap-0.5 text-starYellow text-sm"></div>
+                    <div id="today-stars" class="flex gap-0.5 text-hoverViolet text-sm"></div>
                     <span id="today-rating-num" class="text-slate-300 text-sm font-semibold ml-2"></span>
                 </div>
 
@@ -761,14 +775,15 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
                         </div>
                     </div>
 
-                    <!-- Rating Dropdown -->
+                    <!-- Affection Dropdown -->
                     <div class="relative">
                         <select id="rating-select" class="w-full bg-slate-900/80 text-white border border-slate-700/80 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-primary transition-colors appearance-none cursor-pointer">
-                            <option value="">평점: 전체</option>
-                            <option value="5.0">⭐⭐⭐⭐⭐ (5.0)</option>
-                            <option value="4.8">⭐⭐⭐⭐ (4.8 이상)</option>
-                            <option value="4.6">⭐⭐⭐⭐ (4.6 이상)</option>
-                            <option value="4.0">⭐⭐⭐⭐ (4.0 이상)</option>
+                            <option value="">애정도: 전체</option>
+                            <option value="5.0">5.0</option>
+                            <option value="4.5">4.5 이상</option>
+                            <option value="4.0">4.0 이상</option>
+                            <option value="3.5">3.5 이상</option>
+                            <option value="3.0">3.0 이상</option>
                         </select>
                         <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
                             <i class="fa-solid fa-chevron-down text-xs"></i>
@@ -880,14 +895,8 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
                         <label class="text-sm font-semibold text-slate-700">방영 연도
                             <input id="custom-year" type="number" min="1950" max="2100" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="2026">
                         </label>
-                        <label class="text-sm font-semibold text-slate-700">애정도
-                            <select id="custom-rating" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10">
-                                <option value="5">❤️❤️❤️❤️❤️</option>
-                                <option value="4">❤️❤️❤️❤️🤍</option>
-                                <option value="3">❤️❤️❤️🤍🤍</option>
-                                <option value="2">❤️❤️🤍🤍🤍</option>
-                                <option value="1">❤️🤍🤍🤍🤍</option>
-                            </select>
+                        <label class="text-sm font-semibold text-slate-700">애정도 <span class="font-normal text-slate-500">(1.0 ~ 5.0)</span>
+                            <input id="custom-rating" type="number" min="1" max="5" step="0.1" value="4.0" inputmode="decimal" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="예: 4.7">
                         </label>
                         <label class="text-sm font-semibold text-slate-700">대표 감정
                             <select id="custom-mood" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10">
@@ -950,6 +959,36 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
                 </div>
                 <form id="edit-anime-form" class="space-y-5">
                     <input id="edit-anime-id" type="hidden">
+
+                    <section class="rounded-2xl border border-violet-100 bg-violet-50/60 p-4 sm:p-5" aria-labelledby="edit-poster-heading">
+                        <div class="mb-4 flex flex-col justify-between gap-2 sm:flex-row sm:items-start">
+                            <div>
+                                <h3 id="edit-poster-heading" class="text-sm font-extrabold text-slate-800">작품 포스터 수정</h3>
+                                <p class="mt-1 text-xs leading-relaxed text-slate-500">현재 포스터를 자동으로 다시 찾거나, 내 이미지로 직접 교체할 수 있습니다.</p>
+                            </div>
+                            <span id="edit-poster-source-label" class="inline-flex w-fit items-center rounded-full border border-violet-200 bg-white px-3 py-1 text-[11px] font-bold text-violet-700">현재 이미지</span>
+                        </div>
+                        <div class="grid gap-4 sm:grid-cols-[170px_1fr] sm:items-start">
+                            <div id="edit-poster-preview" class="poster-picker-preview relative mx-auto aspect-[3/4] w-[150px] overflow-hidden rounded-2xl border border-violet-200 shadow-md sm:mx-0">
+                                <div id="edit-poster-placeholder" class="absolute inset-0 flex flex-col items-center justify-center gap-2 px-3 text-center text-violet-400">
+                                    <i class="fa-regular fa-image text-3xl"></i>
+                                    <span class="text-xs font-bold">포스터 미리보기</span>
+                                </div>
+                                <img id="edit-poster-image" alt="수정할 포스터 미리보기" class="absolute inset-0 hidden h-full w-full object-cover">
+                            </div>
+                            <div class="space-y-3">
+                                <button id="search-edit-poster-btn" type="button" class="flex w-full items-center justify-center gap-2 rounded-xl border border-violet-200 bg-white px-4 py-3 text-sm font-bold text-violet-700 transition hover:border-violet-400 hover:bg-violet-50">
+                                    <i class="fa-solid fa-magnifying-glass"></i> 자동으로 다시 찾기
+                                </button>
+                                <label class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-violet-500">
+                                    <i class="fa-solid fa-upload"></i> 내 이미지 선택
+                                    <input id="edit-poster-file" type="file" accept="image/jpeg,image/png,image/webp" class="sr-only">
+                                </label>
+                                <button id="remove-edit-poster-btn" type="button" class="w-full rounded-xl border border-red-200 bg-white px-4 py-2.5 text-xs font-bold text-red-600 transition hover:bg-red-50">현재 이미지 제거</button>
+                                <p id="edit-poster-status" class="min-h-[32px] text-xs leading-relaxed text-slate-500">현재 등록된 포스터를 불러오는 중입니다.</p>
+                            </div>
+                        </div>
+                    </section>
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <label class="text-sm font-semibold text-slate-700">작품명
                             <input id="edit-title" required maxlength="80" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10">
@@ -966,10 +1005,8 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
                         <label class="text-sm font-semibold text-slate-700">방영 연도
                             <input id="edit-year" type="number" min="1900" max="2100" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10">
                         </label>
-                        <label class="text-sm font-semibold text-slate-700">애정도
-                            <select id="edit-rating" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10">
-                                <option value="5">❤️❤️❤️❤️❤️</option><option value="4">❤️❤️❤️❤️🤍</option><option value="3">❤️❤️❤️🤍🤍</option><option value="2">❤️❤️🤍🤍🤍</option><option value="1">❤️🤍🤍🤍🤍</option>
-                            </select>
+                        <label class="text-sm font-semibold text-slate-700">애정도 <span class="font-normal text-slate-500">(1.0 ~ 5.0)</span>
+                            <input id="edit-rating" type="number" min="1" max="5" step="0.1" inputmode="decimal" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="예: 4.7">
                         </label>
                         <label class="text-sm font-semibold text-slate-700">대표 감정
                             <select id="edit-mood" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10">
@@ -1089,8 +1126,8 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
                             
                             <!-- Tab 1: Overview Panel -->
                             <div id="panel-overview" class="tab-panel space-y-4">
-                                <div class="flex items-center gap-1.5 text-starYellow">
-                                    <div id="modal-stars" class="flex gap-0.5"></div>
+                                <div class="flex items-center gap-1.5 text-hoverViolet">
+                                    <div id="modal-stars" class="flex gap-0.5 text-hoverViolet"></div>
                                     <span id="modal-rating" class="text-slate-300 text-xs font-semibold ml-1"></span>
                                 </div>
                                 
@@ -2162,7 +2199,7 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
             {
                 id: 46,
                 title: "베베데빌",
-                englishTitle: "Baby Devil",
+                englishTitle: "Beelzebub",
                 genre: "코미디 · 판타지",
                 year: 2011,
                 rating: 4.7,
@@ -2181,7 +2218,7 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
             {
                 id: 47,
                 title: "미소의 세상",
-                englishTitle: "Super Doll Licca-chan",
+                englishTitle: "Kocchi Muite! Miiko",
                 genre: "일상 · 코미디",
                 year: 2001,
                 rating: 4.7,
@@ -2377,6 +2414,10 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
         let pendingAutoPosterUrl = '';
         let pendingPosterObjectUrl = '';
         let posterSearchDebounceTimer = null;
+        let pendingEditPosterFile = null;
+        let pendingEditAutoPosterUrl = '';
+        let pendingEditPosterObjectUrl = '';
+        let editPosterRemoveRequested = false;
         const indexedPosterUrlCache = new Map();
 
         function openPosterDatabase() {
@@ -2579,6 +2620,120 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
             if (status) status.textContent = '저장할 때 자동으로 크기를 줄이고 압축해 브라우저 DB에 보관합니다.';
         }
 
+        function updateEditPosterPreview(url, sourceText = '현재 이미지') {
+            const image = document.getElementById('edit-poster-image');
+            const placeholder = document.getElementById('edit-poster-placeholder');
+            const sourceLabel = document.getElementById('edit-poster-source-label');
+            if (!image || !placeholder) return;
+            if (url) {
+                image.src = url;
+                image.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+                if (sourceLabel) sourceLabel.textContent = sourceText;
+            } else {
+                image.removeAttribute('src');
+                image.classList.add('hidden');
+                placeholder.classList.remove('hidden');
+                if (sourceLabel) sourceLabel.textContent = '이미지 없음';
+            }
+        }
+
+        function resetEditPosterSelection() {
+            pendingEditPosterFile = null;
+            pendingEditAutoPosterUrl = '';
+            editPosterRemoveRequested = false;
+            if (pendingEditPosterObjectUrl) URL.revokeObjectURL(pendingEditPosterObjectUrl);
+            pendingEditPosterObjectUrl = '';
+            const fileInput = document.getElementById('edit-poster-file');
+            if (fileInput) fileInput.value = '';
+        }
+
+        async function loadCurrentEditPoster(anime) {
+            resetEditPosterSelection();
+            const status = document.getElementById('edit-poster-status');
+            const preview = document.getElementById('edit-poster-preview');
+            preview?.classList.add('is-loading');
+            if (status) status.textContent = '현재 포스터를 불러오는 중입니다…';
+            try {
+                const url = await getPosterImage(anime);
+                updateEditPosterPreview(url || '', anime.posterStorage === 'indexedDB' ? '직접 저장 이미지' : '현재 이미지');
+                if (status) status.textContent = url ? '현재 사용 중인 포스터입니다.' : '현재 등록된 이미지가 없습니다.';
+            } catch (error) {
+                updateEditPosterPreview('');
+                if (status) status.textContent = '현재 포스터를 불러오지 못했습니다.';
+            } finally {
+                preview?.classList.remove('is-loading');
+            }
+        }
+
+        async function searchEditPoster() {
+            const id = Number(document.getElementById('edit-anime-id')?.value);
+            const anime = animeDatabase.find(item => Number(item.id) === id);
+            if (!anime) return;
+            const status = document.getElementById('edit-poster-status');
+            const preview = document.getElementById('edit-poster-preview');
+            if (status) status.textContent = '새 포스터를 검색하고 있습니다…';
+            preview?.classList.add('is-loading');
+            try {
+                const tempAnime = {
+                    ...anime,
+                    title: document.getElementById('edit-title')?.value.trim() || anime.title,
+                    englishTitle: document.getElementById('edit-english-title')?.value.trim() || anime.englishTitle,
+                    year: Number(document.getElementById('edit-year')?.value) || anime.year
+                };
+                let candidates = [];
+                try { candidates = await findJikanPoster(tempAnime); } catch (error) { console.warn(error); }
+                if (!candidates.length) candidates = await findKitsuPoster(tempAnime);
+                let validUrl = '';
+                for (const candidate of candidates.slice(0, 12)) {
+                    if (await testImageUrl(candidate, 5000)) { validUrl = candidate; break; }
+                }
+                if (!validUrl) throw new Error('포스터를 찾지 못했습니다.');
+                pendingEditPosterFile = null;
+                if (pendingEditPosterObjectUrl) URL.revokeObjectURL(pendingEditPosterObjectUrl);
+                pendingEditPosterObjectUrl = '';
+                pendingEditAutoPosterUrl = validUrl;
+                editPosterRemoveRequested = false;
+                updateEditPosterPreview(validUrl, '새 자동 검색 이미지');
+                if (status) status.textContent = '새로 찾은 포스터입니다. 저장을 누르면 적용됩니다.';
+            } catch (error) {
+                if (status) status.textContent = '새 포스터를 찾지 못했습니다. 직접 이미지를 선택해 주세요.';
+            } finally {
+                preview?.classList.remove('is-loading');
+            }
+        }
+
+        function handleEditPosterFile(event) {
+            const file = event.target.files?.[0];
+            if (!file) return;
+            const status = document.getElementById('edit-poster-status');
+            if (file.size > 12 * 1024 * 1024) {
+                showToast('이미지는 12MB 이하 파일을 선택해 주세요.');
+                event.target.value = '';
+                return;
+            }
+            pendingEditPosterFile = file;
+            pendingEditAutoPosterUrl = '';
+            editPosterRemoveRequested = false;
+            if (pendingEditPosterObjectUrl) URL.revokeObjectURL(pendingEditPosterObjectUrl);
+            pendingEditPosterObjectUrl = URL.createObjectURL(file);
+            updateEditPosterPreview(pendingEditPosterObjectUrl, '새 직접 선택 이미지');
+            if (status) status.textContent = '저장할 때 이미지를 축소·압축해 브라우저 DB에 보관합니다.';
+        }
+
+        function removeEditPoster() {
+            pendingEditPosterFile = null;
+            pendingEditAutoPosterUrl = '';
+            editPosterRemoveRequested = true;
+            if (pendingEditPosterObjectUrl) URL.revokeObjectURL(pendingEditPosterObjectUrl);
+            pendingEditPosterObjectUrl = '';
+            const input = document.getElementById('edit-poster-file');
+            if (input) input.value = '';
+            updateEditPosterPreview('', '삭제 예정');
+            const status = document.getElementById('edit-poster-status');
+            if (status) status.textContent = '저장하면 현재 포스터가 제거되고 기본 이미지로 돌아갑니다.';
+        }
+
         function splitCommaValues(value) {
             return String(value || '')
                 .split(',')
@@ -2670,6 +2825,7 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
             document.getElementById('edit-recommend').value = (anime.recommendTo || []).join(', ');
             document.getElementById('edit-platforms').value = (anime.platforms || []).join(', ');
             document.getElementById('edit-series').value = seriesToEditableText(anime.series);
+            loadCurrentEditPoster(anime);
             const resetButton = document.getElementById('reset-original-content-btn');
             if (resetButton) {
                 resetButton.classList.toggle('hidden', Boolean(anime.isCustom));
@@ -2686,6 +2842,7 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
         }
 
         function closeEditAnimeModal() {
+            resetEditPosterSelection();
             const modal = document.getElementById('edit-anime-modal');
             if (!modal || modal.classList.contains('hidden')) return;
             modal.classList.remove('opacity-100');
@@ -2718,7 +2875,7 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
             };
         }
 
-        function saveEditedAnime(event) {
+        async function saveEditedAnime(event) {
             event.preventDefault();
             const id = Number(document.getElementById('edit-anime-id').value);
             const anime = animeDatabase.find(item => Number(item.id) === id);
@@ -2729,10 +2886,37 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
                 return;
             }
             Object.assign(anime, updated);
+
+            try {
+                if (editPosterRemoveRequested) {
+                    await deletePosterBlob(id);
+                    anime.posterUrl = '';
+                    anime.posterStorage = 'fallback';
+                } else if (pendingEditPosterFile) {
+                    const compressedBlob = await compressPosterFile(pendingEditPosterFile);
+                    await savePosterBlob(id, compressedBlob);
+                    anime.posterUrl = '';
+                    anime.posterStorage = 'indexedDB';
+                } else if (pendingEditAutoPosterUrl) {
+                    await deletePosterBlob(id);
+                    anime.posterUrl = pendingEditAutoPosterUrl;
+                    anime.posterStorage = 'remote';
+                }
+                posterPromiseCache.delete(id);
+                localStorage.removeItem(`poster_cache_v7_${id}`);
+            } catch (error) {
+                console.error(error);
+                showToast('포스터 저장에 실패해 글 내용만 수정했습니다.');
+            }
+
             if (anime.isCustom) {
                 saveCustomAnime();
             } else {
-                contentOverrides[String(id)] = cloneSerializable(updated);
+                contentOverrides[String(id)] = cloneSerializable({
+                    ...updated,
+                    posterUrl: anime.posterUrl || '',
+                    posterStorage: anime.posterStorage || 'fallback'
+                });
                 saveContentOverrides();
             }
             selectedAnime = anime;
@@ -2832,7 +3016,7 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
                 englishTitle: document.getElementById('custom-english-title').value.trim() || title,
                 genre,
                 year: Number.isFinite(yearValue) && yearValue > 0 ? yearValue : new Date().getFullYear(),
-                rating: Number(document.getElementById('custom-rating').value) || 3,
+                rating: Math.min(5, Math.max(1, Math.round((Number(document.getElementById('custom-rating').value) || 3) * 10) / 10)),
                 studio: document.getElementById('custom-studio').value.trim() || '정보 미입력',
                 mood,
                 plot,
@@ -3020,7 +3204,17 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
         const posterPromiseCache = new Map();
         let posterRequestQueue = Promise.resolve();
 
+        // Remove stale poster selections from older lookup rules.
+        // The listed titles previously matched sequels, unrelated works, or dead image URLs.
+        const correctedPosterIds = new Set([1, 12, 13, 16, 17, 23, 46, 47, 49, 50, 51, 52, 54]);
+        correctedPosterIds.forEach(id => {
+            for (let version = 1; version <= 6; version += 1) {
+                localStorage.removeItem(`poster_cache_v${version}_${id}`);
+            }
+        });
+
         const posterSearchAliases = {
+            1: 'Yumeiro Patissiere',
             2: 'Haikyuu',
             3: 'Kimetsu no Yaiba',
             4: 'Sono Bisque Doll wa Koi wo Suru',
@@ -3029,15 +3223,16 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
             8: 'Meitantei Conan',
             9: 'Yamada-kun to Lv999 no Koi wo Suru',
             10: 'Kamisama Hajimemashita',
-            12: 'Crayon Shin-chan',
-            13: 'Sen to Chihiro no Kamikakushi',
-            16: 'Shugo Chara',
+            12: 'Crayon Shin-chan 1992',
+            13: 'Sen to Chihiro no Kamikakushi 2001',
+            16: 'Shugo Chara! 2007',
+            17: 'Sugar Sugar Rune 2005',
             18: 'Tonari no Kaibutsu-kun',
             19: 'Akagami no Shirayuki-hime',
             20: 'Tamon-kun Ima Docchi',
             21: 'Kaichou wa Maid-sama',
             22: 'Inu x Boku SS',
-            23: 'Uruwashi no Yoi no Tsuki',
+            23: 'Uruwashi no Yoi no Tsuki In the Clear Moonlit Dusk',
             24: 'Ookami Shoujo to Kuro Ouji',
             27: 'Watashi ga Motete Dousunda',
             28: 'Howl no Ugoku Shiro',
@@ -3052,14 +3247,14 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
             42: 'Gakuen Babysitters',
             44: 'Sukitte Ii na yo',
             45: 'Miira no Kaikata',
-            46: 'Beelzebub-jou no Okinimesu mama',
-            47: 'Kocchi Muite Miiko',
-            49: 'Keroro Gunsou',
-            50: 'Chibi Maruko-chan',
-            51: 'Annyeong Jadoo-ya',
-            52: 'Atashinchi',
+            46: 'Beelzebub 2011',
+            47: 'Kocchi Muite! Miiko 1998',
+            49: 'Keroro Gunsou 2004',
+            50: 'Chibi Maruko-chan 1990',
+            51: 'Hello Jadoo Korean animation',
+            52: "Atashin'chi 2002",
             53: 'Yuzuki-san Chi no Yon Kyoudai',
-            54: 'Cardcaptor Sakura'
+            54: 'Cardcaptor Sakura 1998'
         };
 
         function enqueuePosterRequest(task) {
@@ -3110,9 +3305,14 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
                     if (resultYear && targetYear) score -= Math.min(Math.abs(resultYear - targetYear), 10);
                     const titles = [result.title, result.title_english, result.title_japanese]
                         .filter(Boolean).join(' ').toLowerCase();
-                    const words = query.toLowerCase().split(/\s+/).filter(word => word.length > 2);
-                    score += words.filter(word => titles.includes(word)).length * 3;
-                    if (result.type === 'TV' || result.type === 'Movie') score += 1;
+                    const normalizedQuery = query.toLowerCase().replace(/[!:'’.,-]/g, ' ').replace(/\s+/g, ' ').trim();
+                    const normalizedTitles = titles.replace(/[!:'’.,-]/g, ' ').replace(/\s+/g, ' ').trim();
+                    const words = normalizedQuery.split(/\s+/).filter(word => word.length > 2 && !/^\d{4}$/.test(word));
+                    score += words.filter(word => normalizedTitles.includes(word)).length * 4;
+                    if (normalizedTitles.includes(normalizedQuery.replace(/\s+\d{4}$/, ''))) score += 14;
+                    if (resultYear === targetYear) score += 10;
+                    if (result.type === 'TV' || result.type === 'Movie') score += 2;
+                    if (/season|movie|special|ova|ona|recap|professional|clear card/i.test(titles) && !/movie|professional|clear card/i.test(query)) score -= 8;
                     return { result, score };
                 }).sort((a, b) => b.score - a.score);
 
@@ -3168,7 +3368,7 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
                     return anime.posterUrl;
                 }
 
-                const cacheKey = `poster_cache_v4_${anime.id}`;
+                const cacheKey = `poster_cache_v7_${anime.id}`;
                 const cachedUrl = localStorage.getItem(cacheKey);
                 if (cachedUrl && await testImageUrl(cachedUrl, 4000)) return cachedUrl;
                 if (cachedUrl) localStorage.removeItem(cacheKey);
@@ -3223,7 +3423,7 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
             image.onload = () => image.classList.remove('opacity-0');
             image.onerror = () => {
                 if (anime.posterStorage !== 'indexedDB') {
-                    localStorage.removeItem(`poster_cache_v4_${anime.id}`);
+                    localStorage.removeItem(`poster_cache_v7_${anime.id}`);
                 }
                 image.remove();
             };
@@ -3400,18 +3600,18 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
             document.getElementById('today-year').innerText = `${randomPick.year}년`;
             document.getElementById('today-studio').innerText = randomPick.studio;
             document.getElementById('today-mood').innerText = `#${randomPick.mood}`;
-            document.getElementById('today-rating-num').innerText = `${randomPick.rating.toFixed(1)} / 5.0`;
+            document.getElementById('today-rating-num').innerText = `애정도 ${randomPick.rating.toFixed(1)} / 5.0`;
 
-            // Draw Stars
+            // Draw affection hearts
             const starsContainer = document.getElementById('today-stars');
             starsContainer.innerHTML = '';
-            const fullStars = Math.floor(randomPick.rating);
+            const fullHearts = Math.floor(randomPick.rating);
             for (let i = 0; i < 5; i++) {
                 const star = document.createElement('i');
-                if (i < fullStars) {
-                    star.className = "fa-solid fa-star";
+                if (i < fullHearts) {
+                    star.className = "fa-solid fa-heart";
                 } else {
-                    star.className = "fa-regular fa-star";
+                    star.className = "fa-regular fa-heart";
                 }
                 starsContainer.appendChild(star);
             }
@@ -3450,10 +3650,10 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
                 card.className = `anime-card bg-cardBg border border-slate-700/60 rounded-2xl overflow-hidden shadow-lg transition-all duration-300 transform hover:-translate-y-2 hover:border-primary/50 hover:shadow-primary/10 cursor-pointer group ${watched ? 'is-watched' : ''}`;
                 card.onclick = () => openDetailModal(item.id);
 
-                // Build star template
+                // Build affection heart template
                 let stars = '';
                 for (let i = 0; i < 5; i++) {
-                    stars += `<i class="${i < Math.floor(item.rating) ? 'fa-solid' : 'fa-regular'} fa-star text-[10px]"></i>`;
+                    stars += `<i class="${i < Math.floor(item.rating) ? 'fa-solid' : 'fa-regular'} fa-heart text-[10px]"></i>`;
                 }
 
                 card.innerHTML = `
@@ -3499,11 +3699,11 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
                             ${item.title}
                         </h4>
                         <div class="flex items-center justify-between pt-1">
-                            <div class="flex items-center gap-0.5 text-starYellow">
+                            <div class="flex items-center gap-0.5 text-hoverViolet">
                                 ${stars}
                             </div>
                             <span class="text-[11px] font-semibold text-slate-300 bg-slate-800 px-2 py-0.5 rounded-full border border-slate-700/50">
-                                ⭐ ${item.rating.toFixed(1)}
+                                💜 애정도 ${item.rating.toFixed(1)}
                             </span>
                         </div>
                     </div>
@@ -3519,7 +3719,7 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
         function filterArchive() {
             const searchVal = document.getElementById('search-input').value.toLowerCase().trim();
             const genreVal = document.getElementById('genre-select').value;
-            const ratingVal = document.getElementById('rating-select').value;
+            const affectionVal = document.getElementById('rating-select').value;
 
             const filtered = animeDatabase.filter(item => {
                 const matchesSearch = item.title.toLowerCase().includes(searchVal) || 
@@ -3529,16 +3729,16 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
                 
                 const matchesGenre = genreVal === "" || item.genre.includes(genreVal);
                 
-                const matchesRating = ratingVal === "" || item.rating >= parseFloat(ratingVal);
+                const matchesAffection = affectionVal === "" || item.rating >= parseFloat(affectionVal);
                 
                 const matchesMood = !activeMoodFilter || item.mood === activeMoodFilter;
 
-                return matchesSearch && matchesGenre && matchesRating && matchesMood;
+                return matchesSearch && matchesGenre && matchesAffection && matchesMood;
             });
 
             // Toggle visibility of clear filters button
             const clearBtn = document.getElementById('clear-filters-btn');
-            if (searchVal !== "" || genreVal !== "" || ratingVal !== "" || activeMoodFilter !== null) {
+            if (searchVal !== "" || genreVal !== "" || affectionVal !== "" || activeMoodFilter !== null) {
                 clearBtn.classList.remove('hidden');
             } else {
                 clearBtn.classList.add('hidden');
@@ -3601,14 +3801,14 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
             document.getElementById('modal-plot').innerText = anime.plot;
             document.getElementById('modal-review').innerText = anime.review;
             document.getElementById('modal-why-love').innerText = anime.whyLove || "성장과 우정, 따뜻한 마음이 녹아든 마스터 최애작 중 하나입니다.";
-            document.getElementById('modal-rating').innerText = `${Number(anime.rating || 0).toFixed(1)} / 5.0`;
+            document.getElementById('modal-rating').innerText = `애정도 ${Number(anime.rating || 0).toFixed(1)} / 5.0`;
 
-            // Draw Stars in Modal
+            // Draw affection hearts in Modal
             const starContainer = document.getElementById('modal-stars');
             starContainer.innerHTML = '';
             for (let i = 0; i < 5; i++) {
                 const star = document.createElement('i');
-                star.className = i < Math.floor(Number(anime.rating) || 0) ? 'fa-solid fa-star' : 'fa-regular fa-star';
+                star.className = i < Math.floor(Number(anime.rating) || 0) ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
                 starContainer.appendChild(star);
             }
 
@@ -3788,7 +3988,7 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
                         ${(index % currentRoulettePool.length) + 1}
                     </div>
                     <span class="font-heading font-extrabold text-sm text-slate-100 truncate max-w-[180px]">${item.title}</span>
-                    <span class="text-[10px] text-starYellow ml-auto"><i class="fa-solid fa-star"></i> ${item.rating.toFixed(1)}</span>
+                    <span class="text-[10px] text-hoverViolet ml-auto"><i class="fa-solid fa-heart"></i> 애정도 ${item.rating.toFixed(1)}</span>
                 `;
                 strip.appendChild(row);
             });
@@ -3835,7 +4035,7 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
                         ${(index % currentRoulettePool.length) + 1}
                     </div>
                     <span class="font-heading font-extrabold text-sm text-slate-100 truncate max-w-[180px]">${item.title}</span>
-                    <span class="text-[10px] text-starYellow ml-auto"><i class="fa-solid fa-star"></i> ${item.rating.toFixed(1)}</span>
+                    <span class="text-[10px] text-hoverViolet ml-auto"><i class="fa-solid fa-heart"></i> 애정도 ${item.rating.toFixed(1)}</span>
                 `;
                 stripForShuffle.appendChild(row);
             });
@@ -4032,6 +4232,9 @@ html.dark .brand-mark { box-shadow: 0 10px 26px rgba(124,58,237,.38), inset 0 1p
             document.getElementById('close-edit-anime-btn')?.addEventListener('click', closeEditAnimeModal);
             document.getElementById('cancel-edit-anime-btn')?.addEventListener('click', closeEditAnimeModal);
             document.getElementById('edit-anime-form')?.addEventListener('submit', saveEditedAnime);
+            document.getElementById('search-edit-poster-btn')?.addEventListener('click', searchEditPoster);
+            document.getElementById('edit-poster-file')?.addEventListener('change', handleEditPosterFile);
+            document.getElementById('remove-edit-poster-btn')?.addEventListener('click', removeEditPoster);
             document.getElementById('clear-edit-writing-btn')?.addEventListener('click', clearEditableWritingFields);
             document.getElementById('reset-original-content-btn')?.addEventListener('click', resetSelectedAnimeToOriginal);
             document.getElementById('edit-anime-modal')?.addEventListener('click', event => {
