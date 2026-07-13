@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AniVault - Personal Anime Archive</title>
     <!-- Google Fonts: Outfit (Heading/EN) & Inter (Body) -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght=300;400;600;700;800&family=Inter:wght=300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons for Beautiful Visuals -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Tailwind CSS CDN -->
@@ -31,12 +31,10 @@
         }
     </script>
     <style>
-        /* Custom Smooth Scroll */
         html {
             scroll-behavior: smooth;
         }
         
-        /* Hide default scrollbars but keep functionality */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -139,7 +137,6 @@
 </head>
 <body class="bg-midnight text-slate-100 font-body min-h-screen relative overflow-x-hidden">
 
-    <!-- Ambient Floating Glares -->
     <div class="aurora-glow-1"></div>
     <div class="aurora-glow-2"></div>
 
@@ -195,7 +192,7 @@
             <!-- Description -->
             <p class="text-slate-400 text-base sm:text-lg max-w-2xl leading-relaxed mb-10">
                 좋아했던 작품을 꼼꼼하게 기록하고, 새로운 보물 같은 인생작을 발견하는 공간입니다.<br>
-                전설적인 거장들의 작품부터 숨겨진 일상 속 명작까지 가득 담겨있습니다.
+                추억 속의 어린 시절 명작부터 깊은 감동을 자아내는 최신작까지 고스란히 담아냈습니다.
             </p>
 
             <!-- Interactive Buttons -->
@@ -227,7 +224,7 @@
                 <h2 class="font-heading font-bold text-2xl text-slate-200 inline-flex items-center gap-2">
                     <i class="fa-solid fa-chart-simple text-primary"></i> 나의 덕력 지표 <span class="text-sm font-normal text-slate-400">(My Anime Stats)</span>
                 </h2>
-                <p class="text-slate-400 text-sm mt-1">마스터의 과몰입 수준과 신뢰도 높은 스펙 데이터를 바로 인증합니다.</p>
+                <p class="text-slate-400 text-sm mt-1">마스터의 감상 깊이와 아카이브의 정교함을 보여주는 실시간 스펙 데이터입니다.</p>
             </div>
 
             <!-- Stats 4-Column Grid -->
@@ -240,7 +237,7 @@
                         <span class="text-slate-400 text-sm font-semibold ml-1">works</span>
                     </div>
                     <div class="h-1 bg-slate-700/50 rounded-full mt-4 overflow-hidden">
-                        <div class="w-4/5 h-full bg-primary rounded-full"></div>
+                        <div class="w-full h-full bg-primary rounded-full"></div>
                     </div>
                 </div>
 
@@ -264,7 +261,7 @@
                         <span class="text-slate-400 text-sm font-semibold ml-1">/ 5.0</span>
                     </div>
                     <div class="h-1 bg-slate-700/50 rounded-full mt-4 overflow-hidden">
-                        <div class="w-[92%] h-full bg-starYellow rounded-full"></div>
+                        <div class="w-[94%] h-full bg-starYellow rounded-full"></div>
                     </div>
                 </div>
 
@@ -283,13 +280,13 @@
         </div>
     </section>
 
-    <!-- L3. Today's Pick (Auto Random Recommendation on load) -->
+    <!-- L3. Today's Pick -->
     <section id="today" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-10 text-center sm:text-left">
             <h2 class="font-heading font-bold text-2xl text-slate-200 inline-flex items-center gap-2">
                 <i class="fa-solid fa-sparkles text-starYellow animate-pulse"></i> 오늘의 한 줄기 빛 <span class="text-sm font-normal text-slate-400">(Today's Pick)</span>
             </h2>
-            <p class="text-slate-400 text-sm mt-1">페이지 진입 시마다 시스템이 엄선하여 보여드리는 오늘의 소중한 힐링작입니다.</p>
+            <p class="text-slate-400 text-sm mt-1">페이지에 들어올 때마다 엄선된 아카이브 보관물 중에서 무작위로 한 작품을 자동 추천합니다.</p>
         </div>
 
         <!-- Today's Pick Dynamic Card -->
@@ -301,14 +298,7 @@
             <!-- Left Side Poster Layout (3:4 aspect) -->
             <div class="w-full md:w-1/3 max-w-[240px] mx-auto md:mx-0 flex-shrink-0">
                 <div id="today-poster-container" class="w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl relative">
-                    <!-- Dynamic Graphic Poster Fallback -->
-                    <div id="today-poster-fallback" class="absolute inset-0 bg-gradient-to-tr from-primary to-hoverViolet flex flex-col justify-between p-4">
-                        <span id="today-fallback-genre" class="text-[10px] text-white/80 font-bold bg-white/15 px-2.5 py-1 rounded-full w-max"></span>
-                        <div class="flex flex-col gap-1 text-white">
-                            <h3 id="today-fallback-title" class="font-heading font-extrabold text-lg line-clamp-2"></h3>
-                            <span id="today-fallback-meta" class="text-[10px] text-white/70"></span>
-                        </div>
-                    </div>
+                    <!-- Dynamic Fallback content drawn by SVG -->
                 </div>
             </div>
 
@@ -335,13 +325,13 @@
                 <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-2">
                     <span id="today-year" class="bg-slate-800 text-slate-300 text-xs px-3 py-1.5 rounded-lg border border-slate-700/40"></span>
                     <span id="today-studio" class="bg-slate-800 text-slate-300 text-xs px-3 py-1.5 rounded-lg border border-slate-700/40"></span>
-                    <span id="today-mood" class="bg-primary/10 text-hoverViolet text-xs px-3 py-1.5 rounded-lg border border-primary/20 font-medium"></span>
+                    <span id="today-mood" class="bg-primary/10 text-hoverViolet text-xs px-3 py-1.5 rounded-lg border border-primary/20 font-medium animate-pulse"></span>
                 </div>
 
                 <!-- Interaction CTA inside Today's Pick -->
                 <div class="pt-4 flex justify-center md:justify-start">
                     <button id="today-detail-btn" class="text-xs font-semibold bg-slate-800 hover:bg-slate-700 hover:text-white text-slate-300 py-3 px-6 rounded-xl border border-slate-700/60 transition-all duration-300 flex items-center gap-2">
-                        <span>자세히 보기 & 명대사 열기</span>
+                        <span>상세 소감 및 명대사 열기</span>
                         <i class="fa-solid fa-arrow-right text-[10px]"></i>
                     </button>
                 </div>
@@ -358,7 +348,7 @@
                 <h2 class="font-heading font-bold text-2xl text-slate-200 inline-flex items-center gap-2">
                     <i class="fa-solid fa-box-archive text-primary"></i> 아카이브 큐레이션 도감 <span class="text-sm font-normal text-slate-400">(Archive Collection)</span>
                 </h2>
-                <p class="text-slate-400 text-sm mt-1">체계적인 필터 기능과 기분별 테마 배지를 통해 취향에 꼭 들어맞는 작품을 발굴하세요.</p>
+                <p class="text-slate-400 text-sm mt-1">체계적인 필터 기능과 기분별 테마 뱃지를 조합하여 55가지 인생작 중 딱 맞는 작품을 골라보세요.</p>
             </div>
 
             <!-- Integrated Filter Box -->
@@ -370,20 +360,32 @@
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </span>
-                        <input id="search-input" type="text" placeholder="작품명 또는 줄거리 키워드 검색..." class="w-full bg-slate-900/80 text-white placeholder-slate-400 border border-slate-700/80 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-primary transition-colors">
+                        <input id="search-input" type="text" placeholder="작품명, 줄거리, 후기 키워드 검색..." class="w-full bg-slate-900/80 text-white placeholder-slate-400 border border-slate-700/80 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-primary transition-colors">
                     </div>
 
                     <!-- Genre Dropdown -->
                     <div class="relative">
                         <select id="genre-select" class="w-full bg-slate-900/80 text-white border border-slate-700/80 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-primary transition-colors appearance-none cursor-pointer">
                             <option value="">장르: 전체</option>
-                            <option value="판타지">판타지</option>
-                            <option value="드라마">드라마</option>
+                            <option value="성장">성장</option>
+                            <option value="요리">요리</option>
+                            <option value="학원">학원</option>
+                            <option value="스포츠">스포츠</option>
+                            <option value="청춘">청춘</option>
                             <option value="액션">액션</option>
-                            <option value="일상">일상</option>
+                            <option value="판타지">판타지</option>
                             <option value="로맨스">로맨스</option>
-                            <option value="메카닉">메카닉</option>
+                            <option value="코미디">코미디</option>
+                            <option value="개그">개그</option>
+                            <option value="추리">추리</option>
+                            <option value="미스터리">미스터리</option>
+                            <option value="일상">일상</option>
+                            <option value="가족">가족</option>
                             <option value="모험">모험</option>
+                            <option value="마법소녀">마법소녀</option>
+                            <option value="다크 판타지">다크 판타지</option>
+                            <option value="드라마">드라마</option>
+                            <option value="SF">SF</option>
                         </select>
                         <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
                             <i class="fa-solid fa-chevron-down text-xs"></i>
@@ -394,9 +396,10 @@
                     <div class="relative">
                         <select id="rating-select" class="w-full bg-slate-900/80 text-white border border-slate-700/80 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-primary transition-colors appearance-none cursor-pointer">
                             <option value="">평점: 전체</option>
-                            <option value="4.9">⭐⭐⭐⭐⭐ (4.9)</option>
-                            <option value="4.8">⭐⭐⭐⭐⭐ (4.8)</option>
-                            <option value="4.7">⭐⭐⭐⭐ (4.7)</option>
+                            <option value="5.0">⭐⭐⭐⭐⭐ (5.0)</option>
+                            <option value="4.8">⭐⭐⭐⭐ (4.8 이상)</option>
+                            <option value="4.6">⭐⭐⭐⭐ (4.6 이상)</option>
+                            <option value="4.0">⭐⭐⭐⭐ (4.0 이상)</option>
                         </select>
                         <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
                             <i class="fa-solid fa-chevron-down text-xs"></i>
@@ -404,7 +407,7 @@
                     </div>
                 </div>
 
-                <!-- Integrated Mood Badges Row (30% Recommendation Integration) -->
+                <!-- Integrated Mood Badges Row -->
                 <div class="pt-4 border-t border-slate-800 flex flex-wrap items-center gap-2">
                     <span class="text-xs font-semibold text-slate-400 mr-2">기분별 추천 (Mood):</span>
                     <button class="mood-badge text-xs font-medium px-4 py-2 bg-slate-900 text-slate-400 hover:text-white rounded-full border border-slate-800 transition-all flex items-center gap-1.5 cursor-pointer hover:bg-slate-800" data-mood="힐링">
@@ -438,8 +441,8 @@
                 <div class="w-16 h-16 bg-slate-800/50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-slate-500 text-2xl">
                     <i class="fa-solid fa-box-open"></i>
                 </div>
-                <h3 class="font-heading font-semibold text-lg text-slate-300">조건에 맞는 작품이 없습니다</h3>
-                <p class="text-slate-500 text-xs mt-1">검색어를 수정하거나 기분별 필터를 해제해 보세요.</p>
+                <h3 class="font-heading font-semibold text-lg text-slate-300">조건에 맞는 애니메이션이 없습니다</h3>
+                <p class="text-slate-500 text-xs mt-1">검색어를 수정하거나 기분 필터를 해제해 보세요.</p>
                 <button onclick="clearAllFilters()" class="mt-4 bg-primary text-white text-xs font-bold py-2.5 px-5 rounded-lg hover:bg-hoverViolet transition-colors shadow-lg shadow-primary/20">
                     모든 조건 초기화
                 </button>
@@ -463,7 +466,7 @@
                     
                     <!-- Left metadata & Graphic Poster inside Modal -->
                     <div class="w-full md:w-1/3 max-w-[200px] mx-auto md:mx-0 flex-shrink-0">
-                        <div id="modal-poster-container" class="w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-xl relative">
+                        <div id="modal-poster-container" class="w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-xl relative bg-slate-900">
                             <!-- Fallback Graphic content will be rendered here dynamically -->
                         </div>
                         <div class="mt-4 space-y-2">
@@ -494,7 +497,7 @@
                                 📝 Review
                             </button>
                             <button onclick="switchTab('quotes')" class="tab-btn pb-2.5 font-semibold text-slate-400 hover:text-white transition-colors relative" id="tab-quotes">
-                                💬 Quotes
+                                👥 Recommend
                             </button>
                             
                             <!-- Sliding Indicator Line -->
@@ -502,28 +505,59 @@
                         </div>
 
                         <!-- 3-Tab Contents Panel -->
-                        <div class="min-h-[160px] text-slate-300 text-sm leading-relaxed">
+                        <div class="min-h-[220px] text-slate-300 text-sm leading-relaxed">
                             
                             <!-- Tab 1: Overview Panel -->
-                            <div id="panel-overview" class="tab-panel space-y-3">
+                            <div id="panel-overview" class="tab-panel space-y-4">
                                 <div class="flex items-center gap-1.5 text-starYellow">
                                     <div id="modal-stars" class="flex gap-0.5"></div>
                                     <span id="modal-rating" class="text-slate-300 text-xs font-semibold ml-1"></span>
                                 </div>
-                                <p id="modal-plot" class="text-slate-300"></p>
+                                
+                                <div>
+                                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5"><i class="fa-solid fa-circle-info"></i> 줄거리 요약</h4>
+                                    <p id="modal-plot" class="text-slate-300 bg-slate-900/30 p-3.5 rounded-xl border border-slate-800/60 leading-relaxed"></p>
+                                </div>
+
+                                <!-- OTT Platforms Dynamic Area -->
+                                <div>
+                                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2"><i class="fa-solid fa-play"></i> 감상 가능 OTT</h4>
+                                    <div id="modal-platforms" class="flex flex-wrap gap-2">
+                                        <!-- Rendered by JS -->
+                                    </div>
+                                </div>
+
+                                <!-- Series and Episodes Dynamic Area -->
+                                <div>
+                                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2"><i class="fa-solid fa-layer-group"></i> 시리즈 구성 및 분량</h4>
+                                    <div id="modal-series" class="grid grid-cols-1 sm:grid-cols-2 gap-2 bg-slate-900/30 p-3 rounded-xl border border-slate-800/60">
+                                        <!-- Rendered by JS -->
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Tab 2: Review Panel -->
-                            <div id="panel-review" class="tab-panel hidden space-y-3 bg-slate-900/40 p-4 rounded-xl border border-slate-800/80">
-                                <span class="text-xs font-semibold text-hoverViolet uppercase tracking-wider block"><i class="fa-regular fa-comment-dots"></i> 마스터의 덕심 소감</span>
-                                <p id="modal-review" class="italic text-slate-200"></p>
+                            <div id="panel-review" class="tab-panel hidden space-y-3">
+                                <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800/80">
+                                    <span class="text-xs font-semibold text-hoverViolet uppercase tracking-wider block mb-1.5"><i class="fa-regular fa-comment-dots"></i> 마스터의 소중한 감상문</span>
+                                    <p id="modal-review" class="italic text-slate-200 leading-relaxed"></p>
+                                </div>
+                                <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800/80">
+                                    <span class="text-xs font-semibold text-successGreen uppercase tracking-wider block mb-1.5"><i class="fa-solid fa-heart"></i> Why I Love It!</span>
+                                    <p id="modal-why-love" class="text-slate-300 leading-relaxed"></p>
+                                </div>
                             </div>
 
-                            <!-- Tab 3: Quotes Panel -->
-                            <div id="panel-quotes" class="tab-panel hidden space-y-3 bg-slate-950/40 p-4 rounded-xl border border-slate-800/80 relative">
-                                <i class="fa-solid fa-quote-left text-3xl text-primary/20 absolute top-2 left-2"></i>
-                                <div class="pl-4">
-                                    <p id="modal-quotes" class="text-slate-100 font-medium whitespace-pre-line leading-relaxed"></p>
+                            <!-- Tab 3: Quotes / Recommendations Panel -->
+                            <div id="panel-quotes" class="tab-panel hidden space-y-3">
+                                <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800/80">
+                                    <span class="text-xs font-semibold text-starYellow uppercase tracking-wider block mb-2"><i class="fa-solid fa-users"></i> 이런 분들에게 특히 추천합니다!</span>
+                                    <ul id="modal-recommends" class="space-y-1.5 text-xs text-slate-300">
+                                        <!-- Populated dynamically -->
+                                    </ul>
+                                </div>
+                                <div class="flex flex-wrap gap-2 pt-1" id="modal-tags">
+                                    <!-- Dynamic Mood & Vibe Tag Pills -->
                                 </div>
                             </div>
 
@@ -536,7 +570,7 @@
             <!-- Footer of Modal -->
             <div class="bg-slate-900/60 px-6 py-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
                 <span>Branded Design by AniVault</span>
-                <span class="flex items-center gap-1 text-hoverViolet"><i class="fa-solid fa-heart animate-pulse"></i> Keep Watching</span>
+                <span class="flex items-center gap-1 text-hoverViolet"><i class="fa-solid fa-heart animate-pulse"></i> Keep Archiving</span>
             </div>
         </div>
     </div>
@@ -553,7 +587,7 @@
             <div class="text-center mb-6">
                 <span class="text-xs font-semibold text-hoverViolet uppercase tracking-widest bg-primary/10 border border-primary/20 px-3 py-1 rounded-full"><i class="fa-solid fa-dice"></i> MATCHING ALGORITHM</span>
                 <h3 class="font-heading font-extrabold text-xl text-white mt-3">나의 취향 저격수 고르기</h3>
-                <p class="text-slate-400 text-xs mt-1">인생작 보관고에서 최고의 하나가 결정됩니다.</p>
+                <p class="text-slate-400 text-xs mt-1">55개의 보물창고 보관품 중 최적의 애니메이션이 결정됩니다.</p>
             </div>
 
             <!-- Slot Machine Physical Container -->
@@ -633,111 +667,1104 @@
 
     <!-- JAVASCRIPT LOGIC BLOCK -->
     <script>
-        // Core Curated Database
         const animeDatabase = [
             {
                 id: 1,
-                title: "장송의 프리렌",
-                englishTitle: "Frieren: Beyond Journey's End",
-                genre: "판타지",
-                year: 2023,
-                rating: 4.9,
-                studio: "매드하우스",
-                mood: "힐링",
-                plot: "마왕을 쓰러트린 용사 일행의 그 후... 수명이 다른 엘프 프리렌이 인간을 더 깊이 알기 위해 세상을 다시 떠돌며 겪는 아늑하고 신비로운 여정.",
-                review: "시간과 생명, 그리고 따스한 관계에 대한 최고의 고찰. 자극적인 연출 없이도 잔잔하게 온 감정을 전해주는 인생 만화입니다.",
-                quotes: "인간의 수명은 짧다는 걸 알고 있었으면서... 왜 더 알려고 하지 않았을까."
+                title: "꿈빛 파티시엘",
+                englishTitle: "Yumeiro Patissiere",
+                genre: "성장 · 요리 · 학원",
+                year: 2009,
+                rating: 5.0,
+                studio: "스튜디오 피에로",
+                mood: "성장",
+                plot: "파티시엘을 꿈꾸는 소녀가 노력과 우정을 통해 자신의 꿈을 이루어가는 성장 이야기.",
+                review: "어릴 적 '파티시엘'이라는 꿈을 꾸게 만들어 준 작품이다. 보기만 해도 따뜻하고 몽글몽글한 분위기 덕분에 지금도 힐링이 되는 애니메이션이다.",
+                whyLove: "꿈을 향해 한 걸음씩 성장하는 과정이 순수하고 따뜻하게 그려진다.",
+                recommendTo: ["힐링 애니를 좋아하는 사람", "성장 스토리를 좋아하는 사람", "디저트를 좋아하는 사람"],
+                tags: ["🌿 힐링", "✨ 성장", "🍰 달콤함"],
+                platforms: ["라프텔", "네이버 시리즈온"],
+                series: [
+                    { name: "1기", episodes: "50화" },
+                    { name: "2기 프로페셔널", episodes: "13화" }
+                ]
             },
             {
                 id: 2,
-                title: "바이올렛 에버가든",
-                englishTitle: "Violet Evergarden",
-                genre: "드라마",
-                year: 2018,
-                rating: 4.9,
-                studio: "교토 애니메이션",
-                mood: "눈물",
-                plot: "전쟁의 도구로써 감정 없이 자라난 바이올렛이, 전쟁 후 대필 작가 '자동수기인형'으로 살아가며 가슴 찡한 사랑의 깊은 의미를 탐색하는 이야기.",
-                review: "작화, 연출, 음악 모든 부분에서 교토 애니메이션의 최고 극치를 맛볼 수 있습니다. 눈물을 흘리지 않을 수 없는 감정선이 가득 차 있습니다.",
-                quotes: "길이 어긋나더라도, 서로 떨어지더라도, 당신을 늘 사랑하고 있습니다."
+                title: "하이큐!!",
+                englishTitle: "Haikyu!!",
+                genre: "스포츠 · 청춘 · 성장",
+                year: 2014,
+                rating: 4.0,
+                studio: "Production I.G",
+                mood: "성장",
+                plot: "배구를 향한 열정 하나로 전국을 꿈꾸는 고등학생들의 청춘 이야기.",
+                review: "단순한 스포츠 애니메이션이 아니라 팀워크와 성장, 노력의 가치를 가장 잘 보여주는 작품이었다. 경기 하나하나가 손에 땀을 쥐게 만들 정도로 몰입감이 뛰어났다.",
+                whyLove: "승리보다 성장의 과정에 집중하는 점이 가장 큰 매력이다.",
+                recommendTo: ["성장물을 좋아하는 사람", "스포츠 애니를 처음 보는 사람", "열정적인 이야기를 좋아하는 사람"],
+                tags: ["🔥 몰입감", "✨ 성장", "😭 감동"],
+                platforms: ["넷플릭스", "라프텔", "티빙", "웨이브"],
+                series: [
+                    { name: "1기", episodes: "25화" },
+                    { name: "2기", episodes: "25화" },
+                    { name: "3기 (카라스노 VS 시라토리자와)", episodes: "10화" },
+                    { name: "4기 (TO THE TOP)", episodes: "25화" },
+                    { name: "극장판 쓰레기장의 결전", episodes: "극장판 1화" }
+                ]
             },
             {
                 id: 3,
                 title: "귀멸의 칼날",
                 englishTitle: "Demon Slayer",
-                genre: "액션",
+                genre: "액션 · 판타지 · 성장",
                 year: 2019,
-                rating: 4.8,
+                rating: 4.0,
                 studio: "ufotable",
                 mood: "몰입감",
-                plot: "혈귀에게 온 가족을 잃고 유일하게 살아남았으나 혈귀가 된 여동생 네즈코를 기어코 다시 인간으로 되돌려놓기 위해 싸우는 검사 탄지로의 처절한 투쟁기.",
-                review: "Ufotable의 전무후무한 3D 배경과 극상의 작화 기법이 만나 액션의 정점을 보여줍니다. 대중성과 연출력을 모두 휘잡은 압도적인 몰입작.",
-                quotes: "마음이 무너지더라도, 굴하지 말고 이빨을 악물어라!"
+                plot: "가족을 잃은 소년이 동생을 지키기 위해 귀살대가 되어 싸우는 이야기.",
+                review: "주인공이 점점 성장해 나가는 과정이 재미있었고, 화려한 작화와 전투 연출 덕분에 보는 내내 몰입감이 뛰어났다.",
+                whyLove: "액션과 감동, 가족애가 적절하게 어우러진 작품이다.",
+                recommendTo: ["화려한 액션을 좋아하는 사람", "성장형 주인공을 좋아하는 사람"],
+                tags: ["🔥 액션", "✨ 성장", "⚔️ 전투"],
+                platforms: ["넷플릭스", "라프텔", "티빙", "디즈니+"],
+                series: [
+                    { name: "1기 (카마도 탄지로 입지편)", episodes: "26화" },
+                    { name: "무한열차편 (TVA)", episodes: "7화" },
+                    { name: "2기 (환락의 거리편)", episodes: "11화" },
+                    { name: "3기 (도공 마을편)", episodes: "11화" },
+                    { name: "4기 (합동 강화 훈련편)", episodes: "8화" }
+                ]
             },
             {
                 id: 4,
-                title: "봇치 더 록!",
-                englishTitle: "Bocchi the Rock!",
-                genre: "일상",
+                title: "그 비스크 돌은 사랑을 한다",
+                englishTitle: "My Dress-Up Darling",
+                genre: "로맨스 · 코미디",
                 year: 2022,
-                rating: 4.7,
+                rating: 4.0,
                 studio: "CloverWorks",
                 mood: "웃음",
-                plot: "극악무도한 아싸이자 대인기피증 기타리스트인 '봇치' 고토 히토리가 우연한 계기로 결속 밴드에 영입되면서 밴드 멤버들과 음악으로 교류하고 우정을 깨달아가는 이야기.",
-                review: "소심한 주인공의 온갖 우스꽝스러운 피해망상을 감탄스러운 비주얼 실험과 개그 연출로 완벽히 형상화해 냈습니다. 노래 또한 완벽한 앨범.",
-                quotes: "외톨이라도 괜찮아. 우리들의 뜨거운 음악은 여기에 살아 숨 쉬고 있으니까!"
+                plot: "서로 다른 취미를 가진 두 사람이 코스프레를 통해 가까워지는 이야기.",
+                review: "일본 전통 인형을 만드는 남주와 코스프레를 즐기는 여주가 서로를 이해하고 함께 성장하는 과정이 인상 깊었다.",
+                whyLove: "서로의 취향을 존중하며 함께 성장하는 관계가 보기 좋다.",
+                recommendTo: ["달달한 로맨스를 좋아하는 사람", "코미디가 섞인 작품을 좋아하는 사람"],
+                tags: ["💕 설렘", "😂 웃음", "✨ 성장"],
+                platforms: ["넷플릭스", "라프텔", "티빙", "웨이브"],
+                series: [
+                    { name: "1기", episodes: "12화" }
+                ]
             },
             {
                 id: 5,
-                title: "신세기 에반게리온",
-                englishTitle: "Neon Genesis Evangelion",
-                genre: "메카닉",
-                year: 1995,
-                rating: 4.8,
-                studio: "가이낙스",
-                mood: "몰입감",
-                plot: "수수께끼의 적으로부터 인류를 수호하기 위해 에반게리온의 지휘 아래 소년 신지가 겪는 자아의 깊은 고독과 상실, 인류 보완 계획의 수수께끼.",
-                review: "서브컬처 역사를 뒤바꾼 기념비적인 고전 명작. 한 소년의 철학적인 자아 고뇌와 충격적인 세기말의 파멸을 담고 있습니다.",
-                quotes: "도망치면 안 돼. 도망치면 안 돼. 도망치면 안 돼."
+                title: "아오하라이드",
+                englishTitle: "Blue Spring Ride",
+                genre: "청춘 · 로맨스",
+                year: 2014,
+                rating: 4.0,
+                studio: "Production I.G",
+                mood: "눈물",
+                plot: "상처를 가진 두 사람이 다시 만나 서로를 치유해가는 청춘 로맨스.",
+                review: "서로에게 상처를 받은 두 사람이 조금씩 마음을 열어가는 과정이 따뜻했다. 듣고 싶었던 말을 건네주는 장면들이 오래 기억에 남는다.",
+                whyLove: "잔잔하지만 깊은 감정선을 가진 작품이라 여운이 오래 남는다.",
+                recommendTo: ["청춘 로맨스를 좋아하는 사람", "감성적인 작품을 찾는 사람"],
+                tags: ["💕 설렘", "🌿 힐링", "😭 여운"],
+                platforms: ["라프텔", "네이버 시리즈온"],
+                series: [
+                    { name: "1기", episodes: "12화" },
+                    { name: "OAD 에피소드", episodes: "2화" }
+                ]
             },
             {
                 id: 6,
-                title: "센과 치히로의 행방불명",
-                englishTitle: "Spirited Away",
-                genre: "판타지",
-                year: 2001,
-                rating: 4.9,
-                studio: "스튜디오 지브리",
-                mood: "힐링",
-                plot: "미지의 기괴한 신들의 온천장 세계로 들어가버린 소녀 치히로가 돼지로 변한 부모를 구하고, 소년 하쿠의 소중한 이름을 되돌려주기 위해 벌이는 모험.",
-                review: "미야자키 하야오의 상상력의 경지이자 아늑함을 품은 순수한 동화. 지브리의 장인 정신이 매 초 단위마다 박혀 있는 완벽한 아카이브 작품.",
-                quotes: "한 번 만난 인연은 잊히는 것이 아니라, 기억나지 않을 뿐이야."
+                title: "나의 히어로 아카데미아",
+                englishTitle: "My Hero Academia",
+                genre: "액션 · 성장 · 히어로",
+                year: 2016,
+                rating: 4.0,
+                studio: "BONES",
+                mood: "몰입감",
+                plot: "무개성 소년이 최고의 히어로를 꿈꾸며 성장하는 이야기.",
+                review: "능력이 없던 미도리야가 조금씩 자신의 힘을 이해하고 성장하는 과정이 인상적이었다. 쇼토가 자신의 과거를 극복하며 변화하는 모습도 큰 감동을 주었다.",
+                whyLove: "화려한 액션 속에서도 캐릭터들의 성장과 감정이 잘 살아 있다.",
+                recommendTo: ["히어로물을 좋아하는 사람", "성장형 주인공을 좋아하는 사람"],
+                tags: ["🔥 액션", "✨ 성장", "😭 감동"],
+                platforms: ["넷플릭스", "라프텔", "티빙", "디즈니+"],
+                series: [
+                    { name: "1기", episodes: "13화" },
+                    { name: "2기", episodes: "25화" },
+                    { name: "3기", episodes: "25화" },
+                    { name: "4기", episodes: "25화" },
+                    { name: "5기", episodes: "25화" },
+                    { name: "6기", episodes: "25화" },
+                    { name: "7기", episodes: "21화" }
+                ]
             },
             {
                 id: 7,
-                title: "너의 이름은.",
-                englishTitle: "Your Name.",
-                genre: "로맨스",
-                year: 2016,
-                rating: 4.7,
-                studio: "코믹스 웨이브 필름",
-                mood: "눈물",
-                plot: "도쿄에 거주하는 소년 타키와 시골마을에 사는 소녀 미츠하가 주기적으로 꿈속에서 서로 몸이 뒤바뀌며 펼치는 미스터리한 실타래 같은 로맨스.",
-                review: "신카이 마코토의 압도적인 자연 배경 빛 묘사와 래드윔프스 음악의 결합이 극강의 전율을 줍니다. 누구나 가슴 시려 할 기적 같은 여운.",
-                quotes: "아직 만나지 못한 너를, 나는 계속 찾고 있어."
+                title: "마슐",
+                englishTitle: "Mashle: Magic and Muscles",
+                genre: "액션 · 판타지 · 개그",
+                year: 2023,
+                rating: 4.0,
+                studio: "A-1 Pictures",
+                mood: "웃음",
+                plot: "마법이 모든 것을 결정하는 세상에서 오직 근육만으로 맞서는 소년의 이야기.",
+                review: "진지한 설정과 달리 모든 문제를 근육으로 해결하는 전개가 신선하고 웃음을 자아냈다. 가볍게 보기 좋은 작품이다.",
+                whyLove: "말도 안 되는 전개를 끝까지 밀어붙이는 개그가 매력적이다.",
+                recommendTo: ["개그 애니를 좋아하는 사람", "가볍게 볼 작품을 찾는 사람"],
+                tags: ["😂 웃음", "💪 시원함", "🔥 액션"],
+                platforms: ["넷플릭스", "라프텔", "티빙", "웨이브"],
+                series: [
+                    { name: "1기", episodes: "12화" },
+                    { name: "2기 (신각자 후보 선발 시험편)", episodes: "12화" }
+                ]
             },
             {
                 id: 8,
+                title: "명탐정 코난",
+                englishTitle: "Detective Conan",
+                genre: "추리 · 미스터리",
+                year: 1996,
+                rating: 4.0,
+                studio: "TMS 엔터테인먼트",
+                mood: "몰입감",
+                plot: "몸은 아이가 되었지만 뛰어난 추리력으로 사건을 해결해 나가는 탐정 이야기.",
+                review: "어릴 때부터 꾸준히 봐 온 작품이라 애정이 깊다. 다양한 사건과 반전이 계속 이어져 오래 봐도 질리지 않는다.",
+                whyLove: "긴 시간 동안 꾸준히 재미를 유지하는 작품이라는 점이 가장 큰 매력이다.",
+                recommendTo: ["추리물을 좋아하는 사람", "긴 시리즈를 즐기는 사람"],
+                tags: ["🕵️ 추리", "🤯 반전", "🔍 몰입"],
+                platforms: ["티빙", "라프텔", "웨이브"],
+                series: [
+                    { name: "한국 정규 시리즈", episodes: "22개 시즌 이상" },
+                    { name: "일본 본편 시리즈", episodes: "1100화 돌파" }
+                ]
+            },
+            {
+                id: 9,
+                title: "야마다군과 Lv999의 사랑을 하다",
+                englishTitle: "My Love Story with Yamada-kun at Lv999",
+                genre: "로맨스 · 일상",
+                year: 2023,
+                rating: 4.0,
+                studio: "매드하우스",
+                mood: "힐링",
+                plot: "온라인 게임을 계기로 시작되는 현실 로맨스.",
+                review: "게임이라는 소재를 자연스럽게 로맨스와 연결한 점이 신선했다. 두 사람의 거리감이 조금씩 좁혀지는 과정이 설렘을 더했다.",
+                whyLove: "부담 없이 편하게 보기 좋은 현실 로맨스.",
+                recommendTo: ["게임을 좋아하는 사람", "달달한 연애물을 좋아하는 사람"],
+                tags: ["💕 설렘", "🎮 게임", "🌿 힐링"],
+                platforms: ["넷플릭스", "라프텔", "티빙"],
+                series: [
+                    { name: "1기", episodes: "13화" }
+                ]
+            },
+            {
+                id: 10,
+                title: "오늘부터 신령님",
+                englishTitle: "Kamisama Kiss",
+                genre: "로맨스 · 판타지 · 코미디",
+                year: 2012,
+                rating: 4.0,
+                studio: "TMS 엔터테인먼트",
+                mood: "웃음",
+                plot: "평범한 여고생이 토지신이 되면서 펼쳐지는 판타지 로맨스.",
+                review: "코미디와 로맨스, 판타지가 균형 있게 어우러진 작품이다. 등장인물들의 관계가 발전하는 과정이 재미있고, 가볍게 웃으며 보기 좋았다.",
+                whyLove: "유쾌한 분위기 속에서도 설레는 감정을 잘 담아낸 작품이다.",
+                recommendTo: ["판타지 로맨스를 좋아하는 사람", "웃으면서 볼 작품을 찾는 사람"],
+                tags: ["💕 설렘", "😂 웃음", "✨ 판타지"],
+                platforms: ["라프텔", "네이버 시리즈온", "넷플릭스"],
+                series: [
+                    { name: "1기", episodes: "13화" },
+                    { name: "2기", episodes: "12화" },
+                    { name: "과거편 (OAD)", episodes: "4화" }
+                ]
+            },
+            {
+                id: 11,
+                title: "스킵과 로퍼",
+                englishTitle: "Skip and Loafer",
+                genre: "청춘 · 일상 · 성장",
+                year: 2023,
+                rating: 4.0,
+                studio: "P.A.WORKS",
+                mood: "힐링",
+                plot: "시골에서 상경한 소녀가 새로운 학교에서 사람들과 관계를 맺으며 성장하는 이야기.",
+                review: "잔잔한 일상 속에서 사람과 사람 사이의 관계를 정말 따뜻하게 그려낸 작품이다. 자극적인 전개는 없지만 그래서 더 오래 기억에 남는다.",
+                whyLove: "평범한 하루도 특별하게 느껴지도록 만드는 힘이 있다.",
+                recommendTo: ["힐링 애니를 좋아하는 사람", "잔잔한 청춘물을 좋아하는 사람"],
+                tags: ["🌿 힐링", "✨ 성장", "☀️ 따뜻함"],
+                platforms: ["넷플릭스", "라프텔", "티빙"],
+                series: [
+                    { name: "1기", episodes: "12화" }
+                ]
+            },
+            {
+                id: 12,
+                title: "짱구는 못말려",
+                englishTitle: "Crayon Shin-chan",
+                genre: "일상 · 가족 · 코미디",
+                year: 1992,
+                rating: 4.0,
+                studio: "신에이 동화",
+                mood: "웃음",
+                plot: "엉뚱한 다섯 살 짱구와 가족, 친구들이 만들어가는 일상 이야기.",
+                review: "어릴 때는 웃긴 애니메이션이라고만 생각했는데, 커서 보니 가족 이야기와 어른들의 삶이 더 크게 다가왔다.",
+                whyLove: "웃기면서도 따뜻한 가족애를 자연스럽게 보여준다.",
+                recommendTo: ["가족 애니를 좋아하는 사람", "편하게 웃고 싶은 사람"],
+                tags: ["😂 웃음", "👨‍👩‍👧 가족", "🌿 힐링"],
+                platforms: ["티빙", "디즈니+", "라프텔"],
+                series: [
+                    { name: "정규 시즌 (국내 투니버스 기준)", episodes: "24개 시즌 방영 중" },
+                    { name: "극장판 시리즈", episodes: "31개 시즌 이상" }
+                ]
+            },
+            {
+                id: 13,
+                title: "센과 치히로의 행방불명",
+                englishTitle: "Spirited Away",
+                genre: "판타지 · 모험",
+                year: 2001,
+                rating: 5.0,
+                studio: "스튜디오 지브리",
+                mood: "눈물",
+                plot: "신들의 세계에 들어간 소녀 치히로가 성장하며 부모를 구하는 이야기.",
+                review: "몇 번을 다시 봐도 새로운 의미가 보이는 작품이다. 지브리 특유의 세계관과 음악이 정말 아름답다.",
+                whyLove: "판타지 속에서 현실을 이야기하는 방식이 인상적이다.",
+                recommendTo: ["지브리를 좋아하는 사람", "여운이 오래 남는 영화를 찾는 사람"],
+                tags: ["✨ 판타지", "🌌 신비", "😭 여운"],
+                platforms: ["넷플릭스"],
+                series: [
+                    { name: "극장판 단편", episodes: "1화 (125분)" }
+                ]
+            },
+            {
+                id: 14,
+                title: "너에게 닿기를",
+                englishTitle: "Kimi ni Todoke",
+                genre: "청춘 · 로맨스",
+                year: 2009,
+                rating: 4.9,
+                studio: "Production I.G",
+                mood: "힐링",
+                plot: "오해 속에서 살아온 소녀가 친구와 사랑을 통해 조금씩 변해가는 이야기.",
+                review: "천천히 가까워지는 관계를 보는 것만으로도 설레는 작품이다. 서로를 이해하는 과정이 정말 따뜻하다.",
+                whyLove: "답답할 정도로 느린 전개마저도 이 작품의 매력이다.",
+                recommendTo: ["순수한 로맨스를 좋아하는 사람", "청춘물을 좋아하는 사람"],
+                tags: ["💕 설렘", "🌿 힐링", "🌸 청춘"],
+                platforms: ["넷플릭스", "라프텔"],
+                series: [
+                    { name: "1기", episodes: "25화" },
+                    { name: "2기", episodes: "12화" },
+                    { name: "3기 (넷플릭스 독점)", episodes: "6화" }
+                ]
+            },
+            {
+                id: 15,
+                title: "헌터×헌터",
+                englishTitle: "Hunter x Hunter",
+                genre: "액션 · 모험 · 판타지",
+                year: 2011,
+                rating: 5.0,
+                studio: "매드하우스",
+                mood: "몰입감",
+                plot: "아버지를 찾기 위해 헌터가 된 소년이 다양한 모험을 떠나는 이야기.",
+                review: "소년만화라고 생각했는데 볼수록 세계관과 심리전이 정말 탄탄했다. 특히 개미편은 오래 기억에 남는다.",
+                whyLove: "능력 설정과 캐릭터 심리 묘사가 정말 뛰어나다.",
+                recommendTo: ["탄탄한 세계관을 좋아하는 사람", "전략적인 전투를 좋아하는 사람"],
+                tags: ["⚔️ 액션", "🌍 모험", "🧠 심리"],
+                platforms: ["넷플릭스", "라프텔", "티빙", "웨이브"],
+                series: [
+                    { name: "1기 (리메이크 판)", episodes: "148화" }
+                ]
+            },
+            {
+                id: 16,
+                title: "캐릭캐릭 체인지",
+                englishTitle: "Shugo Chara!",
+                genre: "마법소녀 · 학원 · 성장",
+                year: 2007,
+                rating: 4.8,
+                studio: "사테라이트",
+                mood: "성장",
+                plot: "마음을 표현하지 못하던 소녀가 캐릭터들과 함께 진짜 자신을 찾아가는 이야기.",
+                review: "어릴 적 가장 좋아했던 마법소녀 애니 중 하나다. 다양한 캐릭터 변신과 성장 이야기가 정말 재미있었다.",
+                whyLove: "'진짜 나'를 찾는다는 메시지가 지금 봐도 좋다.",
+                recommendTo: ["추억의 애니를 좋아하는 사람", "성장물을 좋아하는 사람"],
+                tags: ["✨ 성장", "💖 설렘", "🌈 추억"],
+                platforms: ["라프텔", "티빙"],
+                series: [
+                    { name: "1기", episodes: "51화" },
+                    { name: "2기 (두근두근)", episodes: "51화" },
+                    { name: "3기 (파티!)", episodes: "25화" }
+                ]
+            },
+            {
+                id: 17,
+                title: "슈가슈가룬",
+                englishTitle: "Sugar Sugar Rune",
+                genre: "판타지 · 마법소녀",
+                year: 2005,
+                rating: 4.8,
+                studio: "스튜디오 피에로",
+                mood: "성장",
+                plot: "차기 마계의 여왕을 결정하기 위해 인간계에 내려온 두 마녀의 이야기.",
+                review: "귀여운 그림체와는 다르게 설정이 꽤 흥미롭다. 어릴 적 정말 재미있게 봤던 추억의 작품이다.",
+                whyLove: "동화 같은 분위기와 독특한 세계관이 매력적이다.",
+                recommendTo: ["마법소녀 장르를 좋아하는 사람", "동화 같은 감성을 좋아하는 사람"],
+                tags: ["✨ 판타지", "🍬 몽글몽글", "🌈 추억"],
+                platforms: ["라프텔", "티빙", "네이버 시리즈온"],
+                series: [
+                    { name: "1기", episodes: "51화" }
+                ]
+            },
+            {
+                id: 18,
+                title: "옆자리 괴물군",
+                englishTitle: "My Little Monster",
+                genre: "청춘 · 로맨스",
+                year: 2012,
+                rating: 4.8,
+                studio: "브레인즈 베이스",
+                mood: "웃음",
+                plot: "공부밖에 모르던 소녀와 자유로운 소년이 서로를 변화시키는 이야기.",
+                review: "평범하지 않은 두 사람이 서로에게 영향을 주며 성장하는 모습이 재미있었다. 개성 있는 캐릭터들이 특히 매력적이다.",
+                whyLove: "티격태격하면서도 서로를 이해해가는 과정이 좋다.",
+                recommendTo: ["학원 로맨스를 좋아하는 사람", "코미디가 섞인 작품을 좋아하는 사람"],
+                tags: ["💕 설렘", "😂 웃음", "✨ 성장"],
+                platforms: ["라프텔", "넷플릭스"],
+                series: [
+                    { name: "1기", episodes: "13화" },
+                    { name: "OVA 외전", episodes: "1화" }
+                ]
+            },
+            {
+                id: 19,
+                title: "빨강머리 백설공주",
+                englishTitle: "Snow White with the Red Hair",
+                genre: "판타지 · 로맨스",
+                year: 2015,
+                rating: 4.9,
+                studio: "BONES",
+                mood: "힐링",
+                plot: "약사가 되고 싶은 소녀와 왕자의 따뜻한 사랑 이야기.",
+                review: "서로를 의지하기보다 각자의 자리에서 성장하는 관계가 정말 건강하게 느껴졌다.",
+                whyLove: "동화 같은 분위기와 성숙한 로맨스가 인상적이다.",
+                recommendTo: ["힐링 로맨스를 좋아하는 사람", "판타지를 좋아하는 사람"],
+                tags: ["🌿 힐링", "💕 설렘", "👑 판타지"],
+                platforms: ["라프텔", "네이버 시리즈온", "넷플릭스"],
+                series: [
+                    { name: "1기", episodes: "12화" },
+                    { name: "2기", episodes: "12화" }
+                ]
+            },
+            {
+                id: 20,
+                title: "타몬 군 지금 어느 쪽?!",
+                englishTitle: "Tamon-kun Ima Docchi?!",
+                genre: "로맨스 · 코미디",
+                year: 2024,
+                rating: 4.7,
+                studio: "J.C.STAFF",
+                mood: "웃음",
+                plot: "무대 위와 무대 아래의 모습이 다른 아이돌과 팬의 이야기를 그린 로맨틱 코미디.",
+                review: "무대에서는 완벽하지만 일상에서는 허당인 모습의 반전이 귀엽다. 가볍게 웃으며 보기 좋은 작품이다.",
+                whyLove: "캐릭터들의 반전 매력과 유쾌한 분위기가 좋다.",
+                recommendTo: ["아이돌 소재를 좋아하는 사람", "가벼운 로맨스를 좋아하는 사람"],
+                tags: ["💕 설렘", "😂 웃음", "🎤 아이돌"],
+                platforms: ["라프텔", "티빙"],
+                series: [
+                    { name: "1기", episodes: "12화" }
+                ]
+            },
+            {
+                id: 21,
+                title: "회장님은 메이드사마!",
+                englishTitle: "Maid Sama!",
+                genre: "로맨스 · 학원 · 코미디",
+                year: 2010,
+                rating: 4.9,
+                studio: "J.C.STAFF",
+                mood: "웃음",
+                plot: "학생회장과 학교 최고의 인기남이 서로의 비밀을 공유하며 가까워지는 학원 로맨스.",
+                review: "처음에는 티격태격하는 관계지만 서로를 이해하고 믿게 되는 과정이 정말 설렜다. 웃음과 설렘을 모두 잡은 작품이라고 생각한다.",
+                whyLove: "츤데레와 다정함의 조합이 정말 매력적이다.",
+                recommendTo: ["학원 로맨스를 좋아하는 사람", "코미디가 있는 연애물을 좋아하는 사람"],
+                tags: ["💕 설렘", "😂 웃음", "🎓 학원"],
+                platforms: ["라프텔", "네이버 시리즈온", "넷플릭스"],
+                series: [
+                    { name: "1기", episodes: "26화" },
+                    { name: "스페셜 에피소드", episodes: "1화" }
+                ]
+            },
+            {
+                id: 22,
+                title: "이누×보쿠 SS",
+                englishTitle: "Inu x Boku SS",
+                genre: "판타지 · 로맨스",
+                year: 2012,
+                rating: 4.8,
+                studio: "david production",
+                mood: "눈물",
+                plot: "요괴의 피를 이어받은 사람들이 함께 살아가는 저택에서 펼쳐지는 이야기.",
+                review: "초반에는 가벼운 로맨스인 줄 알았는데 뒤로 갈수록 감정선이 깊어져 생각보다 여운이 컸다.",
+                whyLove: "귀여운 분위기 속에 숨겨진 진지한 이야기가 좋다.",
+                recommendTo: ["판타지 로맨스를 좋아하는 사람", "감정선이 깊은 작품을 좋아하는 사람"],
+                tags: ["💕 설렘", "🌙 몽환", "😭 여운"],
+                platforms: ["라프텔", "네이버 시리즈온"],
+                series: [
+                    { name: "1기", episodes: "12화" },
+                    { name: "OVA 외전", episodes: "1화" }
+                ]
+            },
+            {
+                id: 23,
+                title: "아름다운 초저녁달",
+                englishTitle: "Uruwashi no Yoiyami no Tsuki",
+                genre: "청춘 · 로맨스",
+                year: 2024,
+                rating: 4.9,
+                studio: "CloverWorks",
+                mood: "힐링",
+                plot: "'왕자님'이라 불리는 두 사람이 서로를 이해하며 사랑을 키워가는 이야기.",
+                review: "잔잔한 분위기와 예쁜 작화가 인상적이었다. 서로를 바라보는 시선이 따뜻해서 편안하게 볼 수 있었다.",
+                whyLove: "과하지 않은 설렘이 오래 남는다.",
+                recommendTo: ["감성적인 로맨스를 좋아하는 사람", "예쁜 작화를 좋아하는 사람"],
+                tags: ["💕 설렘", "🌙 감성", "🌿 힐링"],
+                platforms: ["라프텔", "티빙"],
+                series: [
+                    { name: "1기", episodes: "12화" }
+                ]
+            },
+            {
+                id: 24,
+                title: "늑대 소녀와 흑왕자",
+                englishTitle: "Wolf Girl and Black Prince",
+                genre: "로맨스 · 학원",
+                year: 2014,
+                rating: 4.7,
+                studio: "TYO 애니메이션",
+                mood: "성장",
+                plot: "거짓말에서 시작된 두 사람의 관계가 진짜 사랑으로 변해가는 이야기.",
+                review: "초반에는 답답하기도 했지만 서로가 조금씩 변해가는 모습을 보는 재미가 있었다.",
+                whyLove: "캐릭터가 성장하면서 관계도 함께 변화하는 점이 좋다.",
+                recommendTo: ["츤데레 로맨스를 좋아하는 사람", "학원 연애물을 좋아하는 사람"],
+                tags: ["💕 설렘", "🎓 학원", "✨ 성장"],
+                platforms: ["라프텔", "네이버 시리즈온"],
+                series: [
+                    { name: "1기", episodes: "12화" },
+                    { name: "OAD 에피소드", episodes: "1화" }
+                ]
+            },
+            {
+                id: 25,
+                title: "진격의 거인",
+                englishTitle: "Attack on Titan",
+                genre: "액션 · 다크 판타지",
+                year: 2013,
+                rating: 5.0,
+                studio: "WIT STUDIO",
+                mood: "몰입감",
+                plot: "거인에게 지배당하는 세계에서 자유를 찾기 위해 싸우는 인류의 이야기.",
+                review: "처음에는 단순한 액션물이라고 생각했지만 뒤로 갈수록 세계관과 떡밥 회수가 정말 놀라웠다. 마지막까지 긴장을 놓을 수 없는 작품이었다.",
+                whyLove: "모든 복선이 하나로 이어지는 순간의 전율이 잊히지 않는다.",
+                recommendTo: ["탄탄한 세계관을 좋아하는 사람", "몰입감 있는 작품을 찾는 사람"],
+                tags: ["🔥 몰입감", "⚔️ 액션", "🤯 반전"],
+                platforms: ["넷플릭스", "라프텔", "티빙", "디즈니+"],
+                series: [
+                    { name: "1기", episodes: "25화" },
+                    { name: "2기", episodes: "12화" },
+                    { name: "3기 (파트 1 & 2)", episodes: "22화" },
+                    { name: "파이널 시즌 (파트 1, 2 & 완결편)", episodes: "30화" }
+                ]
+            },
+            {
+                id: 26,
+                title: "주술회전",
+                englishTitle: "Jujutsu Kaisen",
+                genre: "액션 · 다크 판타지",
+                year: 2020,
+                rating: 4.8,
+                studio: "MAPPA",
+                mood: "몰입감",
+                plot: "저주를 둘러싼 싸움 속에서 성장하는 주술사들의 이야기.",
+                review: "화려한 전투 연출과 개성 있는 캐릭터들이 정말 매력적이었다. 액션 하나만으로도 보는 재미가 충분한 작품이다.",
+                whyLove: "애니메이션 연출이 정말 뛰어나다.",
+                recommendTo: ["화려한 액션을 좋아하는 사람", "다크 판타지를 좋아하는 사람"],
+                tags: ["🔥 액션", "⚡ 전투", "🌑 다크"],
+                platforms: ["넷플릭스", "라프텔", "티빙", "디즈니+"],
+                series: [
+                    { name: "1기", episodes: "24화" },
+                    { name: "극장판 주술회전 0", episodes: "극장판 1화" },
+                    { name: "2기 (회옥·옥절 & 시부야 사변)", episodes: "23화" }
+                ]
+            },
+            {
+                id: 27,
+                title: "내가 인기 있어서 어쩌자는 거야",
+                englishTitle: "Kiss Him, Not Me",
+                genre: "로맨스 · 코미디",
+                year: 2016,
+                rating: 4.6,
+                studio: "브레인즈 베이스",
+                mood: "웃음",
+                plot: "덕질을 좋아하던 소녀가 갑자기 인기를 얻게 되면서 벌어지는 이야기.",
+                review: "가볍게 웃으면서 보기 좋은 로맨틱 코미디였다. 설정이 독특해서 부담 없이 즐길 수 있었다.",
+                whyLove: "아무 생각 없이 웃으며 보기 좋다.",
+                recommendTo: ["코미디를 좋아하는 사람", "가벼운 로맨스를 찾는 사람"],
+                tags: ["😂 웃음", "💕 설렘", "🌸 청춘"],
+                platforms: ["라프텔", "네이버 시리즈온"],
+                series: [
+                    { name: "1기", episodes: "12화" }
+                ]
+            },
+            {
+                id: 28,
                 title: "하울의 움직이는 성",
                 englishTitle: "Howl's Moving Castle",
-                genre: "판타지",
+                genre: "판타지 · 로맨스",
                 year: 2004,
+                rating: 5.0,
+                studio: "스튜디오 지브리",
+                mood: "힐링",
+                plot: "저주에 걸린 소녀와 마법사 하울이 함께하는 판타지 이야기.",
+                review: "음악, 배경, 작화까지 모든 요소가 아름다운 작품이다. 시간이 지나 다시 봐도 새로운 감정을 느끼게 된다.",
+                whyLove: "지브리 특유의 감성과 환상적인 세계관이 가장 큰 매력이다.",
+                recommendTo: ["지브리 작품을 좋아하는 사람", "판타지 영화를 좋아하는 사람"],
+                tags: ["✨ 판타지", "🌙 감성", "💕 설렘"],
+                platforms: ["넷플릭스"],
+                series: [
+                    { name: "극장판 단편", episodes: "1화 (119분)" }
+                ]
+            },
+            {
+                id: 29,
+                title: "너의 이름은.",
+                englishTitle: "Your Name.",
+                genre: "로맨스 · 판타지",
+                year: 2016,
+                rating: 5.0,
+                studio: "코믹스 웨이브 필름",
+                mood: "눈물",
+                plot: "몸이 바뀌는 두 남녀가 시간을 넘어 서로를 찾아가는 이야기.",
+                review: "영상미와 음악이 정말 아름답고, 마지막까지 몰입해서 보게 되는 작품이었다. 결말의 여운이 오래 남는다.",
+                whyLove: "영상과 OST가 만들어내는 감정이 압도적이다.",
+                recommendTo: ["감성적인 영화를 좋아하는 사람", "여운이 오래 남는 작품을 찾는 사람"],
+                tags: ["😭 여운", "🌌 운명", "💕 설렘"],
+                platforms: ["넷플릭스", "디즈니+", "웨이브", "라프텔"],
+                series: [
+                    { name: "극장판 단편", episodes: "1화 (106분)" }
+                ]
+            },
+            {
+                id: 30,
+                title: "호리미야",
+                englishTitle: "Horimiya",
+                genre: "청춘 · 로맨스 · 일상",
+                year: 2021,
+                rating: 4.9,
+                studio: "CloverWorks",
+                mood: "힐링",
+                plot: "학교 밖에서는 전혀 다른 모습을 가진 두 사람이 가까워지는 이야기.",
+                review: "서로의 있는 그대로의 모습을 받아들이는 관계가 정말 보기 좋았다. 잔잔한 일상 속 설렘이 오래 기억에 남는다.",
+                whyLove: "억지 갈등 없이 편안하게 볼 수 있는 청춘 로맨스다.",
+                recommendTo: ["잔잔한 로맨스를 좋아하는 사람", "힐링되는 일상물을 좋아하는 사람"],
+                tags: ["🌿 힐링", "💕 설렘", "☀️ 일상"],
+                platforms: ["넷플릭스", "라프텔", "티빙"],
+                series: [
+                    { name: "1기", episodes: "13화" },
+                    { name: "호리미야 -piece-", episodes: "13화" }
+                ]
+            },
+            {
+                id: 31,
+                title: "향기로운 꽃은 늠름하게 핀다",
+                englishTitle: "The Fragrant Flower Blooms with Dignity",
+                genre: "청춘 · 로맨스 · 학원",
+                year: 2025,
+                rating: 5.0,
+                studio: "CloverWorks",
+                mood: "힐링",
+                plot: "서로 다른 학교에 다니는 두 사람이 편견을 넘어 가까워지는 청춘 로맨스.",
+                review: "캐릭터들의 감정선이 정말 섬세하게 표현된다. 자극적인 전개 없이도 계속 다음 화가 궁금해지는 작품이었다.",
+                whyLove: "서로를 있는 그대로 이해하려는 모습이 가장 인상 깊었다.",
+                recommendTo: ["잔잔한 로맨스를 좋아하는 사람", "감정선이 섬세한 작품을 좋아하는 사람"],
+                tags: ["💕 설렘", "🌿 힐링", "🌸 청춘"],
+                platforms: ["라프텔", "티빙"],
+                series: [
+                    { name: "1기", episodes: "12화" }
+                ]
+            },
+            {
+                id: 32,
+                title: "스파이 패밀리",
+                englishTitle: "SPY x FAMILY",
+                genre: "코미디 · 액션 · 가족",
+                year: 2022,
+                rating: 4.9,
+                studio: "WIT STUDIO x CloverWorks",
+                mood: "웃음",
+                plot: "스파이, 암살자, 초능력자가 한 가족이 되어 펼쳐지는 이야기.",
+                review: "액션과 코미디의 균형이 정말 좋다. 특히 아냐 덕분에 웃으면서 편하게 볼 수 있는 작품이다.",
+                whyLove: "가짜 가족이 진짜 가족처럼 변해가는 과정이 따뜻하다.",
+                recommendTo: ["가족 코미디를 좋아하는 사람", "가볍게 웃으며 볼 작품을 찾는 사람"],
+                tags: ["😂 웃음", "👨‍👩‍👧 가족", "🔥 액션"],
+                platforms: ["넷플릭스", "라프텔", "티빙", "디즈니+"],
+                series: [
+                    { name: "1기 (파트 1 & 2)", episodes: "25화" },
+                    { name: "2기", episodes: "12화" },
+                    { name: "극장판 SPY x FAMILY CODE: White", episodes: "극장판 1화" }
+                ]
+            },
+            {
+                id: 33,
+                title: "갓파와 여름방학을",
+                englishTitle: "Summer Days with Coo",
+                genre: "판타지 · 가족",
+                year: 2007,
+                rating: 4.8,
+                studio: "신에이 동화",
+                mood: "눈물",
+                plot: "여름방학 동안 인간과 갓파가 함께하며 우정을 쌓아가는 이야기.",
+                review: "어릴 적 재미있게 봤던 작품이다. 잔잔한 감동과 환경에 대한 메시지가 오래 기억에 남는다.",
+                whyLove: "동화 같은 분위기 속에서도 따뜻한 메시지를 전한다.",
+                recommendTo: ["가족 영화를 좋아하는 사람", "여운 있는 애니메이션을 좋아하는 사람"],
+                tags: ["🌿 힐링", "😭 감동", "🌳 자연"],
+                platforms: ["라프텔", "네이버 시리즈온"],
+                series: [
+                    { name: "극장판 단편", episodes: "1화 (138분)" }
+                ]
+            },
+            {
+                id: 34,
+                title: "포켓몬스터",
+                englishTitle: "Pokemon",
+                genre: "모험 · 판타지",
+                year: 1997,
+                rating: 5.0,
+                studio: "OLM",
+                mood: "성장",
+                plot: "포켓몬 마스터를 꿈꾸는 지우와 포켓몬들의 모험 이야기.",
+                review: "어린 시절을 함께한 추억의 애니메이션이다. 새로운 지방과 포켓몬을 만나는 재미가 정말 컸다.",
+                whyLove: "세대를 넘어 함께 추억할 수 있는 작품이다.",
+                recommendTo: ["모험물을 좋아하는 사람", "추억을 느끼고 싶은 사람"],
+                tags: ["🌈 추억", "🌍 모험", "⚡ 판타지"],
+                platforms: ["넷플릭스", "티빙", "라프텔"],
+                series: [
+                    { name: "무인편~W (지우 여정)", episodes: "1200화 이상" },
+                    { name: "리코와 로드의 모험", episodes: "시리즈 방영 중" }
+                ]
+            },
+            {
+                id: 35,
+                title: "벼랑 위의 포뇨",
+                englishTitle: "Ponyo",
+                genre: "판타지 · 가족",
+                year: 2008,
+                rating: 4.9,
+                studio: "스튜디오 지브리",
+                mood: "힐링",
+                plot: "인간이 되고 싶은 물고기 소녀 포뇨와 소스케의 이야기.",
+                review: "보기만 해도 기분이 좋아지는 작품이다. 따뜻한 색감과 귀여운 캐릭터들이 힐링을 준다.",
+                whyLove: "동심을 가장 순수하게 담아낸 지브리 작품이다.",
+                recommendTo: ["지브리를 좋아하는 사람", "가족과 함께 볼 작품을 찾는 사람"],
+                tags: ["🌿 힐링", "🐟 판타지", "☀️ 따뜻함"],
+                platforms: ["넷플릭스"],
+                series: [
+                    { name: "극장판 단편", episodes: "1화 (101분)" }
+                ]
+            },
+            {
+                id: 36,
+                title: "천공의 성 라퓨타",
+                englishTitle: "Castle in the Sky",
+                genre: "모험 · 판타지",
+                year: 1986,
+                rating: 5.0,
+                studio: "스튜디오 지브리",
+                mood: "성장",
+                plot: "전설의 공중도시 라퓨타를 찾아 떠나는 모험 이야기.",
+                review: "오래된 작품임에도 지금 봐도 전혀 촌스럽지 않다. 모험의 설렘을 가장 잘 담아낸 지브리 영화라고 생각한다.",
+                whyLove: "모험이라는 단어를 가장 잘 표현한 작품.",
+                recommendTo: ["판타지 영화를 좋아하는 사람", "모험 이야기를 좋아하는 사람"],
+                tags: ["🌍 모험", "✨ 판타지", "☁️ 자유"],
+                platforms: ["넷플릭스"],
+                series: [
+                    { name: "극장판 단편", episodes: "1화 (124분)" }
+                ]
+            },
+            {
+                id: 37,
+                title: "마녀 배달부 키키",
+                englishTitle: "Kiki's Delivery Service",
+                genre: "판타지 · 성장",
+                year: 1989,
+                rating: 5.0,
+                studio: "스튜디오 지브리",
+                mood: "힐링",
+                plot: "홀로 독립한 어린 마녀가 새로운 도시에서 성장하는 이야기.",
+                review: "힘든 시기를 겪으며 다시 자신의 길을 찾아가는 모습이 많은 위로가 되었다.",
+                whyLove: "성장통을 가장 따뜻하게 표현한 작품이다.",
+                recommendTo: ["위로가 필요한 사람", "잔잔한 힐링 영화를 좋아하는 사람"],
+                tags: ["🌿 힐링", "✨ 성장", "🌙 위로"],
+                platforms: ["넷플릭스"],
+                series: [
+                    { name: "극장판 단편", episodes: "1화 (102분)" }
+                ]
+            },
+            {
+                id: 38,
+                title: "고양이의 보은",
+                englishTitle: "The Cat Returns",
+                genre: "판타지 · 모험",
+                year: 2002,
                 rating: 4.8,
                 studio: "스튜디오 지브리",
                 mood: "힐링",
-                plot: "황야의 마녀가 건 저주에 걸려 아흔 살 할머니가 되어버린 소녀 소피가 꽃미남 마법사 하울의 기묘하게 걸어 다니는 거대한 성에 머무는 이야기.",
-                review: "히사이시 조의 불멸의 피아노 메인 테마곡과 함께, 전쟁 없는 포근한 목가적 세상을 동경하게 만드는 웅장하고 따뜻한 지브리의 보물.",
-                quotes: "소피, 네 아름다운 머리카락이 별빛처럼 빛나고 있어."
+                plot: "우연히 고양이 왕국으로 초대받은 소녀의 판타지 모험.",
+                review: "가볍게 보기 좋은 지브리 작품이다. 귀여운 고양이들과 판타지 세계가 매력적이다.",
+                whyLove: "동화책을 읽는 듯한 기분이 든다.",
+                recommendTo: ["고양이를 좋아하는 사람", "가벼운 판타지를 좋아하는 사람"],
+                tags: ["🐈 판타지", "🌿 힐링", "🌈 동화"],
+                platforms: ["넷플릭스"],
+                series: [
+                    { name: "극장판 단편", episodes: "1화 (75분)" }
+                ]
+            },
+            {
+                id: 39,
+                title: "지박소년 하나코군",
+                englishTitle: "Toilet-Bound Hanako-kun",
+                genre: "판타지 · 미스터리",
+                year: 2020,
+                rating: 4.9,
+                studio: "Lerche",
+                mood: "눈물",
+                plot: "학교에 떠도는 괴담과 하나코군을 중심으로 펼쳐지는 판타지 이야기.",
+                review: "독특한 그림체와 분위기가 정말 매력적이었다. 귀여운 분위기 속에서도 슬픈 이야기가 숨어 있어 더 기억에 남는다.",
+                whyLove: "작화와 연출이 작품의 분위기를 완벽하게 살린다.",
+                recommendTo: ["판타지를 좋아하는 사람", "미스터리한 분위기를 좋아하는 사람"],
+                tags: ["🌙 몽환", "👻 미스터리", "😭 여운"],
+                platforms: ["라프텔", "티빙"],
+                series: [
+                    { name: "1기", episodes: "12화" },
+                    { name: "방과후 하나코 군", episodes: "4화" }
+                ]
+            },
+            {
+                id: 40,
+                title: "WIND BREAKER",
+                englishTitle: "Wind Breaker",
+                genre: "액션 · 학원",
+                year: 2024,
+                rating: 4.8,
+                studio: "CloverWorks",
+                mood: "성장",
+                plot: "싸움만 잘하던 소년이 사람들을 지키며 성장하는 이야기.",
+                review: "액션이 정말 시원시원하고 캐릭터들의 매력이 뛰어나다. 단순한 싸움이 아니라 동료와 신념을 지키는 이야기가 인상적이었다.",
+                whyLove: "액션 속에서도 따뜻한 인간관계를 잘 보여준다.",
+                recommendTo: ["학원 액션물을 좋아하는 사람", "속도감 있는 전개를 좋아하는 사람"],
+                tags: ["🔥 액션", "🤝 우정", "✨ 성장"],
+                platforms: ["라프텔", "티빙", "웨이브", "넷플릭스"],
+                series: [
+                    { name: "1기", episodes: "12화" }
+                ]
+            },
+            {
+                id: 41,
+                title: "후르츠 바스켓",
+                englishTitle: "Fruits Basket",
+                genre: "로맨스 · 판타지 · 드라마",
+                year: 2019,
+                rating: 5.0,
+                studio: "TMS 엔터테인먼트",
+                mood: "눈물",
+                plot: "비밀을 가진 소마 가문과 따뜻한 소녀 토오루가 함께하며 서로를 치유해가는 이야기.",
+                review: "슬픈 과거를 가진 사람들이 서로를 만나 조금씩 치유되는 과정이 정말 따뜻했다. 눈물도 많았지만 그만큼 위로를 많이 받은 작품이다.",
+                whyLove: "상처를 안고 살아가는 사람들에게 위로를 건네는 작품.",
+                recommendTo: ["감동적인 이야기를 좋아하는 사람", "여운이 오래 남는 작품을 찾는 사람"],
+                tags: ["😭 감동", "🌿 힐링", "❤️ 치유"],
+                platforms: ["라프텔", "넷플릭스", "티빙"],
+                series: [
+                    { name: "1기", episodes: "25화" },
+                    { name: "2기", episodes: "25화" },
+                    { name: "3기 (The Final)", episodes: "13화" }
+                ]
+            },
+            {
+                id: 42,
+                title: "학원 베이비시터즈",
+                englishTitle: "School Babysitters",
+                genre: "일상 · 가족",
+                year: 2018,
+                rating: 4.9,
+                studio: "브레인즈 베이스",
+                mood: "힐링",
+                plot: "고등학생이 어린아이들을 돌보며 함께 성장해가는 따뜻한 이야기.",
+                review: "아이들이 너무 귀엽고, 보고 있으면 저절로 미소가 지어진다. 하루의 피로가 사라지는 힐링 애니메이션이다.",
+                whyLove: "웃음과 따뜻함을 동시에 느낄 수 있다.",
+                recommendTo: ["힐링 작품을 좋아하는 사람", "귀여운 캐릭터를 좋아하는 사람"],
+                tags: ["🌿 힐링", "👶 귀여움", "☀️ 따뜻함"],
+                platforms: ["라프텔", "네이버 시리즈온"],
+                series: [
+                    { name: "1기", episodes: "12화" },
+                    { name: "OVA 외전", episodes: "1화" }
+                ]
+            },
+            {
+                id: 43,
+                title: "썬더 일레븐",
+                englishTitle: "Inazuma Eleven",
+                genre: "스포츠 · 성장",
+                year: 2008,
+                rating: 4.8,
+                studio: "OLM",
+                mood: "성장",
+                plot: "축구를 통해 꿈을 향해 달려가는 소년들의 이야기.",
+                review: "어릴 적 가장 재미있게 봤던 축구 애니메이션이다. 필살기가 등장하는 연출 덕분에 보는 재미가 컸다.",
+                whyLove: "축구와 판타지를 재미있게 섞어낸 작품.",
+                recommendTo: ["스포츠 애니를 좋아하는 사람", "추억을 느끼고 싶은 사람"],
+                tags: ["⚽ 스포츠", "✨ 성장", "🌈 추억"],
+                platforms: ["라프텔", "네이버 시리즈온"],
+                series: [
+                    { name: "1기 오리지널", episodes: "127화" },
+                    { name: "아레스의 천칭", episodes: "26화" },
+                    { name: "오리온의 각인", episodes: "49화" }
+                ]
+            },
+            {
+                id: 44,
+                title: "사랑한다고 말해",
+                englishTitle: "Say \"I love you\"",
+                genre: "청춘 · 로맨스",
+                year: 2012,
+                rating: 4.8,
+                studio: "ZEXCS",
+                mood: "힐링",
+                plot: "사람을 믿지 못하던 두 사람이 사랑을 통해 서로를 이해하게 되는 이야기.",
+                review: "화려한 전개는 없지만 잔잔한 감정선이 정말 좋았다. 서로를 이해하는 과정이 오래 기억에 남는다.",
+                whyLove: "조용하지만 깊은 감정을 담아낸 로맨스.",
+                recommendTo: ["감성적인 로맨스를 좋아하는 사람", "잔잔한 작품을 좋아하는 사람"],
+                tags: ["💕 설렘", "🌿 힐링", "🌙 감성"],
+                platforms: ["라프텔", "네이버 시리즈온"],
+                series: [
+                    { name: "1기", episodes: "13화" },
+                    { name: "OVA 스페셜", episodes: "1화" }
+                ]
+            },
+            {
+                id: 45,
+                title: "미이라 사육법",
+                englishTitle: "How to Keep a Mummy",
+                genre: "일상 · 판타지",
+                year: 2018,
+                rating: 4.8,
+                studio: "8bit",
+                mood: "힐링",
+                plot: "작고 귀여운 미이라와 함께 살아가는 소년의 일상 이야기.",
+                review: "등장하는 캐릭터들이 너무 귀여워서 보는 내내 미소가 지어진다. 부담 없이 보기 좋은 힐링 애니였다.",
+                whyLove: "귀여움 하나만으로도 충분한 가치가 있는 작품.",
+                recommendTo: ["귀여운 캐릭터를 좋아하는 사람", "힐링 작품을 좋아하는 사람"],
+                tags: ["👶 귀여움", "🌿 힐링", "😂 웃음"],
+                platforms: ["라프텔", "네이버 시리즈온"],
+                series: [
+                    { name: "1기", episodes: "12화" }
+                ]
+            },
+            {
+                id: 46,
+                title: "베베데빌",
+                englishTitle: "Baby Devil",
+                genre: "코미디 · 판타지",
+                year: 2011,
+                rating: 4.7,
+                studio: "시너지SP",
+                mood: "웃음",
+                plot: "악마 아기를 돌보게 되면서 벌어지는 유쾌한 이야기.",
+                review: "짧은 에피소드 형식이라 가볍게 보기 좋았고, 귀여운 캐릭터들 덕분에 부담 없이 즐길 수 있었다.",
+                whyLove: "짧지만 웃음을 주는 작품.",
+                recommendTo: ["짧은 애니를 좋아하는 사람", "귀여운 캐릭터를 좋아하는 사람"],
+                tags: ["😂 웃음", "👶 귀여움", "😈 판타지"],
+                platforms: ["라프텔"],
+                series: [
+                    { name: "1기 (TVA 쇼트)", episodes: "75화" }
+                ]
+            },
+            {
+                id: 47,
+                title: "미소의 세상",
+                englishTitle: "Super Doll Licca-chan",
+                genre: "일상 · 코미디",
+                year: 2001,
+                rating: 4.7,
+                studio: "닛폰 애니메이션",
+                mood: "힐링",
+                plot: "천진난만한 소녀 미소와 주변 사람들의 따뜻한 일상을 그린 이야기.",
+                review: "어릴 적 TV에서 자주 보던 추억의 작품이다. 지금 생각해도 편안한 분위기가 기억에 남는다.",
+                whyLove: "추억이라는 이유만으로도 충분히 소중한 작품.",
+                recommendTo: ["추억의 애니를 좋아하는 사람", "가볍게 볼 작품을 찾는 사람"],
+                tags: ["🌈 추억", "☀️ 일상", "🌿 힐링"],
+                platforms: ["라프텔"],
+                series: [
+                    { name: "1기", episodes: "52화" }
+                ]
+            },
+            {
+                id: 48,
+                title: "도라에몽",
+                englishTitle: "Doraemon",
+                genre: "일상 · SF · 코미디",
+                year: 1979,
+                rating: 5.0,
+                studio: "신에이 동화",
+                mood: "웃음",
+                plot: "22세기에서 온 고양이 로봇 도라에몽과 진구의 이야기.",
+                review: "어린 시절 가장 친숙했던 애니메이션이다. 신기한 도구를 보며 상상력을 키웠던 기억이 난다.",
+                whyLove: "세대를 넘어 사랑받는 이유가 있는 작품.",
+                recommendTo: ["가족과 함께 볼 작품을 찾는 사람", "추억을 느끼고 싶은 사람"],
+                tags: ["🌈 추억", "😂 웃음", "🤖 SF"],
+                platforms: ["티빙", "라프텔", "디즈니+"],
+                series: [
+                    { name: "신 도라에몽 시리즈", episodes: "24개 시즌 이상" },
+                    { name: "스탠바이미 3D", episodes: "극장판 1화" }
+                ]
+            },
+            {
+                id: 49,
+                title: "개구리 중사 케로로",
+                englishTitle: "Sgt. Frog",
+                genre: "코미디 · SF",
+                year: 2004,
+                rating: 4.9,
+                studio: "선라이즈",
+                mood: "웃음",
+                plot: "지구를 침략하러 왔다가 일상에 적응해버린 개구리 소대의 이야기.",
+                review: "패러디가 정말 많고 개그도 독특해서 질리지 않는다. 어릴 적 가장 많이 웃었던 애니 중 하나다.",
+                whyLove: "유쾌한 개그와 개성 넘치는 캐릭터들.",
+                recommendTo: ["코미디를 좋아하는 사람", "추억의 애니를 좋아하는 사람"],
+                tags: ["😂 웃음", "👽 SF", "🌈 추억"],
+                platforms: ["티빙", "라프텔"],
+                series: [
+                    { name: "1기~7기 통합", episodes: "358화" }
+                ]
+            },
+            {
+                id: 50,
+                title: "마루코는 아홉살",
+                englishTitle: "Chibi Maruko-chan",
+                genre: "일상 · 가족",
+                year: 1990,
+                rating: 4.8,
+                studio: "닛폰 애니메이션",
+                mood: "힐링",
+                plot: "평범한 초등학생 마루코와 가족들의 소소한 일상 이야기.",
+                review: "화려한 사건은 없지만 그래서 더 편안하게 볼 수 있는 작품이다. 소소한 웃음이 오래 남는다.",
+                whyLove: "평범한 일상의 소중함을 느끼게 해준다.",
+                recommendTo: ["잔잔한 일상을 좋아하는 사람", "가족 이야기를 좋아하는 사람"],
+                tags: ["🌿 힐링", "👨‍👩‍👧 가족", "☀️ 일상"],
+                platforms: ["티빙", "라프텔"],
+                series: [
+                    { name: "정규 시즌제", episodes: "수백 화 이상 구성" }
+                ]
+            },
+            {
+                id: 51,
+                title: "안녕 자두야",
+                englishTitle: "Hello Jadoo",
+                genre: "일상 · 가족 · 코미디",
+                year: 2011,
+                rating: 4.8,
+                studio: "아토스비주얼",
+                mood: "웃음",
+                plot: "장난기 많은 자두와 가족들의 유쾌한 일상을 그린 이야기.",
+                review: "우리 주변에서 있을 법한 이야기들이 많아서 공감하며 봤다. 가족들과의 에피소드가 특히 재미있다.",
+                whyLove: "한국적인 감성이 잘 살아 있는 작품.",
+                recommendTo: ["가족 애니를 좋아하는 사람", "추억을 느끼고 싶은 사람"],
+                tags: ["😂 웃음", "👨‍👩‍👧 가족", "🌈 추억"],
+                platforms: ["티빙", "웨이브", "라프텔"],
+                series: [
+                    { name: "시즌 1", episodes: "32화" },
+                    { name: "시즌 2", episodes: "30화" },
+                    { name: "시즌 3", episodes: "30화" },
+                    { name: "시즌 4", episodes: "30화" }
+                ]
+            },
+            {
+                id: 52,
+                title: "아따맘마",
+                englishTitle: "Atashin'chi",
+                genre: "일상 · 가족",
+                year: 2002,
+                rating: 4.9,
+                studio: "신에이 동화",
+                mood: "힐링",
+                plot: "엄마를 중심으로 펼쳐지는 평범하지만 특별한 가족 이야기.",
+                review: "어릴 땐 웃기기만 했는데, 커서 보니 부모님의 마음이 조금은 이해되는 작품이었다.",
+                whyLove: "일상 속에서 공감할 수 있는 에피소드가 많다.",
+                recommendTo: ["가족 애니를 좋아하는 사람", "편안한 작품을 찾는 사람"],
+                tags: ["🌿 힐링", "👨‍👩‍👧 가족", "😊 공감"],
+                platforms: ["티빙", "라프텔"],
+                series: [
+                    { name: "오리지널", episodes: "330화" },
+                    { name: "새로운 아따맘마", episodes: "26화" }
+                ]
+            },
+            {
+                id: 53,
+                title: "유즈키네 사형제",
+                englishTitle: "The Yuzuki Family's Four Sons",
+                genre: "일상 · 가족 · 드라마",
+                year: 2023,
+                rating: 5.0,
+                studio: "슈카",
+                mood: "눈물",
+                plot: "부모님을 잃은 네 형제가 서로를 의지하며 살아가는 따뜻한 이야기.",
+                review: "화려한 사건은 없지만 네 형제가 서로를 생각하는 모습만으로도 마음이 따뜻해졌다. 잔잔한 감동이 오래 남는 작품이다.",
+                whyLove: "가족이라는 존재의 소중함을 다시 한번 느끼게 해준다.",
+                recommendTo: ["가족 드라마를 좋아하는 사람", "힐링 작품을 찾는 사람"],
+                tags: ["❤️ 가족", "🌿 힐링", "😭 감동"],
+                platforms: ["라프텔", "티빙"],
+                series: [
+                    { name: "1기", episodes: "12화" }
+                ]
+            },
+            {
+                id: 54,
+                title: "카드캡터 체리",
+                englishTitle: "Cardcaptor Sakura",
+                genre: "마법소녀 · 판타지",
+                year: 1998,
+                rating: 5.0,
+                studio: "매드하우스",
+                mood: "성장",
+                plot: "봉인된 카드들을 회수하기 위해 활약하는 소녀 체리의 이야기.",
+                review: "어릴 적 가장 좋아했던 마법소녀 애니메이션 중 하나다. 매 화 바뀌는 의상과 카드들이 아직도 기억에 남는다.",
+                whyLove: "귀여운 분위기와 아름다운 작화, 그리고 순수한 감성이 잘 어우러진 작품이다.",
+                recommendTo: ["마법소녀 장르를 좋아하는 사람", "추억을 느끼고 싶은 사람"],
+                tags: ["✨ 판타지", "💖 설렘", "🌈 추억"],
+                platforms: ["넷플릭스", "라프텔", "티빙"],
+                series: [
+                    { name: "크로우 카드편", episodes: "46화" },
+                    { name: "사쿠라 카드편", episodes: "24화" },
+                    { name: "클리어 카드편 (신작)", episodes: "22화" }
+                ]
+            },
+            {
+                id: 55,
+                title: "허니 레몬 소다",
+                englishTitle: "Honey Lemon Soda",
+                genre: "청춘 · 로맨스",
+                year: 2025,
+                rating: 4.9,
+                studio: "J.C.STAFF",
+                mood: "힐링",
+                plot: "소심했던 소녀가 새로운 학교에서 사랑과 우정을 통해 조금씩 변화해가는 이야기.",
+                review: "밝은 레몬색처럼 상큼하면서도 따뜻한 분위기가 인상적였다. 서로의 부족한 부분을 채워주며 성장하는 모습이 보기 좋았다.",
+                whyLove: "풋풋한 첫사랑의 설렘과 성장의 순간을 예쁘게 담아낸 작품.",
+                recommendTo: ["청춘 로맨스를 좋아하는 사람", "따뜻한 분위기의 작품을 찾는 사람"],
+                tags: ["💕 설렘", "✨ 성장", "🌿 힐링"],
+                platforms: ["라프텔", "티빙"],
+                series: [
+                    { name: "1기", episodes: "12화 예정" }
+                ]
             }
         ];
 
@@ -747,19 +1774,47 @@
         let activeMoodFilter = null;
         let isSpinning = false;
         
-        // Dynamic Stars creation
+        // Dynamic poster image async loader utilizing Kitsu API & LocalStorage Caching
+        async function getPosterImage(animeId, englishTitle) {
+            const cacheKey = `poster_cache_v2_${animeId}`;
+            const cachedUrl = localStorage.getItem(cacheKey);
+            
+            if (cachedUrl) {
+                return cachedUrl;
+            }
+            
+            try {
+                // Querying the public open-source Kitsu database via English Title
+                const response = await fetch(`https://kitsu.io/api/edge/anime?filter[text]=${encodeURIComponent(englishTitle)}&page[limit]=1`);
+                if (!response.ok) throw new Error('API request failed');
+                const json = await response.json();
+                
+                if (json.data && json.data.length > 0) {
+                    const posterUrl = json.data[0].attributes.posterImage.medium || json.data[0].attributes.posterImage.small;
+                    if (posterUrl) {
+                        localStorage.setItem(cacheKey, posterUrl);
+                        return posterUrl;
+                    }
+                }
+            } catch (error) {
+                console.warn(`Failed to dynamically retrieve poster for: ${englishTitle}`, error);
+            }
+            return null; // Fail clean, will let SVG handle fallback safely
+        }
+
+        // Dynamic Particle Stars creation inside the Hero
         function initStars() {
             const container = document.getElementById('stars-container');
-            const count = 30;
+            const count = 35;
             container.innerHTML = '';
             for (let i = 0; i < count; i++) {
                 const star = document.createElement('div');
                 star.className = 'star-particle';
-                star.style.width = star.style.height = `${Math.random() * 2 + 1}px`;
+                star.style.width = star.style.height = `${Math.random() * 2 + 1.5}px`;
                 star.style.top = `${Math.random() * 100}%`;
                 star.style.left = `${Math.random() * 100}%`;
                 star.style.animationDelay = `${Math.random() * 4}s`;
-                star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                star.style.animationDuration = `${Math.random() * 3 + 2.5}s`;
                 container.appendChild(star);
             }
         }
@@ -777,40 +1832,38 @@
             
             let patternsHtml = '';
             if (theme.pattern === 'circle') {
-                patternsHtml = `<circle cx="150" cy="200" r="100" fill="white" opacity="0.1" />
-                                <circle cx="150" cy="200" r="60" stroke="white" stroke-width="2" fill="none" opacity="0.15" />`;
+                patternsHtml = `<circle cx="150" cy="200" r="105" fill="white" opacity="0.08" />
+                                <circle cx="150" cy="200" r="65" stroke="white" stroke-width="1.5" fill="none" opacity="0.12" />`;
             } else if (theme.pattern === 'grid') {
-                patternsHtml = `<line x1="50" y1="0" x2="50" y2="400" stroke="white" stroke-width="1" opacity="0.1" />
-                                <line x1="150" y1="0" x2="150" y2="400" stroke="white" stroke-width="1" opacity="0.1" />
-                                <line x1="250" y1="0" x2="250" y2="400" stroke="white" stroke-width="1" opacity="0.1" />
-                                <line x1="0" y1="100" x2="300" y2="100" stroke="white" stroke-width="1" opacity="0.1" />
-                                <line x1="0" y1="200" x2="300" y2="200" stroke="white" stroke-width="1" opacity="0.1" />
-                                <line x1="0" y1="300" x2="300" y2="300" stroke="white" stroke-width="1" opacity="0.1" />`;
+                patternsHtml = `<line x1="50" y1="0" x2="50" y2="400" stroke="white" stroke-width="1" opacity="0.08" />
+                                <line x1="150" y1="0" x2="150" y2="400" stroke="white" stroke-width="1" opacity="0.08" />
+                                <line x1="250" y1="0" x2="250" y2="400" stroke="white" stroke-width="1" opacity="0.08" />
+                                <line x1="0" y1="100" x2="300" y2="100" stroke="white" stroke-width="1" opacity="0.08" />
+                                <line x1="0" y1="200" x2="300" y2="200" stroke="white" stroke-width="1" opacity="0.08" />`;
             } else if (theme.pattern === 'lines') {
-                patternsHtml = `<path d="M 0 0 L 300 400 M 50 -50 L 350 350 M -50 50 L 250 450" stroke="white" stroke-width="3" opacity="0.08" />`;
+                patternsHtml = `<path d="M 0 0 L 300 400 M 50 -50 L 350 350" stroke="white" stroke-width="2" opacity="0.07" />`;
             } else {
-                patternsHtml = `<rect x="50" y="50" width="200" height="300" stroke="white" stroke-width="1" fill="none" opacity="0.1" />
-                                <line x1="50" y1="50" x2="250" y2="350" stroke="white" stroke-width="1" opacity="0.1" />`;
+                patternsHtml = `<rect x="50" y="50" width="200" height="300" stroke="white" stroke-width="1" fill="none" opacity="0.08" />`;
             }
 
             return `
                 <svg viewBox="0 0 300 400" class="w-full h-full object-cover">
                     <defs>
-                        <linearGradient id="fallbackG-${title.replace(/\s+/g, '')}" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <linearGradient id="fallbackG-${themeIndex}" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" stop-color="${theme.start}" />
                             <stop offset="100%" stop-color="${theme.end}" />
                         </linearGradient>
                     </defs>
-                    <rect width="300" height="400" fill="url(#fallbackG-${title.replace(/\s+/g, '')})" />
+                    <rect width="300" height="400" fill="url(#fallbackG-${themeIndex})" />
                     ${patternsHtml}
-                    <!-- Icon Overlay representing a secure digital vault -->
-                    <g transform="translate(130, 80) scale(1.5)" opacity="0.25">
+                    <!-- Decorative Graphic Elements representing digital archives -->
+                    <g transform="translate(130, 75) scale(1.6)" opacity="0.2">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" fill="white"/>
                     </g>
-                    <!-- Text inside graphic SVG -->
-                    <text x="25" y="320" font-family="Outfit, Inter, sans-serif" font-weight="900" font-size="22" fill="white" letter-spacing="-0.5">${title}</text>
-                    <text x="25" y="345" font-family="Inter, sans-serif" font-weight="700" font-size="12" fill="white" opacity="0.7">${genre} • ${year}</text>
-                    <text x="25" y="365" font-family="Outfit, sans-serif" font-weight="500" font-size="11" fill="white" opacity="0.5">ANIVAULT SECURE RECORD</text>
+                    <!-- Visual Typography Layer -->
+                    <text x="25" y="315" font-family="Outfit, Inter, sans-serif" font-weight="900" font-size="20" fill="white" letter-spacing="-0.5">${title}</text>
+                    <text x="25" y="340" font-family="Inter, sans-serif" font-weight="600" font-size="11" fill="white" opacity="0.8">${genre.split('·')[0].trim()} • ${year}</text>
+                    <text x="25" y="360" font-family="Outfit, sans-serif" font-weight="500" font-size="9" fill="white" opacity="0.5">ANIVAULT DIGITAL CERTIFIED</text>
                 </svg>
             `;
         }
@@ -831,7 +1884,7 @@
                 osc.type = type;
                 osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
                 
-                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
                 
                 osc.connect(gain);
@@ -862,7 +1915,6 @@
         // Clipboard Copy fallback implementation (for emails)
         function copyEmailToClipboard() {
             const email = "master@anivault.space";
-            // Create dummy input for reliable iFrame copy
             const el = document.createElement('textarea');
             el.value = email;
             document.body.appendChild(el);
@@ -879,13 +1931,14 @@
             const interval = duration / steps;
             
             const stats = [
-                { id: 'stat-completed', target: 38 },
-                { id: 'stat-episodes', target: 524 },
-                { id: 'stat-rating', target: 4.6, isFloat: true }
+                { id: 'stat-completed', target: 55 },
+                { id: 'stat-episodes', target: 5240 },
+                { id: 'stat-rating', target: 4.7, isFloat: true }
             ];
 
             stats.forEach(stat => {
                 const el = document.getElementById(stat.id);
+                if (!el) return;
                 let current = 0;
                 let stepCount = 0;
 
@@ -915,11 +1968,11 @@
             // Populate content
             document.getElementById('today-title').innerText = randomPick.title;
             document.getElementById('today-sub').innerText = randomPick.englishTitle;
-            document.getElementById('today-one-liner').innerText = `"${randomPick.review}"`;
+            document.getElementById('today-one-liner').innerText = `"${randomPick.plot}"`;
             document.getElementById('today-year').innerText = `${randomPick.year}년`;
             document.getElementById('today-studio').innerText = randomPick.studio;
             document.getElementById('today-mood').innerText = `#${randomPick.mood}`;
-            document.getElementById('today-rating-num').innerText = `${randomPick.rating} / 5.0`;
+            document.getElementById('today-rating-num').innerText = `${randomPick.rating.toFixed(1)} / 5.0`;
 
             // Draw Stars
             const starsContainer = document.getElementById('today-stars');
@@ -938,6 +1991,15 @@
             // Draw SVG Fallback Poster
             const posterContainer = document.getElementById('today-poster-container');
             posterContainer.innerHTML = generatePosterFallbackSVG(randomPick.title, randomPick.genre, randomPick.year, randomPick.id);
+
+            // Fetch actual poster image asynchronously
+            getPosterImage(randomPick.id, randomPick.englishTitle).then(url => {
+                if (url) {
+                    posterContainer.innerHTML += `
+                        <img src="${url}" alt="${randomPick.title}" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-500" onload="this.classList.remove('opacity-0');" onerror="this.remove();">
+                    `;
+                }
+            });
 
             // Hook CTA click to open modal
             document.getElementById('today-detail-btn').onclick = () => {
@@ -973,21 +2035,21 @@
 
                 card.innerHTML = `
                     <!-- Poster Area aspect 3:4 -->
-                    <div class="relative w-full aspect-[3/4] overflow-hidden bg-slate-900 border-b border-slate-800">
+                    <div id="poster-container-${item.id}" class="relative w-full aspect-[3/4] overflow-hidden bg-slate-900 border-b border-slate-800">
                         ${generatePosterFallbackSVG(item.title, item.genre, item.year, item.id)}
                         
                         <!-- Glow Hover Layer -->
-                        <div class="absolute inset-0 bg-slate-950/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center gap-2 p-4">
+                        <div class="absolute inset-0 bg-slate-950/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center gap-2 p-4 z-20">
                             <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                                 <i class="fa-solid fa-magnifying-glass-plus text-sm"></i>
                             </div>
-                            <span class="text-xs font-semibold text-white tracking-wider uppercase">자세히 보기 (Click)</span>
+                            <span class="text-xs font-semibold text-white tracking-wider uppercase">상세 도감 열기</span>
                         </div>
 
                         <!-- Top Floating Badges -->
                         <div class="absolute top-2 left-2 flex flex-col gap-1.5 z-10">
                             <span class="bg-primary/90 backdrop-blur-sm text-[9px] text-white font-extrabold px-2 py-0.5 rounded-md uppercase tracking-wider">
-                                ${item.genre}
+                                ${item.genre.split('·')[0].trim()}
                             </span>
                         </div>
                     </div>
@@ -995,7 +2057,7 @@
                     <!-- Description Meta info -->
                     <div class="p-4 space-y-2">
                         <div class="flex items-center justify-between text-slate-400 text-[10px]">
-                            <span>${item.studio}</span>
+                            <span class="truncate max-w-[80px]">${item.studio}</span>
                             <span>${item.year}년</span>
                         </div>
                         <h4 class="font-heading font-bold text-sm text-slate-100 truncate group-hover:text-hoverViolet transition-colors">
@@ -1006,12 +2068,24 @@
                                 ${stars}
                             </div>
                             <span class="text-[11px] font-semibold text-slate-300 bg-slate-800 px-2 py-0.5 rounded-full border border-slate-700/50">
-                                ⭐ ${item.rating}
+                                ⭐ ${item.rating.toFixed(1)}
                             </span>
                         </div>
                     </div>
                 `;
                 grid.appendChild(card);
+
+                // Fetch actual poster image asynchronously and overlay it
+                getPosterImage(item.id, item.englishTitle).then(url => {
+                    if (url) {
+                        const container = document.getElementById(`poster-container-${item.id}`);
+                        if (container) {
+                            container.insertAdjacentHTML('beforeend', `
+                                <img src="${url}" alt="${item.title}" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-500 z-0" onload="this.classList.remove('opacity-0');" onerror="this.remove();">
+                            `);
+                        }
+                    }
+                });
             });
         }
 
@@ -1025,9 +2099,9 @@
                 const matchesSearch = item.title.toLowerCase().includes(searchVal) || 
                                       item.englishTitle.toLowerCase().includes(searchVal) || 
                                       item.plot.toLowerCase().includes(searchVal) ||
-                                      item.studio.toLowerCase().includes(searchVal);
+                                      item.review.toLowerCase().includes(searchVal);
                 
-                const matchesGenre = genreVal === "" || item.genre === genreVal || item.genre.includes(genreVal);
+                const matchesGenre = genreVal === "" || item.genre.includes(genreVal);
                 
                 const matchesRating = ratingVal === "" || item.rating >= parseFloat(ratingVal);
                 
@@ -1064,6 +2138,25 @@
             showToast("모든 필터 조건이 초기화되었습니다.");
         }
 
+        // OTT badge color class mapper helper
+        function getPlatformBadgeHTML(platform) {
+            let colors = "bg-slate-800 text-slate-300 border-slate-700";
+            if (platform.includes("넷플릭스")) {
+                colors = "bg-red-500/10 text-red-400 border-red-500/30";
+            } else if (platform.includes("라프텔")) {
+                colors = "bg-violet-500/10 text-violet-400 border-violet-500/30";
+            } else if (platform.includes("티빙")) {
+                colors = "bg-rose-500/10 text-rose-400 border-rose-500/30";
+            } else if (platform.includes("디즈니+")) {
+                colors = "bg-blue-500/10 text-blue-400 border-blue-500/30";
+            } else if (platform.includes("웨이브")) {
+                colors = "bg-sky-500/10 text-sky-400 border-sky-500/30";
+            } else if (platform.includes("네이버 시리즈온")) {
+                colors = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
+            }
+            return `<span class="px-3 py-1.5 rounded-lg border text-xs font-semibold ${colors}">${platform}</span>`;
+        }
+
         // Open Detail Modal (3-Tab content mapping)
         function openDetailModal(id) {
             const anime = animeDatabase.find(x => x.id === id);
@@ -1078,8 +2171,8 @@
             document.getElementById('modal-year').innerText = `${anime.year}년`;
             document.getElementById('modal-plot').innerText = anime.plot;
             document.getElementById('modal-review').innerText = anime.review;
-            document.getElementById('modal-quotes').innerText = anime.quotes;
-            document.getElementById('modal-rating').innerText = `${anime.rating} / 5.0`;
+            document.getElementById('modal-why-love').innerText = anime.whyLove || "성장과 우정, 따뜻한 마음이 녹아든 마스터 최애작 중 하나입니다.";
+            document.getElementById('modal-rating').innerText = `${anime.rating.toFixed(1)} / 5.0`;
 
             // Draw Stars in Modal
             const starContainer = document.getElementById('modal-stars');
@@ -1094,6 +2187,68 @@
             const posterContainer = document.getElementById('modal-poster-container');
             posterContainer.innerHTML = generatePosterFallbackSVG(anime.title, anime.genre, anime.year, anime.id);
 
+            // Dynamically load the real poster image and overlay it
+            getPosterImage(anime.id, anime.englishTitle).then(url => {
+                if (url) {
+                    posterContainer.innerHTML += `
+                        <img src="${url}" alt="${anime.title}" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-500" onload="this.classList.remove('opacity-0');" onerror="this.remove();">
+                    `;
+                }
+            });
+
+            // Populate OTT Streaming Platforms
+            const platformsContainer = document.getElementById('modal-platforms');
+            platformsContainer.innerHTML = '';
+            if (anime.platforms && anime.platforms.length > 0) {
+                anime.platforms.forEach(platform => {
+                    platformsContainer.innerHTML += getPlatformBadgeHTML(platform);
+                });
+            } else {
+                platformsContainer.innerHTML = '<span class="text-xs text-slate-500">정보를 준비 중입니다.</span>';
+            }
+
+            // Populate Series structure and episode count
+            const seriesContainer = document.getElementById('modal-series');
+            seriesContainer.innerHTML = '';
+            if (anime.series && anime.series.length > 0) {
+                anime.series.forEach(s => {
+                    const row = document.createElement('div');
+                    row.className = "flex items-center justify-between text-xs bg-slate-950/40 p-2.5 rounded-lg border border-slate-800/40";
+                    row.innerHTML = `
+                        <span class="font-medium text-slate-200">${s.name}</span>
+                        <span class="text-hoverViolet font-bold bg-primary/10 px-2 py-0.5 rounded border border-primary/20">${s.episodes}</span>
+                    `;
+                    seriesContainer.appendChild(row);
+                });
+            } else {
+                seriesContainer.innerHTML = '<div class="text-xs text-slate-500 col-span-2 text-center py-2">정보를 준비 중입니다.</div>';
+            }
+
+            // Populate Recommendation Checklist
+            const recommendList = document.getElementById('modal-recommends');
+            recommendList.innerHTML = '';
+            if (anime.recommendTo && anime.recommendTo.length > 0) {
+                anime.recommendTo.forEach(rec => {
+                    const li = document.createElement('li');
+                    li.className = "flex items-center gap-2";
+                    li.innerHTML = `<i class="fa-solid fa-circle-check text-successGreen"></i> <span>${rec}</span>`;
+                    recommendList.appendChild(li);
+                });
+            } else {
+                recommendList.innerHTML = `<li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-successGreen"></i> <span>인생 애니메이션을 찾는 모든 분</span></li>`;
+            }
+
+            // Populate Tags
+            const tagContainer = document.getElementById('modal-tags');
+            tagContainer.innerHTML = '';
+            const allTags = anime.tags || ["#인생작", `#${anime.mood}`];
+            allTags.forEach(tag => {
+                const span = document.createElement('span');
+                span.className = "bg-primary/15 text-hoverViolet text-[10px] font-semibold px-3 py-1 rounded-full border border-primary/20";
+                span.innerText = tag;
+                tagContainer.appendChild(span);
+            });
+
             // Open Modal structure
             const modal = document.getElementById('detail-modal');
             modal.classList.remove('hidden');
@@ -1107,7 +2262,7 @@
             switchTab('overview');
         }
 
-        // Switch tabs inside Detail Modal smoothly
+        // Switch tabs inside Detail Modal smoothly with sliding indicator bar
         function switchTab(tabId) {
             activeTab = tabId;
             
@@ -1131,7 +2286,6 @@
                 buttons[key].classList.remove('text-hoverViolet');
                 buttons[key].classList.add('text-slate-400');
                 panels[key].classList.add('hidden');
-                panels[key].classList.remove('animate-fade-in');
             });
 
             // Set Active
@@ -1144,8 +2298,8 @@
             indicator.style.width = `${targetBtn.offsetWidth}px`;
             indicator.style.left = `${targetBtn.offsetLeft}px`;
 
-            // Audio Feed feedback
-            playTickSound(500, 0.05);
+            // Audio Feedback
+            playTickSound(520, 0.05);
         }
 
         // Close Detail Modal smoothly
@@ -1194,15 +2348,16 @@
                 row.className = "h-16 flex items-center justify-center gap-3 w-full border-b border-slate-900 px-4 flex-shrink-0 bg-slate-950";
                 row.innerHTML = `
                     <div class="w-8 h-8 rounded bg-gradient-to-tr from-primary to-hoverViolet flex items-center justify-center text-xs text-white font-bold flex-shrink-0">
-                        ${index % animeDatabase.length + 1}
+                        ${(index % animeDatabase.length) + 1}
                     </div>
                     <span class="font-heading font-extrabold text-sm text-slate-100 truncate max-w-[180px]">${item.title}</span>
-                    <span class="text-[10px] text-starYellow ml-auto"><i class="fa-solid fa-star"></i> ${item.rating}</span>
+                    <span class="text-[10px] text-starYellow ml-auto"><i class="fa-solid fa-star"></i> ${item.rating.toFixed(1)}</span>
                 `;
                 strip.appendChild(row);
             });
 
-            // Position to default
+            // Position to default (no transition)
+            strip.style.transition = 'none';
             strip.style.transform = 'translateY(0px)';
 
             setTimeout(() => {
@@ -1216,7 +2371,7 @@
             document.getElementById('roulette-close-btn').classList.remove('opacity-50', 'cursor-not-allowed');
         }
 
-        // Spin Slot mechanism
+        // Spin Slot mechanism using high performance transitions
         function spinRoulette() {
             if (isSpinning) return;
             isSpinning = true;
@@ -1230,43 +2385,46 @@
             closeBtn.classList.add('opacity-50', 'cursor-not-allowed');
             statusText.innerText = "수호자 결정 중... 🔮";
 
-            const rowHeight = 64; // Height of each row in slot machine
-            const speed = 25; // Speed divisor
-            let position = 0;
-            let currentTick = 0;
-            const targetIndex = Math.floor(Math.random() * animeDatabase.length) + (animeDatabase.length * 2); // Land in 3rd quadrant
-            const stopPosition = -(targetIndex * rowHeight) + 64; // Center visual frame correction
+            const rowHeight = 64; 
+            const winnerIndex = Math.floor(Math.random() * animeDatabase.length);
+            // Ensure at least 2 full rotations of our 55-item database for cinematic rolling
+            const targetOffset = (animeDatabase.length * 2) + winnerIndex;
+            const stopPosition = -(targetOffset * rowHeight) + 64; 
 
-            let speedVal = 60; // Initial speed displacement
-            let timer = null;
+            // Hard reset to origin zero before transition
+            strip.style.transition = 'none';
+            strip.style.transform = 'translateY(0px)';
+            
+            // Force Browser Reflow to commit the reset immediately
+            strip.offsetHeight;
 
-            function updateAnimation() {
-                position -= speedVal;
+            // Apply high-fidelity cubic-bezier transition to smoothly decelerate over exactly 3 seconds
+            strip.style.transition = 'transform 3s cubic-bezier(0.12, 0.88, 0.22, 1)';
+            strip.style.transform = `translateY(${stopPosition}px)`;
+
+            // High precision audio tick scheduling simulating mechanical slot wheels slowing down
+            let tickCount = 0;
+            let currentDelay = 50; // starting millisecond interval for tick sound
+            let soundTimer = null;
+
+            function playTickSequence() {
+                if (!isSpinning) return;
+                playTickSound(520 + (tickCount % 8 * 15), 0.05, 'triangle');
+                tickCount++;
                 
-                // Audio tick simulation based on row translation passing boundaries
-                const currentTickOffset = Math.floor(Math.abs(position) / rowHeight);
-                if (currentTickOffset > currentTick) {
-                    currentTick = currentTickOffset;
-                    playTickSound(500 + (currentTickOffset * 8), 0.04, 'triangle');
-                }
-
-                if (position <= stopPosition) {
-                    // Decelerate and snap
-                    position = stopPosition;
-                    strip.style.transform = `translateY(${position}px)`;
-                    cancelAnimationFrame(timer);
-                    finalizeSpin(targetIndex % animeDatabase.length);
-                } else {
-                    // Deceleration curve
-                    if (speedVal > 2) {
-                        speedVal *= 0.985; // Slow down rate
-                    }
-                    strip.style.transform = `translateY(${position}px)`;
-                    timer = requestAnimationFrame(updateAnimation);
-                }
+                // Exponential deceleration growth mimicking CSS cubic-bezier behavior (50ms -> 350ms max cap)
+                currentDelay = Math.min(380, currentDelay * 1.092);
+                soundTimer = setTimeout(playTickSequence, currentDelay);
             }
+            
+            // Initiate audio sequence
+            soundTimer = setTimeout(playTickSequence, currentDelay);
 
-            timer = requestAnimationFrame(updateAnimation);
+            // Complete the cycle exactly at the 3-second mark
+            setTimeout(() => {
+                clearTimeout(soundTimer);
+                finalizeSpin(winnerIndex);
+            }, 3000);
         }
 
         // Finalize Roulette spin results
@@ -1274,37 +2432,35 @@
             const winner = animeDatabase[winnerIndex];
             const statusText = document.getElementById('roulette-status');
             
-            // Victory synth sound effect trigger
+            // Victory synthesis chord progression
             playTickSound(440, 0.15, 'sine');
-            setTimeout(() => playTickSound(659, 0.15, 'sine'), 150);
-            setTimeout(() => playTickSound(880, 0.3, 'sine'), 300);
+            setTimeout(() => playTickSound(659, 0.15, 'sine'), 130);
+            setTimeout(() => playTickSound(880, 0.35, 'sine'), 260);
 
-            statusText.innerText = `축하합니다! 오늘의 매치: ${winner.title}`;
+            statusText.innerText = `오늘의 저격수 낙찰: ${winner.title}!`;
 
             setTimeout(() => {
-                // Close Roulette
                 isSpinning = false;
                 closeRouletteModal();
-                // Pop detail modal instantly
                 setTimeout(() => {
                     openDetailModal(winner.id);
-                    showToast(`🎲 Pick For Me가 '${winner.title}' 작품을 추천해 주었습니다!`);
+                    showToast(`🎲 룰렛 매칭이 '${winner.title}' 작품을 획득하였습니다!`);
                 }, 350);
             }, 1200);
         }
 
         // Window event load routing
         window.onload = function() {
-            // Start Visual particles
+            // Start Visual stars background particles
             initStars();
 
-            // Run counters (L2)
+            // Run stats counter counters
             startStatsCounters();
 
-            // Setup Today's Pick (L3)
+            // Setup Today's Pick (L3) with automatic random choice
             initTodayPick();
 
-            // Populate all cards inside Archive (L4)
+            // Populate all 55 cards inside Archive (L4)
             renderArchive(animeDatabase);
 
             // Hook Event Listeners for Filters
@@ -1333,7 +2489,7 @@
                         activeMoodFilter = selectedMood;
                         this.classList.remove('bg-slate-900', 'text-slate-400', 'border-slate-800');
                         this.classList.add('bg-primary/20', 'text-hoverViolet', 'border-primary/40');
-                        playTickSound(700, 0.05);
+                        playTickSound(650, 0.05);
                     }
 
                     filterArchive();
