@@ -231,6 +231,33 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
 ::-webkit-scrollbar-track { background:#f1f5f9 !important; }
 ::-webkit-scrollbar-thumb { background:#cbd5e1 !important; }
 @media (prefers-reduced-motion: reduce) { .aurora-glow-1,.aurora-glow-2,.star-particle { animation:none !important; } }
+
+/* Add-to-archive poster picker */
+.poster-picker-preview {
+  background:
+    radial-gradient(circle at 25% 20%, rgba(124,58,237,.16), transparent 34%),
+    linear-gradient(145deg,#f8fafc,#eef2ff);
+}
+.poster-picker-preview.is-loading::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(255,255,255,.72);
+  backdrop-filter:blur(2px);
+}
+.poster-picker-preview.is-loading::before {
+  content:"";
+  position:absolute;
+  z-index:3;
+  top:50%; left:50%;
+  width:32px; height:32px;
+  margin:-16px 0 0 -16px;
+  border:3px solid #ddd6fe;
+  border-top-color:#7c3aed;
+  border-radius:50%;
+  animation:posterPickerSpin .8s linear infinite;
+}
+@keyframes posterPickerSpin { to { transform:rotate(360deg); } }
 </style>
 
 </head>
@@ -447,7 +474,13 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
                 <h2 class="font-heading font-bold text-2xl text-slate-200 inline-flex items-center gap-2">
                     <i class="fa-solid fa-box-archive text-primary"></i> 아카이브 큐레이션 도감 <span class="text-sm font-normal text-slate-400">(Archive Collection)</span>
                 </h2>
-                <p class="text-slate-400 text-sm mt-1">체계적인 필터 기능과 기분별 테마 뱃지를 조합하여 55가지 인생작 중 딱 맞는 작품을 골라보세요.</p>
+                <div class="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <p class="text-slate-400 text-sm">체계적인 필터 기능과 기분별 테마 뱃지를 조합하여 <span id="archive-count">55</span>가지 인생작 중 딱 맞는 작품을 골라보세요.</p>
+                    <button id="open-add-anime-btn" type="button" class="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-hoverViolet px-4 py-2.5 text-xs font-bold text-white shadow-lg shadow-primary/20 transition hover:-translate-y-0.5 hover:shadow-primary/30">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>내 애니 추가</span>
+                    </button>
+                </div>
             </div>
 
             <!-- Integrated Filter Box -->
@@ -550,6 +583,203 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
         </div>
     </section>
 
+    <!-- Add Custom Anime Modal -->
+    <div id="add-anime-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/60 p-4 backdrop-blur-md opacity-0 transition-opacity duration-300">
+        <div class="relative max-h-[92vh] w-full max-w-3xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl transition-transform duration-300 scale-95">
+            <button id="close-add-anime-btn" type="button" aria-label="추가 창 닫기" class="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:bg-slate-100 hover:text-slate-900">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="max-h-[92vh] overflow-y-auto p-6 sm:p-8">
+                <div class="mb-6 pr-12">
+                    <span class="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-bold text-primary"><i class="fa-solid fa-bookmark"></i> MY ARCHIVE</span>
+                    <h2 class="mt-3 font-heading text-2xl font-extrabold text-slate-900">새로 본 애니메이션 추가</h2>
+                    <p class="mt-1 text-sm text-slate-500">입력한 작품은 이 브라우저에 저장되며 검색, 필터, 상세 보기와 랜덤 추천에 바로 반영됩니다.</p>
+                </div>
+
+                <form id="add-anime-form" class="space-y-5">
+                    <section class="rounded-2xl border border-violet-100 bg-violet-50/60 p-4 sm:p-5" aria-labelledby="poster-picker-heading">
+                        <div class="mb-4 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+                            <div>
+                                <h3 id="poster-picker-heading" class="text-sm font-extrabold text-slate-800">작품 포스터</h3>
+                                <p class="mt-1 text-xs leading-relaxed text-slate-500">작품명을 입력하면 자동으로 포스터를 찾습니다. 이미지가 다르거나 깨지면 내 파일로 교체할 수 있어요.</p>
+                            </div>
+                            <span id="poster-source-label" class="mt-2 inline-flex w-fit items-center rounded-full border border-violet-200 bg-white px-3 py-1 text-[11px] font-bold text-violet-700 sm:mt-0">자동 검색 대기</span>
+                        </div>
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-[150px_1fr] sm:items-center">
+                            <div id="custom-poster-preview" class="poster-picker-preview relative mx-auto aspect-[3/4] w-[150px] overflow-hidden rounded-2xl border border-violet-200 shadow-md">
+                                <div id="custom-poster-placeholder" class="absolute inset-0 flex flex-col items-center justify-center gap-2 px-3 text-center text-violet-400">
+                                    <i class="fa-regular fa-image text-3xl"></i>
+                                    <span class="text-[11px] font-semibold">포스터 미리보기</span>
+                                </div>
+                                <img id="custom-poster-image" alt="선택한 포스터 미리보기" class="absolute inset-0 hidden h-full w-full object-cover">
+                            </div>
+                            <div class="space-y-3">
+                                <button id="search-custom-poster-btn" type="button" class="flex w-full items-center justify-center gap-2 rounded-xl border border-violet-200 bg-white px-4 py-3 text-sm font-bold text-violet-700 transition hover:border-violet-400 hover:bg-violet-50">
+                                    <i class="fa-solid fa-magnifying-glass"></i><span>포스터 자동 검색</span>
+                                </button>
+                                <label class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-3 text-sm font-bold text-white shadow-md shadow-violet-200 transition hover:bg-violet-500">
+                                    <i class="fa-solid fa-upload"></i><span>내 이미지 선택</span>
+                                    <input id="custom-poster-file" type="file" accept="image/jpeg,image/png,image/webp" class="sr-only">
+                                </label>
+                                <button id="clear-custom-poster-btn" type="button" class="hidden w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-500 transition hover:bg-slate-100">선택한 이미지 지우기</button>
+                                <p id="poster-picker-status" class="min-h-[32px] text-xs leading-relaxed text-slate-500">작품명을 두 글자 이상 입력하면 잠시 후 자동 검색합니다.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <label class="text-sm font-semibold text-slate-700">작품명 <span class="text-red-500">*</span>
+                            <input id="custom-title" required maxlength="80" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="예: 장송의 프리렌">
+                        </label>
+                        <label class="text-sm font-semibold text-slate-700">영문 제목
+                            <input id="custom-english-title" maxlength="100" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="예: Frieren">
+                        </label>
+                        <label class="text-sm font-semibold text-slate-700">장르 <span class="text-red-500">*</span>
+                            <input id="custom-genre" required maxlength="100" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="판타지 · 모험 · 드라마">
+                        </label>
+                        <label class="text-sm font-semibold text-slate-700">제작사
+                            <input id="custom-studio" maxlength="80" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="모르면 비워도 됩니다">
+                        </label>
+                        <label class="text-sm font-semibold text-slate-700">방영 연도
+                            <input id="custom-year" type="number" min="1950" max="2100" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="2026">
+                        </label>
+                        <label class="text-sm font-semibold text-slate-700">애정도
+                            <select id="custom-rating" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10">
+                                <option value="5">❤️❤️❤️❤️❤️</option>
+                                <option value="4">❤️❤️❤️❤️🤍</option>
+                                <option value="3">❤️❤️❤️🤍🤍</option>
+                                <option value="2">❤️❤️🤍🤍🤍</option>
+                                <option value="1">❤️🤍🤍🤍🤍</option>
+                            </select>
+                        </label>
+                        <label class="text-sm font-semibold text-slate-700">대표 감정
+                            <select id="custom-mood" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10">
+                                <option>힐링</option><option>설렘</option><option>웃음</option><option>성장</option><option>여운</option><option>감동</option><option>추억</option><option>몰입감</option>
+                            </select>
+                        </label>
+                        <label class="text-sm font-semibold text-slate-700">감정 태그
+                            <input id="custom-tags" maxlength="150" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="힐링, 설렘, 성장">
+                        </label>
+                    </div>
+
+                    <label class="block text-sm font-semibold text-slate-700">한 줄 소개 <span class="text-red-500">*</span>
+                        <textarea id="custom-plot" required maxlength="400" rows="3" class="mt-2 w-full resize-y rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="작품의 핵심 내용을 짧게 적어주세요."></textarea>
+                    </label>
+                    <label class="block text-sm font-semibold text-slate-700">나의 후기
+                        <textarea id="custom-review" maxlength="700" rows="4" class="mt-2 w-full resize-y rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="이 작품을 보고 느낀 점을 적어주세요."></textarea>
+                    </label>
+                    <label class="block text-sm font-semibold text-slate-700">Why I Love It
+                        <textarea id="custom-why-love" maxlength="400" rows="2" class="mt-2 w-full resize-y rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="이 작품을 좋아하는 가장 큰 이유는 무엇인가요?"></textarea>
+                    </label>
+
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <label class="text-sm font-semibold text-slate-700">추천 대상
+                            <input id="custom-recommend" maxlength="250" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="판타지를 좋아하는 사람, 여운 있는 작품을 찾는 사람">
+                        </label>
+                        <label class="text-sm font-semibold text-slate-700">감상 가능 OTT
+                            <input id="custom-platforms" maxlength="150" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="넷플릭스, 라프텔">
+                        </label>
+                        <label class="text-sm font-semibold text-slate-700 sm:col-span-2">시리즈 구성
+                            <input id="custom-series" maxlength="200" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="1기 12화, 2기 12화">
+                        </label>
+                    </div>
+
+                    <label class="flex cursor-pointer items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm font-semibold text-slate-700">
+                        <input id="custom-watched" type="checkbox" class="h-4 w-4 accent-violet-600">
+                        <span>추가와 동시에 ‘이미 본 작품’으로 표시</span>
+                    </label>
+
+                    <div class="flex flex-col-reverse gap-3 border-t border-slate-200 pt-5 sm:flex-row sm:justify-end">
+                        <button id="cancel-add-anime-btn" type="button" class="rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-bold text-slate-600 transition hover:bg-slate-100">취소</button>
+                        <button type="submit" class="rounded-xl bg-gradient-to-r from-primary to-hoverViolet px-6 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 transition hover:-translate-y-0.5">아카이브에 저장</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Edit Existing Anime Content Modal -->
+    <div id="edit-anime-modal" class="fixed inset-0 z-[60] hidden items-center justify-center bg-slate-950/60 p-4 backdrop-blur-md opacity-0 transition-opacity duration-300">
+        <div class="relative max-h-[92vh] w-full max-w-3xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl transition-transform duration-300 scale-95">
+            <button id="close-edit-anime-btn" type="button" aria-label="수정 창 닫기" class="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:bg-slate-100 hover:text-slate-900">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="max-h-[92vh] overflow-y-auto p-6 sm:p-8">
+                <div class="mb-6 pr-12">
+                    <span class="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-violet-50 px-3 py-1 text-xs font-bold text-violet-700"><i class="fa-solid fa-pen"></i> EDIT ARCHIVE</span>
+                    <h2 class="mt-3 font-heading text-2xl font-extrabold text-slate-900">아카이브 내용 수정</h2>
+                    <p class="mt-1 text-sm text-slate-500">비워 둔 항목은 상세 보기에서도 표시되지 않습니다. 수정 내용은 이 브라우저에 저장됩니다.</p>
+                </div>
+                <form id="edit-anime-form" class="space-y-5">
+                    <input id="edit-anime-id" type="hidden">
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <label class="text-sm font-semibold text-slate-700">작품명
+                            <input id="edit-title" required maxlength="80" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10">
+                        </label>
+                        <label class="text-sm font-semibold text-slate-700">영문 제목
+                            <input id="edit-english-title" maxlength="100" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10">
+                        </label>
+                        <label class="text-sm font-semibold text-slate-700">장르
+                            <input id="edit-genre" maxlength="100" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10">
+                        </label>
+                        <label class="text-sm font-semibold text-slate-700">제작사
+                            <input id="edit-studio" maxlength="80" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10">
+                        </label>
+                        <label class="text-sm font-semibold text-slate-700">방영 연도
+                            <input id="edit-year" type="number" min="1900" max="2100" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10">
+                        </label>
+                        <label class="text-sm font-semibold text-slate-700">애정도
+                            <select id="edit-rating" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10">
+                                <option value="5">❤️❤️❤️❤️❤️</option><option value="4">❤️❤️❤️❤️🤍</option><option value="3">❤️❤️❤️🤍🤍</option><option value="2">❤️❤️🤍🤍🤍</option><option value="1">❤️🤍🤍🤍🤍</option>
+                            </select>
+                        </label>
+                        <label class="text-sm font-semibold text-slate-700">대표 감정
+                            <select id="edit-mood" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10">
+                                <option>힐링</option><option>설렘</option><option>웃음</option><option>성장</option><option>여운</option><option>감동</option><option>추억</option><option>몰입감</option>
+                            </select>
+                        </label>
+                        <label class="text-sm font-semibold text-slate-700">감정 태그
+                            <input id="edit-tags" maxlength="200" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="힐링, 설렘, 성장">
+                        </label>
+                    </div>
+                    <label class="block text-sm font-semibold text-slate-700">한 줄 소개
+                        <textarea id="edit-plot" maxlength="500" rows="3" class="mt-2 w-full resize-y rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"></textarea>
+                    </label>
+                    <label class="block text-sm font-semibold text-slate-700">나의 후기
+                        <textarea id="edit-review" maxlength="1000" rows="5" class="mt-2 w-full resize-y rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"></textarea>
+                    </label>
+                    <label class="block text-sm font-semibold text-slate-700">Why I Love It
+                        <textarea id="edit-why-love" maxlength="600" rows="3" class="mt-2 w-full resize-y rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"></textarea>
+                    </label>
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <label class="text-sm font-semibold text-slate-700">추천 대상
+                            <input id="edit-recommend" maxlength="400" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="쉼표로 구분">
+                        </label>
+                        <label class="text-sm font-semibold text-slate-700">감상 가능 OTT
+                            <input id="edit-platforms" maxlength="250" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="쉼표로 구분">
+                        </label>
+                        <label class="text-sm font-semibold text-slate-700 sm:col-span-2">시리즈 구성
+                            <input id="edit-series" maxlength="350" class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="1기 12화, 2기 12화">
+                        </label>
+                    </div>
+                    <div class="rounded-2xl border border-amber-200 bg-amber-50 p-4">
+                        <p class="text-xs font-bold text-amber-800">글 삭제 방법</p>
+                        <p class="mt-1 text-xs leading-relaxed text-amber-700">삭제할 글의 입력칸을 비운 뒤 저장하세요. 아래 버튼을 누르면 감상 관련 글을 한 번에 비울 수 있습니다.</p>
+                        <button id="clear-edit-writing-btn" type="button" class="mt-3 rounded-xl border border-amber-300 bg-white px-4 py-2 text-xs font-bold text-amber-700 transition hover:bg-amber-100">후기·소개·추천 글 모두 비우기</button>
+                    </div>
+                    <div class="flex flex-col-reverse gap-3 border-t border-slate-200 pt-5 sm:flex-row sm:items-center sm:justify-between">
+                        <button id="reset-original-content-btn" type="button" class="rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-bold text-slate-600 transition hover:bg-slate-100">기본 내용으로 되돌리기</button>
+                        <div class="flex flex-col-reverse gap-3 sm:flex-row">
+                            <button id="cancel-edit-anime-btn" type="button" class="rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-bold text-slate-600 transition hover:bg-slate-100">취소</button>
+                            <button type="submit" class="rounded-xl bg-gradient-to-r from-primary to-hoverViolet px-6 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 transition hover:-translate-y-0.5">수정 내용 저장</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- L5. Anime Detail Modal (3-Tab System) -->
     <div id="detail-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
         <div class="bg-cardBg border border-slate-700/60 rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-2xl relative transform scale-95 transition-transform duration-300">
@@ -585,10 +815,20 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
                         <div>
                             <h2 id="modal-title" class="font-heading font-extrabold text-2xl sm:text-3xl text-white tracking-tight"></h2>
                             <p id="modal-genre" class="text-xs text-hoverViolet font-semibold mt-1 uppercase tracking-wider"></p>
-                            <button id="modal-watched-toggle" type="button" class="mt-3 inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-xs font-bold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary" aria-pressed="false">
-                                <i class="fa-solid fa-eye"></i>
-                                <span>봤어요로 표시</span>
-                            </button>
+                            <div class="mt-3 flex flex-wrap gap-2">
+                                <button id="modal-watched-toggle" type="button" class="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-xs font-bold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary" aria-pressed="false">
+                                    <i class="fa-solid fa-eye"></i>
+                                    <span>봤어요로 표시</span>
+                                </button>
+                                <button id="modal-edit-content" type="button" class="inline-flex items-center gap-2 rounded-xl border border-violet-200 bg-violet-50 px-4 py-2 text-xs font-bold text-violet-700 shadow-sm transition hover:-translate-y-0.5 hover:bg-violet-100">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                    <span>내용 수정</span>
+                                </button>
+                                <button id="modal-delete-custom" type="button" class="hidden inline-flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-xs font-bold text-red-600 shadow-sm transition hover:-translate-y-0.5 hover:bg-red-100">
+                                    <i class="fa-solid fa-trash"></i>
+                                    <span>추가한 작품 삭제</span>
+                                </button>
+                            </div>
                         </div>
 
                         <!-- 3-Tab Header Layout -->
@@ -714,6 +954,16 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
             <!-- Action Status -->
             <div id="roulette-status" class="text-center text-slate-300 text-sm font-semibold py-2">
                 룰렛 돌릴 준비 완료!
+            </div>
+
+            <!-- Result actions: shown only after a winner is selected -->
+            <div id="roulette-result-actions" class="hidden grid grid-cols-2 gap-3 mt-3">
+                <button id="roulette-detail-btn" type="button" class="font-bold bg-primary text-white py-3 px-4 rounded-xl shadow-lg hover:bg-hoverViolet transition-all duration-300">
+                    상세보기
+                </button>
+                <button id="roulette-respin-btn" type="button" class="font-bold bg-slate-800 text-slate-200 py-3 px-4 rounded-xl border border-slate-700 hover:bg-slate-700 transition-all duration-300">
+                    다시 돌리기
+                </button>
             </div>
 
             <!-- Action Buttons inside slot modal -->
@@ -1878,8 +2128,555 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
         let isSpinning = false;
 
         const WATCHED_STORAGE_KEY = 'anivault_watched_anime_ids_v1';
+        const CUSTOM_ANIME_STORAGE_KEY = 'anivault_custom_anime_v1';
+        const CONTENT_OVERRIDES_STORAGE_KEY = 'anivault_content_overrides_v1';
+        let contentOverrides = {};
+        let originalBuiltInAnime = [];
+        const POSTER_DB_NAME = 'AniVaultPosterDB';
+        const POSTER_DB_VERSION = 1;
+        const POSTER_STORE_NAME = 'posters';
         let watchedAnimeIds = new Set();
+        let pendingPosterFile = null;
+        let pendingAutoPosterUrl = '';
+        let pendingPosterObjectUrl = '';
+        let posterSearchDebounceTimer = null;
+        const indexedPosterUrlCache = new Map();
+
+        function openPosterDatabase() {
+            return new Promise((resolve, reject) => {
+                if (!('indexedDB' in window)) {
+                    reject(new Error('이 브라우저는 IndexedDB를 지원하지 않습니다.'));
+                    return;
+                }
+                const request = indexedDB.open(POSTER_DB_NAME, POSTER_DB_VERSION);
+                request.onupgradeneeded = () => {
+                    const db = request.result;
+                    if (!db.objectStoreNames.contains(POSTER_STORE_NAME)) {
+                        db.createObjectStore(POSTER_STORE_NAME, { keyPath: 'animeId' });
+                    }
+                };
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error || new Error('포스터 DB를 열 수 없습니다.'));
+            });
+        }
+
+        async function savePosterBlob(animeId, blob) {
+            const db = await openPosterDatabase();
+            await new Promise((resolve, reject) => {
+                const tx = db.transaction(POSTER_STORE_NAME, 'readwrite');
+                tx.objectStore(POSTER_STORE_NAME).put({ animeId: Number(animeId), blob, updatedAt: Date.now() });
+                tx.oncomplete = resolve;
+                tx.onerror = () => reject(tx.error);
+            });
+            db.close();
+            const oldUrl = indexedPosterUrlCache.get(Number(animeId));
+            if (oldUrl) URL.revokeObjectURL(oldUrl);
+            indexedPosterUrlCache.delete(Number(animeId));
+        }
+
+        async function getPosterBlob(animeId) {
+            try {
+                const db = await openPosterDatabase();
+                const record = await new Promise((resolve, reject) => {
+                    const tx = db.transaction(POSTER_STORE_NAME, 'readonly');
+                    const req = tx.objectStore(POSTER_STORE_NAME).get(Number(animeId));
+                    req.onsuccess = () => resolve(req.result || null);
+                    req.onerror = () => reject(req.error);
+                });
+                db.close();
+                return record?.blob || null;
+            } catch (error) {
+                console.warn('직접 등록한 포스터를 불러오지 못했습니다.', error);
+                return null;
+            }
+        }
+
+        async function getIndexedPosterUrl(animeId) {
+            const numericId = Number(animeId);
+            if (indexedPosterUrlCache.has(numericId)) return indexedPosterUrlCache.get(numericId);
+            const blob = await getPosterBlob(numericId);
+            if (!blob) return null;
+            const url = URL.createObjectURL(blob);
+            indexedPosterUrlCache.set(numericId, url);
+            return url;
+        }
+
+        async function deletePosterBlob(animeId) {
+            try {
+                const db = await openPosterDatabase();
+                await new Promise((resolve, reject) => {
+                    const tx = db.transaction(POSTER_STORE_NAME, 'readwrite');
+                    tx.objectStore(POSTER_STORE_NAME).delete(Number(animeId));
+                    tx.oncomplete = resolve;
+                    tx.onerror = () => reject(tx.error);
+                });
+                db.close();
+            } catch (error) {
+                console.warn('포스터 삭제에 실패했습니다.', error);
+            }
+            const cached = indexedPosterUrlCache.get(Number(animeId));
+            if (cached) URL.revokeObjectURL(cached);
+            indexedPosterUrlCache.delete(Number(animeId));
+        }
+
+        function compressPosterFile(file, maxWidth = 900, maxHeight = 1200, quality = 0.82) {
+            return new Promise((resolve, reject) => {
+                if (!file || !file.type.startsWith('image/')) {
+                    reject(new Error('이미지 파일을 선택해 주세요.'));
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onerror = () => reject(new Error('이미지 파일을 읽지 못했습니다.'));
+                reader.onload = () => {
+                    const image = new Image();
+                    image.onerror = () => reject(new Error('이미지를 불러오지 못했습니다.'));
+                    image.onload = () => {
+                        const scale = Math.min(1, maxWidth / image.naturalWidth, maxHeight / image.naturalHeight);
+                        const width = Math.max(1, Math.round(image.naturalWidth * scale));
+                        const height = Math.max(1, Math.round(image.naturalHeight * scale));
+                        const canvas = document.createElement('canvas');
+                        canvas.width = width;
+                        canvas.height = height;
+                        const context = canvas.getContext('2d', { alpha: false });
+                        context.fillStyle = '#ffffff';
+                        context.fillRect(0, 0, width, height);
+                        context.drawImage(image, 0, 0, width, height);
+                        const preferredType = canvas.toDataURL('image/webp').startsWith('data:image/webp') ? 'image/webp' : 'image/jpeg';
+                        canvas.toBlob(blob => {
+                            if (blob) resolve(blob);
+                            else reject(new Error('이미지를 압축하지 못했습니다.'));
+                        }, preferredType, quality);
+                    };
+                    image.src = reader.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function updateCustomPosterPreview(url, sourceText = '포스터 선택됨') {
+            const image = document.getElementById('custom-poster-image');
+            const placeholder = document.getElementById('custom-poster-placeholder');
+            const clearButton = document.getElementById('clear-custom-poster-btn');
+            const sourceLabel = document.getElementById('poster-source-label');
+            if (!image || !placeholder) return;
+            if (url) {
+                image.src = url;
+                image.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+                clearButton?.classList.remove('hidden');
+                if (sourceLabel) sourceLabel.textContent = sourceText;
+            } else {
+                image.removeAttribute('src');
+                image.classList.add('hidden');
+                placeholder.classList.remove('hidden');
+                clearButton?.classList.add('hidden');
+                if (sourceLabel) sourceLabel.textContent = '자동 검색 대기';
+            }
+        }
+
+        function resetPendingPosterSelection() {
+            pendingPosterFile = null;
+            pendingAutoPosterUrl = '';
+            if (pendingPosterObjectUrl) URL.revokeObjectURL(pendingPosterObjectUrl);
+            pendingPosterObjectUrl = '';
+            const fileInput = document.getElementById('custom-poster-file');
+            if (fileInput) fileInput.value = '';
+            updateCustomPosterPreview('');
+            const status = document.getElementById('poster-picker-status');
+            if (status) status.textContent = '작품명을 두 글자 이상 입력하면 잠시 후 자동 검색합니다.';
+        }
+
+        async function searchCustomPoster() {
+            const title = document.getElementById('custom-title')?.value.trim();
+            const englishTitle = document.getElementById('custom-english-title')?.value.trim();
+            const status = document.getElementById('poster-picker-status');
+            const preview = document.getElementById('custom-poster-preview');
+            if (!title || title.length < 2) {
+                if (status) status.textContent = '작품명을 두 글자 이상 입력해 주세요.';
+                return;
+            }
+            if (pendingPosterFile) return; // A manually selected file always wins.
+            if (status) status.textContent = '포스터를 검색하고 있습니다…';
+            preview?.classList.add('is-loading');
+            try {
+                const tempAnime = {
+                    id: `search-${Date.now()}`,
+                    title,
+                    englishTitle: englishTitle || title,
+                    year: Number(document.getElementById('custom-year')?.value) || 0
+                };
+                let candidates = [];
+                try { candidates = await findJikanPoster(tempAnime); } catch (error) { console.warn(error); }
+                if (!candidates.length) candidates = await findKitsuPoster(tempAnime);
+                let validUrl = '';
+                for (const candidate of candidates.slice(0, 10)) {
+                    if (await testImageUrl(candidate, 5000)) { validUrl = candidate; break; }
+                }
+                if (!validUrl) throw new Error('검색 결과에서 사용할 수 있는 포스터를 찾지 못했습니다.');
+                pendingAutoPosterUrl = validUrl;
+                updateCustomPosterPreview(validUrl, '자동 검색 이미지');
+                if (status) status.textContent = '자동으로 찾은 포스터입니다. 맞지 않으면 내 이미지 선택으로 교체하세요.';
+            } catch (error) {
+                pendingAutoPosterUrl = '';
+                updateCustomPosterPreview('');
+                if (status) status.textContent = '포스터를 찾지 못했습니다. 직접 이미지를 선택해 주세요.';
+            } finally {
+                preview?.classList.remove('is-loading');
+            }
+        }
+
+        async function handleCustomPosterFile(event) {
+            const file = event.target.files?.[0];
+            if (!file) return;
+            const status = document.getElementById('poster-picker-status');
+            if (file.size > 12 * 1024 * 1024) {
+                showToast('이미지는 12MB 이하 파일을 선택해 주세요.');
+                event.target.value = '';
+                return;
+            }
+            pendingPosterFile = file;
+            pendingAutoPosterUrl = '';
+            if (pendingPosterObjectUrl) URL.revokeObjectURL(pendingPosterObjectUrl);
+            pendingPosterObjectUrl = URL.createObjectURL(file);
+            updateCustomPosterPreview(pendingPosterObjectUrl, '직접 선택 이미지');
+            if (status) status.textContent = '저장할 때 자동으로 크기를 줄이고 압축해 브라우저 DB에 보관합니다.';
+        }
+
+        function splitCommaValues(value) {
+            return String(value || '')
+                .split(',')
+                .map(item => item.trim())
+                .filter(Boolean);
+        }
+
+        function normalizeCustomTag(tag) {
+            const clean = String(tag || '').trim();
+            if (!clean) return '';
+            const emojiMap = {
+                '힐링': '🌿 힐링', '설렘': '💕 설렘', '웃음': '😂 웃음', '성장': '✨ 성장',
+                '여운': '😭 여운', '감동': '💧 감동', '추억': '🌈 추억', '몰입감': '🔥 몰입감'
+            };
+            return emojiMap[clean] || clean;
+        }
+
+        function loadCustomAnime() {
+            try {
+                const saved = JSON.parse(localStorage.getItem(CUSTOM_ANIME_STORAGE_KEY) || '[]');
+                if (!Array.isArray(saved)) return;
+                saved.forEach(item => {
+                    if (!item || !item.id || animeDatabase.some(anime => Number(anime.id) === Number(item.id))) return;
+                    animeDatabase.push({ ...item, id: Number(item.id), isCustom: true });
+                });
+            } catch (error) {
+                console.warn('추가 작품 데이터를 불러오지 못했습니다.', error);
+            }
+        }
+
+        function saveCustomAnime() {
+            const customItems = animeDatabase.filter(item => item.isCustom);
+            localStorage.setItem(CUSTOM_ANIME_STORAGE_KEY, JSON.stringify(customItems));
+        }
+
+
+        function cloneSerializable(value) {
+            return JSON.parse(JSON.stringify(value));
+        }
+
+        function captureOriginalBuiltInAnime() {
+            originalBuiltInAnime = cloneSerializable(animeDatabase.filter(item => !item.isCustom));
+        }
+
+        function loadContentOverrides() {
+            try {
+                const saved = JSON.parse(localStorage.getItem(CONTENT_OVERRIDES_STORAGE_KEY) || '{}');
+                contentOverrides = saved && typeof saved === 'object' && !Array.isArray(saved) ? saved : {};
+                Object.entries(contentOverrides).forEach(([id, patch]) => {
+                    const anime = animeDatabase.find(item => Number(item.id) === Number(id) && !item.isCustom);
+                    if (anime && patch && typeof patch === 'object') Object.assign(anime, patch);
+                });
+            } catch (error) {
+                contentOverrides = {};
+                console.warn('수정한 작품 내용을 불러오지 못했습니다.', error);
+            }
+        }
+
+        function saveContentOverrides() {
+            localStorage.setItem(CONTENT_OVERRIDES_STORAGE_KEY, JSON.stringify(contentOverrides));
+        }
+
+        function seriesToEditableText(series) {
+            return Array.isArray(series) ? series.map(item => `${item.name || ''} ${item.episodes || ''}`.trim()).filter(Boolean).join(', ') : '';
+        }
+
+        function parseEditableSeries(value) {
+            return splitCommaValues(value).map(text => {
+                const match = text.match(/^(.*?)(\d+화|극장판.*|\d+분|\d+개.*)$/);
+                return match ? { name: match[1].trim() || '시리즈', episodes: match[2].trim() } : { name: text, episodes: '' };
+            });
+        }
+
+        function openEditAnimeModal() {
+            if (!selectedAnime) return;
+            const anime = selectedAnime;
+            document.getElementById('edit-anime-id').value = anime.id;
+            document.getElementById('edit-title').value = anime.title || '';
+            document.getElementById('edit-english-title').value = anime.englishTitle || '';
+            document.getElementById('edit-genre').value = anime.genre || '';
+            document.getElementById('edit-studio').value = anime.studio || '';
+            document.getElementById('edit-year').value = anime.year || '';
+            document.getElementById('edit-rating').value = String(Math.max(1, Math.min(5, Math.round(Number(anime.rating) || 1))));
+            document.getElementById('edit-mood').value = anime.mood || '힐링';
+            document.getElementById('edit-tags').value = (anime.tags || []).map(tag => String(tag).replace(/^\S+\s+/, '')).join(', ');
+            document.getElementById('edit-plot').value = anime.plot || '';
+            document.getElementById('edit-review').value = anime.review || '';
+            document.getElementById('edit-why-love').value = anime.whyLove || '';
+            document.getElementById('edit-recommend').value = (anime.recommendTo || []).join(', ');
+            document.getElementById('edit-platforms').value = (anime.platforms || []).join(', ');
+            document.getElementById('edit-series').value = seriesToEditableText(anime.series);
+            const resetButton = document.getElementById('reset-original-content-btn');
+            if (resetButton) {
+                resetButton.classList.toggle('hidden', Boolean(anime.isCustom));
+                resetButton.disabled = Boolean(anime.isCustom);
+            }
+            const modal = document.getElementById('edit-anime-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            requestAnimationFrame(() => {
+                modal.classList.add('opacity-100');
+                modal.firstElementChild?.classList.remove('scale-95');
+                modal.firstElementChild?.classList.add('scale-100');
+            });
+        }
+
+        function closeEditAnimeModal() {
+            const modal = document.getElementById('edit-anime-modal');
+            if (!modal || modal.classList.contains('hidden')) return;
+            modal.classList.remove('opacity-100');
+            modal.firstElementChild?.classList.remove('scale-100');
+            modal.firstElementChild?.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 220);
+        }
+
+        function buildEditedAnimeData() {
+            const mood = document.getElementById('edit-mood').value;
+            const tags = [...new Set([normalizeCustomTag(mood), ...splitCommaValues(document.getElementById('edit-tags').value).map(normalizeCustomTag)].filter(Boolean))];
+            return {
+                title: document.getElementById('edit-title').value.trim(),
+                englishTitle: document.getElementById('edit-english-title').value.trim(),
+                genre: document.getElementById('edit-genre').value.trim(),
+                studio: document.getElementById('edit-studio').value.trim(),
+                year: Number(document.getElementById('edit-year').value) || '',
+                rating: Number(document.getElementById('edit-rating').value) || 1,
+                mood,
+                tags,
+                plot: document.getElementById('edit-plot').value.trim(),
+                review: document.getElementById('edit-review').value.trim(),
+                whyLove: document.getElementById('edit-why-love').value.trim(),
+                recommendTo: splitCommaValues(document.getElementById('edit-recommend').value),
+                platforms: splitCommaValues(document.getElementById('edit-platforms').value),
+                series: parseEditableSeries(document.getElementById('edit-series').value)
+            };
+        }
+
+        function saveEditedAnime(event) {
+            event.preventDefault();
+            const id = Number(document.getElementById('edit-anime-id').value);
+            const anime = animeDatabase.find(item => Number(item.id) === id);
+            if (!anime) return;
+            const updated = buildEditedAnimeData();
+            if (!updated.title) {
+                showToast('작품명은 비울 수 없습니다.');
+                return;
+            }
+            Object.assign(anime, updated);
+            if (anime.isCustom) {
+                saveCustomAnime();
+            } else {
+                contentOverrides[String(id)] = cloneSerializable(updated);
+                saveContentOverrides();
+            }
+            selectedAnime = anime;
+            closeEditAnimeModal();
+            filterArchive();
+            initTodayPick();
+            openDetailModal(id);
+            showToast(`'${anime.title}'의 내용을 수정했습니다.`);
+        }
+
+        function clearEditableWritingFields() {
+            ['edit-plot','edit-review','edit-why-love','edit-recommend','edit-tags'].forEach(id => {
+                const field = document.getElementById(id);
+                if (field) field.value = '';
+            });
+            showToast('감상 관련 입력칸을 비웠습니다. 저장을 눌러 적용하세요.');
+        }
+
+        function resetSelectedAnimeToOriginal() {
+            if (!selectedAnime || selectedAnime.isCustom) return;
+            const id = Number(selectedAnime.id);
+            const original = originalBuiltInAnime.find(item => Number(item.id) === id);
+            if (!original) return;
+            if (!window.confirm(`'${selectedAnime.title}'의 수정 내용을 모두 지우고 기본 내용으로 되돌릴까요?`)) return;
+            const index = animeDatabase.findIndex(item => Number(item.id) === id);
+            animeDatabase[index] = cloneSerializable(original);
+            selectedAnime = animeDatabase[index];
+            delete contentOverrides[String(id)];
+            saveContentOverrides();
+            closeEditAnimeModal();
+            filterArchive();
+            initTodayPick();
+            openDetailModal(id);
+            showToast('기본 내용으로 되돌렸습니다.');
+        }
+
+        function updateArchiveCount() {
+            const count = animeDatabase.length;
+            const countEl = document.getElementById('archive-count');
+            if (countEl) countEl.textContent = count.toLocaleString();
+            const completedEl = document.getElementById('stat-completed');
+            if (completedEl) completedEl.textContent = count.toLocaleString();
+        }
+
+        function openAddAnimeModal() {
+            const modal = document.getElementById('add-anime-modal');
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            requestAnimationFrame(() => {
+                modal.classList.add('opacity-100');
+                modal.firstElementChild?.classList.remove('scale-95');
+                modal.firstElementChild?.classList.add('scale-100');
+            });
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => document.getElementById('custom-title')?.focus(), 120);
+        }
+
+        function closeAddAnimeModal() {
+            const modal = document.getElementById('add-anime-modal');
+            if (!modal || modal.classList.contains('hidden')) return;
+            modal.classList.remove('opacity-100');
+            modal.firstElementChild?.classList.remove('scale-100');
+            modal.firstElementChild?.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                if (document.getElementById('detail-modal')?.classList.contains('hidden') && document.getElementById('roulette-modal')?.classList.contains('hidden')) {
+                    document.body.style.overflow = '';
+                }
+                document.getElementById('add-anime-form')?.reset();
+                resetPendingPosterSelection();
+            }, 250);
+        }
+
+        async function addCustomAnimeFromForm(event) {
+            event.preventDefault();
+            const title = document.getElementById('custom-title').value.trim();
+            const genre = document.getElementById('custom-genre').value.trim();
+            const plot = document.getElementById('custom-plot').value.trim();
+            if (!title || !genre || !plot) {
+                showToast('작품명, 장르, 한 줄 소개는 꼭 입력해 주세요.');
+                return;
+            }
+
+            const mood = document.getElementById('custom-mood').value;
+            const enteredTags = splitCommaValues(document.getElementById('custom-tags').value).map(normalizeCustomTag).filter(Boolean);
+            const defaultMoodTag = normalizeCustomTag(mood);
+            const tags = [...new Set([defaultMoodTag, ...enteredTags].filter(Boolean))];
+            const yearValue = Number(document.getElementById('custom-year').value);
+            const seriesText = document.getElementById('custom-series').value.trim();
+            const newId = Date.now();
+
+            const anime = {
+                id: newId,
+                title,
+                englishTitle: document.getElementById('custom-english-title').value.trim() || title,
+                genre,
+                year: Number.isFinite(yearValue) && yearValue > 0 ? yearValue : new Date().getFullYear(),
+                rating: Number(document.getElementById('custom-rating').value) || 3,
+                studio: document.getElementById('custom-studio').value.trim() || '정보 미입력',
+                mood,
+                plot,
+                review: document.getElementById('custom-review').value.trim() || '아직 감상 후기를 작성하지 않았습니다.',
+                whyLove: document.getElementById('custom-why-love').value.trim() || '좋아하는 이유를 나중에 기록할 예정입니다.',
+                recommendTo: splitCommaValues(document.getElementById('custom-recommend').value),
+                tags,
+                platforms: splitCommaValues(document.getElementById('custom-platforms').value),
+                series: seriesText ? [{ name: '시리즈 정보', episodes: seriesText }] : [],
+                posterUrl: pendingAutoPosterUrl || '',
+                posterStorage: pendingPosterFile ? 'indexedDB' : (pendingAutoPosterUrl ? 'remote' : 'fallback'),
+                isCustom: true
+            };
+
+            if (animeDatabase.some(item => item.title.trim().toLowerCase() === title.toLowerCase())) {
+                showToast('같은 제목의 작품이 이미 아카이브에 있습니다.');
+                return;
+            }
+
+            if (pendingPosterFile) {
+                try {
+                    const saveButton = event.submitter;
+                    if (saveButton) {
+                        saveButton.disabled = true;
+                        saveButton.textContent = '이미지 압축 및 저장 중…';
+                    }
+                    const compressedBlob = await compressPosterFile(pendingPosterFile);
+                    await savePosterBlob(newId, compressedBlob);
+                } catch (error) {
+                    console.error(error);
+                    showToast('이미지 저장에 실패했습니다. 이미지 없이 작품을 저장합니다.');
+                    anime.posterStorage = 'fallback';
+                } finally {
+                    const saveButton = event.submitter;
+                    if (saveButton) {
+                        saveButton.disabled = false;
+                        saveButton.textContent = '아카이브에 저장';
+                    }
+                }
+            }
+
+            animeDatabase.unshift(anime);
+            if (document.getElementById('custom-watched').checked) {
+                watchedAnimeIds.add(newId);
+                saveWatchedAnimeIds();
+            }
+            saveCustomAnime();
+            updateArchiveCount();
+            clearAllFilters();
+            document.getElementById('add-anime-form').reset();
+            resetPendingPosterSelection();
+            closeAddAnimeModal();
+            showToast(`✅ '${title}'을(를) 아카이브에 추가했습니다.`);
+        }
+
+        async function deleteSelectedCustomAnime() {
+            if (!selectedAnime || !selectedAnime.isCustom) return;
+            const title = selectedAnime.title;
+            if (!window.confirm(`'${title}'을(를) 아카이브에서 삭제할까요?`)) return;
+            const index = animeDatabase.findIndex(item => Number(item.id) === Number(selectedAnime.id));
+            if (index >= 0) animeDatabase.splice(index, 1);
+            watchedAnimeIds.delete(Number(selectedAnime.id));
+            await deletePosterBlob(selectedAnime.id);
+            saveWatchedAnimeIds();
+            saveCustomAnime();
+            updateArchiveCount();
+            closeDetailModal();
+            filterArchive();
+            showToast(`'${title}'을(를) 삭제했습니다.`);
+        }
         let currentRoulettePool = [];
+        let currentRouletteWinner = null;
+
+        function shuffleArray(items) {
+            const shuffled = [...items];
+            for (let i = shuffled.length - 1; i > 0; i -= 1) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
 
         function loadWatchedAnimeIds() {
             try {
@@ -2123,6 +2920,17 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
             if (posterPromiseCache.has(anime.id)) return posterPromiseCache.get(anime.id);
 
             const promise = (async () => {
+                // User-selected local poster has the highest priority and does not depend on the network.
+                if (anime.posterStorage === 'indexedDB') {
+                    const indexedUrl = await getIndexedPosterUrl(anime.id);
+                    if (indexedUrl) return indexedUrl;
+                }
+
+                // A poster selected by automatic search is stored as a URL in the custom anime record.
+                if (anime.posterUrl && await testImageUrl(anime.posterUrl, 5000)) {
+                    return anime.posterUrl;
+                }
+
                 const cacheKey = `poster_cache_v4_${anime.id}`;
                 const cachedUrl = localStorage.getItem(cacheKey);
                 if (cachedUrl && await testImageUrl(cachedUrl, 4000)) return cachedUrl;
@@ -2177,7 +2985,9 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
             image.className = 'absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-500 z-0';
             image.onload = () => image.classList.remove('opacity-0');
             image.onerror = () => {
-                localStorage.removeItem(`poster_cache_v4_${anime.id}`);
+                if (anime.posterStorage !== 'indexedDB') {
+                    localStorage.removeItem(`poster_cache_v4_${anime.id}`);
+                }
                 image.remove();
             };
             container.appendChild(image);
@@ -2312,7 +3122,7 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
             const interval = duration / steps;
             
             const stats = [
-                { id: 'stat-completed', target: 55 },
+                { id: 'stat-completed', target: animeDatabase.length },
                 { id: 'stat-episodes', target: 5240 },
                 { id: 'stat-rating', target: 4.7, isFloat: true }
             ];
@@ -2543,6 +3353,8 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
 
             selectedAnime = anime;
             updateModalWatchedButton();
+            const deleteCustomButton = document.getElementById('modal-delete-custom');
+            if (deleteCustomButton) deleteCustomButton.classList.toggle('hidden', !anime.isCustom);
             
             // Build text elements
             document.getElementById('modal-title').innerText = anime.title;
@@ -2552,14 +3364,14 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
             document.getElementById('modal-plot').innerText = anime.plot;
             document.getElementById('modal-review').innerText = anime.review;
             document.getElementById('modal-why-love').innerText = anime.whyLove || "성장과 우정, 따뜻한 마음이 녹아든 마스터 최애작 중 하나입니다.";
-            document.getElementById('modal-rating').innerText = `${anime.rating.toFixed(1)} / 5.0`;
+            document.getElementById('modal-rating').innerText = `${Number(anime.rating || 0).toFixed(1)} / 5.0`;
 
             // Draw Stars in Modal
             const starContainer = document.getElementById('modal-stars');
             starContainer.innerHTML = '';
             for (let i = 0; i < 5; i++) {
                 const star = document.createElement('i');
-                star.className = i < Math.floor(anime.rating) ? 'fa-solid fa-star' : 'fa-regular fa-star';
+                star.className = i < Math.floor(Number(anime.rating) || 0) ? 'fa-solid fa-star' : 'fa-regular fa-star';
                 starContainer.appendChild(star);
             }
 
@@ -2709,7 +3521,8 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
 
         // Trigger slot-rolling modal "Pick For Me"
         function triggerPickForMe() {
-            currentRoulettePool = getRouletteCandidates();
+            currentRoulettePool = shuffleArray(getRouletteCandidates());
+            currentRouletteWinner = null;
 
             if (currentRoulettePool.length === 0) {
                 showToast('모든 작품을 이미 본 것으로 표시했어요. 일부 작품의 표시를 해제해 주세요.');
@@ -2753,7 +3566,11 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
                 modal.querySelector('.transform').classList.add('scale-100');
             }, 10);
             
-            document.getElementById('roulette-spin-btn').disabled = false;
+            const spinButton = document.getElementById('roulette-spin-btn');
+            const resultActions = document.getElementById('roulette-result-actions');
+            spinButton.disabled = false;
+            spinButton.classList.remove('hidden');
+            resultActions.classList.add('hidden');
             document.getElementById('roulette-status').innerText = "SPIN 버튼을 눌러보세요!";
             document.getElementById('roulette-close-btn').classList.remove('opacity-50', 'cursor-not-allowed');
         }
@@ -2761,6 +3578,33 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
         // Spin Slot mechanism using high performance transitions
         function spinRoulette() {
             if (isSpinning) return;
+
+            currentRoulettePool = shuffleArray(getRouletteCandidates());
+            currentRouletteWinner = null;
+
+            if (currentRoulettePool.length === 0) {
+                showToast('추천 가능한 미시청 작품이 없습니다.');
+                return;
+            }
+
+            const stripForShuffle = document.getElementById('slot-strip');
+            stripForShuffle.innerHTML = '';
+            const shuffledItems = [...currentRoulettePool, ...currentRoulettePool, ...currentRoulettePool, ...currentRoulettePool];
+            shuffledItems.forEach((item, index) => {
+                const row = document.createElement('div');
+                row.className = "h-16 flex items-center justify-center gap-3 w-full border-b border-slate-900 px-4 flex-shrink-0 bg-slate-950";
+                row.innerHTML = `
+                    <div class="w-8 h-8 rounded bg-gradient-to-tr from-primary to-hoverViolet flex items-center justify-center text-xs text-white font-bold flex-shrink-0">
+                        ${(index % currentRoulettePool.length) + 1}
+                    </div>
+                    <span class="font-heading font-extrabold text-sm text-slate-100 truncate max-w-[180px]">${item.title}</span>
+                    <span class="text-[10px] text-starYellow ml-auto"><i class="fa-solid fa-star"></i> ${item.rating.toFixed(1)}</span>
+                `;
+                stripForShuffle.appendChild(row);
+            });
+
+            document.getElementById('roulette-result-actions').classList.add('hidden');
+            document.getElementById('roulette-spin-btn').classList.remove('hidden');
 
             clearRouletteTimers();
             isSpinning = true;
@@ -2778,12 +3622,6 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
             closeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
 
             statusText.innerText = "추천작 결정 중... 🔮";
-
-            if (currentRoulettePool.length === 0) {
-                isSpinning = false;
-                showToast('추천 가능한 미시청 작품이 없습니다.');
-                return;
-            }
 
             const rowHeight = 64;
             const winnerIndex = Math.floor(Math.random() * currentRoulettePool.length);
@@ -2825,7 +3663,11 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
             if (!isSpinning || sessionId !== rouletteSessionId) return;
 
             const winner = currentRoulettePool[winnerIndex];
+            currentRouletteWinner = winner;
+
             const statusText = document.getElementById('roulette-status');
+            const spinBtn = document.getElementById('roulette-spin-btn');
+            const resultActions = document.getElementById('roulette-result-actions');
 
             playTickSound(440, 0.15, 'sine');
             setTimeout(() => {
@@ -2835,26 +3677,34 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
                 if (sessionId === rouletteSessionId) playTickSound(880, 0.35, 'sine');
             }, 260);
 
+            isSpinning = false;
+            spinBtn.disabled = false;
+            spinBtn.classList.add('hidden');
+            resultActions.classList.remove('hidden');
             statusText.innerText = `오늘의 추천작 : ${winner.title}!`;
+            showToast(`🎲 '${winner.title}'이(가) 추천작으로 뽑혔습니다!`);
+        }
 
-            rouletteResultTimer = setTimeout(() => {
-                if (sessionId !== rouletteSessionId) return;
+        function openRouletteWinnerDetail() {
+            if (!currentRouletteWinner) return;
+            const winnerId = currentRouletteWinner.id;
+            closeRouletteModal();
+            setTimeout(() => openDetailModal(winnerId), 320);
+        }
 
-                isSpinning = false;
-                closeRouletteModal();
-
-                rouletteDetailTimer = setTimeout(() => {
-                    // closeRouletteModal invalidates the old session, so only continue
-                    // when the roulette was not manually cancelled before this point.
-                    openDetailModal(winner.id);
-                    showToast(`🎲 룰렛 매칭이 '${winner.title}' 작품을 획득하였습니다!`);
-                }, 350);
-            }, 1200);
+        function respinRoulette() {
+            if (isSpinning) return;
+            document.getElementById('roulette-result-actions').classList.add('hidden');
+            document.getElementById('roulette-spin-btn').classList.remove('hidden');
+            document.getElementById('roulette-status').innerText = '새로운 순서로 다시 섞는 중...';
+            spinRoulette();
         }
 
         // Window event load routing
         document.addEventListener('DOMContentLoaded', function() {
             const rouletteModal = document.getElementById('roulette-modal');
+            document.getElementById('roulette-detail-btn').addEventListener('click', openRouletteWinnerDetail);
+            document.getElementById('roulette-respin-btn').addEventListener('click', respinRoulette);
 
             // Click outside the roulette panel to cancel and close at any time.
             rouletteModal.addEventListener('click', function(event) {
@@ -2866,6 +3716,18 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
             // Escape closes either open modal. Roulette cancellation is immediate.
             document.addEventListener('keydown', function(event) {
                 if (event.key !== 'Escape') return;
+
+                const editAnimeModal = document.getElementById('edit-anime-modal');
+                if (editAnimeModal && !editAnimeModal.classList.contains('hidden')) {
+                    closeEditAnimeModal();
+                    return;
+                }
+
+                const addAnimeModal = document.getElementById('add-anime-modal');
+                if (addAnimeModal && !addAnimeModal.classList.contains('hidden')) {
+                    closeAddAnimeModal();
+                    return;
+                }
 
                 if (!rouletteModal.classList.contains('hidden')) {
                     closeRouletteModal();
@@ -2880,6 +3742,40 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
 
             // Restore the user's watched-anime selections before rendering cards.
             loadWatchedAnimeIds();
+            captureOriginalBuiltInAnime();
+            loadCustomAnime();
+            loadContentOverrides();
+            updateArchiveCount();
+
+            const openAddAnimeButton = document.getElementById('open-add-anime-btn');
+            const addAnimeModal = document.getElementById('add-anime-modal');
+            document.getElementById('close-add-anime-btn')?.addEventListener('click', closeAddAnimeModal);
+            document.getElementById('cancel-add-anime-btn')?.addEventListener('click', closeAddAnimeModal);
+            document.getElementById('add-anime-form')?.addEventListener('submit', addCustomAnimeFromForm);
+            document.getElementById('search-custom-poster-btn')?.addEventListener('click', searchCustomPoster);
+            document.getElementById('custom-poster-file')?.addEventListener('change', handleCustomPosterFile);
+            document.getElementById('clear-custom-poster-btn')?.addEventListener('click', resetPendingPosterSelection);
+            document.getElementById('custom-title')?.addEventListener('input', () => {
+                clearTimeout(posterSearchDebounceTimer);
+                if (pendingPosterFile) return;
+                const title = document.getElementById('custom-title').value.trim();
+                if (title.length < 2) return;
+                posterSearchDebounceTimer = setTimeout(searchCustomPoster, 850);
+            });
+            openAddAnimeButton?.addEventListener('click', openAddAnimeModal);
+            addAnimeModal?.addEventListener('click', event => {
+                if (event.target === addAnimeModal) closeAddAnimeModal();
+            });
+            document.getElementById('modal-delete-custom')?.addEventListener('click', deleteSelectedCustomAnime);
+            document.getElementById('modal-edit-content')?.addEventListener('click', openEditAnimeModal);
+            document.getElementById('close-edit-anime-btn')?.addEventListener('click', closeEditAnimeModal);
+            document.getElementById('cancel-edit-anime-btn')?.addEventListener('click', closeEditAnimeModal);
+            document.getElementById('edit-anime-form')?.addEventListener('submit', saveEditedAnime);
+            document.getElementById('clear-edit-writing-btn')?.addEventListener('click', clearEditableWritingFields);
+            document.getElementById('reset-original-content-btn')?.addEventListener('click', resetSelectedAnimeToOriginal);
+            document.getElementById('edit-anime-modal')?.addEventListener('click', event => {
+                if (event.target === event.currentTarget) closeEditAnimeModal();
+            });
 
             const modalWatchedToggle = document.getElementById('modal-watched-toggle');
             if (modalWatchedToggle) {
