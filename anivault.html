@@ -260,6 +260,144 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
 @keyframes posterPickerSpin { to { transform:rotate(360deg); } }
 </style>
 
+
+<style id="theme-toggle-styles">
+html, body, nav, section, footer, #detail-modal > div, #roulette-modal > div,
+#add-anime-modal > div, #edit-anime-modal > div, input, select, textarea,
+#archive-grid > *, #todays-pick-card, .mood-badge {
+  transition: background-color .28s ease, color .28s ease, border-color .28s ease, box-shadow .28s ease;
+}
+
+#theme-toggle {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+}
+#theme-toggle .theme-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity .22s ease, transform .28s ease;
+}
+html[data-theme="light"] #theme-toggle .sun-icon { opacity: 0; transform: rotate(-90deg) scale(.65); }
+html[data-theme="light"] #theme-toggle .moon-icon { opacity: 1; transform: rotate(0) scale(1); }
+html[data-theme="dark"] #theme-toggle .sun-icon { opacity: 1; transform: rotate(0) scale(1); }
+html[data-theme="dark"] #theme-toggle .moon-icon { opacity: 0; transform: rotate(90deg) scale(.65); }
+
+html[data-theme="dark"] { color-scheme: dark; }
+html[data-theme="dark"] body { background:#0F172A !important; color:#F8FAFC !important; }
+html[data-theme="dark"] body::before {
+  background:
+    radial-gradient(circle at 18% 12%, rgba(124,58,237,.18), transparent 35%),
+    radial-gradient(circle at 82% 8%, rgba(59,130,246,.12), transparent 31%),
+    linear-gradient(180deg,#0F172A 0%,#111827 45%,#0B1120 100%) !important;
+}
+html[data-theme="dark"] .aurora-glow-1 { background:radial-gradient(circle,rgba(124,58,237,.20) 0%,rgba(124,58,237,0) 70%) !important; opacity:1; }
+html[data-theme="dark"] .aurora-glow-2 { background:radial-gradient(circle,rgba(168,85,247,.17) 0%,rgba(168,85,247,0) 70%) !important; opacity:1; }
+html[data-theme="dark"] .star-particle { background:#fff !important; }
+html[data-theme="dark"] .glass-nav {
+  background:rgba(15,23,42,.84) !important;
+  border-bottom:1px solid rgba(148,163,184,.12) !important;
+  box-shadow:0 8px 30px rgba(2,6,23,.28) !important;
+}
+html[data-theme="dark"] nav a, html[data-theme="dark"] nav span { color:#CBD5E1; }
+html[data-theme="dark"] nav .text-white { color:#fff !important; }
+html[data-theme="dark"] nav .text-hoverViolet { color:#C084FC !important; }
+
+html[data-theme="dark"] .bg-midnight,
+html[data-theme="dark"] .bg-slate-950,
+html[data-theme="dark"] .bg-slate-950\/85,
+html[data-theme="dark"] .bg-slate-950\/80,
+html[data-theme="dark"] .bg-slate-950\/40 { background-color:#020617 !important; }
+html[data-theme="dark"] .bg-slate-900,
+html[data-theme="dark"] .bg-slate-900\/80,
+html[data-theme="dark"] .bg-slate-900\/60,
+html[data-theme="dark"] .bg-slate-900\/50,
+html[data-theme="dark"] .bg-slate-900\/40,
+html[data-theme="dark"] .bg-slate-900\/30,
+html[data-theme="dark"] .bg-slate-900\/10 { background-color:#0F172A !important; }
+html[data-theme="dark"] .bg-cardBg,
+html[data-theme="dark"] .bg-cardBg\/60 { background-color:#1E293B !important; }
+html[data-theme="dark"] .bg-slate-800,
+html[data-theme="dark"] .bg-slate-800\/80,
+html[data-theme="dark"] .bg-slate-800\/60,
+html[data-theme="dark"] .bg-slate-800\/50 { background-color:#1E293B !important; }
+html[data-theme="dark"] .from-cardBg { --tw-gradient-from:#1E293B var(--tw-gradient-from-position) !important; }
+html[data-theme="dark"] .to-slate-900 { --tw-gradient-to:#0F172A var(--tw-gradient-to-position) !important; }
+
+html[data-theme="dark"] .text-white,
+html[data-theme="dark"] .text-slate-100,
+html[data-theme="dark"] .text-slate-200 { color:#F8FAFC !important; }
+html[data-theme="dark"] .text-slate-300 { color:#CBD5E1 !important; }
+html[data-theme="dark"] .text-slate-400 { color:#94A3B8 !important; }
+html[data-theme="dark"] .text-slate-500,
+html[data-theme="dark"] .text-slate-600 { color:#64748B !important; }
+
+html[data-theme="dark"] .border-slate-900,
+html[data-theme="dark"] .border-slate-800,
+html[data-theme="dark"] .border-slate-800\/80,
+html[data-theme="dark"] .border-slate-800\/60,
+html[data-theme="dark"] .border-slate-800\/50 { border-color:#1E293B !important; }
+html[data-theme="dark"] .border-slate-700,
+html[data-theme="dark"] .border-slate-700\/80,
+html[data-theme="dark"] .border-slate-700\/60,
+html[data-theme="dark"] .border-slate-700\/50,
+html[data-theme="dark"] .border-slate-700\/40 { border-color:#334155 !important; }
+
+html[data-theme="dark"] input,
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea {
+  background:#0F172A !important;
+  color:#F8FAFC !important;
+  border-color:#334155 !important;
+}
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder { color:#64748B !important; }
+html[data-theme="dark"] #hero { background:linear-gradient(180deg,rgba(15,23,42,.50),rgba(15,23,42,.94)) !important; }
+html[data-theme="dark"] #stats,
+html[data-theme="dark"] #archive { background:rgba(15,23,42,.72) !important; }
+html[data-theme="dark"] #archive-grid > *,
+html[data-theme="dark"] #todays-pick-card,
+html[data-theme="dark"] #stats .rounded-2xl,
+html[data-theme="dark"] .bg-cardBg,
+html[data-theme="dark"] .bg-cardBg\/60 { box-shadow:0 14px 38px rgba(2,6,23,.34) !important; }
+html[data-theme="dark"] .mood-badge { background:#0F172A !important; color:#94A3B8 !important; border-color:#1E293B !important; }
+html[data-theme="dark"] .mood-badge:hover { background:#1E293B !important; color:#fff !important; }
+html[data-theme="dark"] .mood-badge.active,
+html[data-theme="dark"] .mood-badge.bg-primary\/20 { background:#7C3AED !important; color:#fff !important; border-color:#8B5CF6 !important; }
+
+html[data-theme="dark"] #detail-modal,
+html[data-theme="dark"] #roulette-modal,
+html[data-theme="dark"] #add-anime-modal,
+html[data-theme="dark"] #edit-anime-modal { background:rgba(2,6,23,.82) !important; }
+html[data-theme="dark"] #detail-modal > div,
+html[data-theme="dark"] #roulette-modal > div,
+html[data-theme="dark"] #add-anime-modal > div,
+html[data-theme="dark"] #edit-anime-modal > div { background:#1E293B !important; border-color:#334155 !important; }
+html[data-theme="dark"] #detail-modal .bg-slate-900\/50,
+html[data-theme="dark"] #detail-modal .bg-slate-900\/30,
+html[data-theme="dark"] #roulette-modal .bg-slate-950,
+html[data-theme="dark"] #add-anime-modal .bg-slate-900\/50,
+html[data-theme="dark"] #edit-anime-modal .bg-slate-900\/50 { background:#0F172A !important; }
+html[data-theme="dark"] footer { background:#020617 !important; border-top-color:#0F172A !important; }
+html[data-theme="dark"] footer .text-slate-300 { color:#CBD5E1 !important; }
+html[data-theme="dark"] footer .text-slate-400,
+html[data-theme="dark"] footer .text-slate-500,
+html[data-theme="dark"] footer .text-slate-600 { color:#64748B !important; }
+html[data-theme="dark"] ::-webkit-scrollbar-track { background:#0F172A !important; }
+html[data-theme="dark"] ::-webkit-scrollbar-thumb { background:#334155 !important; }
+html[data-theme="dark"] .poster-picker-preview { background:#0F172A !important; border-color:#334155 !important; }
+</style>
+<script>
+(function () {
+  const savedTheme = localStorage.getItem('anivault-theme');
+  document.documentElement.dataset.theme = savedTheme === 'dark' ? 'dark' : 'light';
+})();
+</script>
+
 </head>
 <body class="bg-midnight text-slate-100 font-body min-h-screen relative overflow-x-hidden">
 
@@ -287,8 +425,12 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
                     <a href="#archive" class="text-slate-300 hover:text-white font-medium text-sm transition-colors duration-200">Archive (Collection)</a>
                 </div>
                 <!-- Contact shortcut -->
-                <div class="flex items-center gap-3">
-                    <a href="#archive" class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-semibold py-2 px-4 rounded-lg text-xs transition-all duration-300 border border-slate-700/50">
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <button id="theme-toggle" type="button" aria-label="다크모드로 전환" title="테마 전환" class="rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700/50 shadow-sm transition-all duration-300">
+                        <span class="theme-icon moon-icon"><i class="fa-solid fa-moon"></i></span>
+                        <span class="theme-icon sun-icon"><i class="fa-solid fa-sun"></i></span>
+                    </button>
+                    <a href="#archive" class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-semibold py-2 px-3 sm:px-4 rounded-lg text-xs transition-all duration-300 border border-slate-700/50">
                         도감 탐색
                     </a>
                 </div>
@@ -3700,9 +3842,33 @@ footer .text-slate-300,footer .text-slate-400,footer .text-slate-500,footer .tex
             spinRoulette();
         }
 
+        const THEME_STORAGE_KEY = 'anivault-theme';
+
+        function applyTheme(theme, persist = true) {
+            const nextTheme = theme === 'dark' ? 'dark' : 'light';
+            document.documentElement.dataset.theme = nextTheme;
+            if (persist) localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+
+            const toggle = document.getElementById('theme-toggle');
+            if (toggle) {
+                const isDark = nextTheme === 'dark';
+                toggle.setAttribute('aria-label', isDark ? '라이트모드로 전환' : '다크모드로 전환');
+                toggle.setAttribute('title', isDark ? '라이트모드로 전환' : '다크모드로 전환');
+            }
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.dataset.theme || 'light';
+            const next = current === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+            showToast(next === 'dark' ? '🌙 다크모드로 전환했습니다.' : '☀️ 라이트모드로 전환했습니다.');
+        }
+
         // Window event load routing
         document.addEventListener('DOMContentLoaded', function() {
             const rouletteModal = document.getElementById('roulette-modal');
+            applyTheme(document.documentElement.dataset.theme || 'light', false);
+            document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
             document.getElementById('roulette-detail-btn').addEventListener('click', openRouletteWinnerDetail);
             document.getElementById('roulette-respin-btn').addEventListener('click', respinRoulette);
 
